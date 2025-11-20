@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { sendOtp } from "../features/authentication/services/SendOTP";
 import { useNavigate } from "react-router-dom";
+import "./ForgotPassword.css";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -18,19 +19,28 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div>
-      <h2>Forgot Password</h2>
+    <div className="forgot-container">
+      <div className="big-text">
+        BRAG BOARD &nbsp; BRAG BOARD &nbsp; BRAG BOARD &nbsp; BRAG BOARD BRAG BOARD &nbsp; BRAG BOARD &nbsp; BRAG BOARD &nbsp; 
+        BRAG BOARD BRAG BOARD &nbsp; BRAG BOARD &nbsp; BRAG BOARD &nbsp; BRAG BOARD BRAG BOARD &nbsp; BRAG BOARD &nbsp;
+         BRAG BOARD &nbsp; BRAG BOARD BRAG BOARD &nbsp; BRAG BOARD &nbsp; BRAG BOARD &nbsp; BRAG BOARD BRAG BOARD &nbsp; 
+         BRAG BOARD &nbsp; BRAG BOARD &nbsp; BRAG BOARD
+      </div>
 
-      <input
-        type="email"
-        placeholder="Enter your registered email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <div className="forgot-box">
+        <h2>Forgot Password</h2>
 
-      <button onClick={handleSendOtp}>Send OTP</button>
+        <input
+          type="email"
+          placeholder="Enter your registered email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      {msg && <p>{msg}</p>}
+        <button onClick={handleSendOtp}>Send OTP</button>
+
+        {msg && <p>{msg}</p>}
+      </div>
     </div>
   );
 };
