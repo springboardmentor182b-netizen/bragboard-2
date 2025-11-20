@@ -1,0 +1,7 @@
+Flask 
+flask-cors 
+flask-bcrypt 
+flask-mail 
+python-dotenv 
+Flask-JWT-Extended
+flask_sqlalchemygit 
