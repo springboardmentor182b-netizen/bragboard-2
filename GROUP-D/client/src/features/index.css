@@ -1,0 +1,16 @@
+/* basic page reset */
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  font-family: Inter, Roboto, system-ui, -apple-system, "Segoe UI",
+    "Helvetica Neue", Arial;
+  background: #f9fafb;
+}
+button {
+  cursor: pointer;
+}
