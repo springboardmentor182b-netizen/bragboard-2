@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 const MODES = {
@@ -35,6 +36,7 @@ const COPY = {
 };
 
 function LoginPage() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState(MODES.LOGIN);
   const [formState, setFormState] = useState(INITIAL_STATE);
   const [status, setStatus] = useState(null);
@@ -78,6 +80,10 @@ function LoginPage() {
             type: 'success',
             text: `Welcome back, ${formState.email}!`,
           });
+          // Navigate to dashboard after successful login
+          setTimeout(() => {
+            navigate('/dashboard');
+          }, 1000);
           break;
         }
         case MODES.FORGOT: {
