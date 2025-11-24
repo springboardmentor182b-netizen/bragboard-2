@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BragBoard Admin – Export Reports</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="frame">
+
+    <!-- Sidebar -->
+    <aside class="aside">
+        <div class="title">BragBoard Admin</div>
+
+        <nav class="menu">
+            <div class="menu-item">Admin Dashboard</div>
+            <div class="menu-item">Shout-out Management</div>
+            <div class="menu-item">Resolving Reports</div>
+            <div class="menu-item active">Export Reports</div>
+        </nav>
+    </aside>
+
+    <!-- Main Section -->
+    <main class="main">
+
+        <h1>Export Reports</h1>
+
+        <div class="filters">
+
+            <label class="label">Department:</label>
+            <div class="select"><span>All Departments</span></div>
+
+            <label class="label">Status:</label>
+            <div class="select"><span>All</span></div>
+
+            <button class="btn">Export CSV</button>
+        </div>
+
+        <div class="table">
+
+            <!-- Table Header -->
+            <div class="table-row header">
+                <div class="cell">Employee</div>
+                <div class="cell">Department</div>
+                <div class="cell cell-wide">Report</div>
+                <div class="cell">Status</div>
+                <div class="cell">Time</div>
+            </div>
+
+            <!-- Row 1 -->
+            <div class="table-row">
+                <div class="cell">John Doe</div>
+                <div class="cell">Marketing</div>
+                <div class="cell cell-wide">Completed campaign ahead of schedule</div>
+                <div class="cell">Resolved</div>
+                <div class="cell">2 hrs ago</div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="table-row alt">
+                <div class="cell">Jane Smith</div>
+                <div class="cell">Sales</div>
+                <div class="cell cell-wide">Exceeded monthly sales target</div>
+                <div class="cell">Resolved</div>
+                <div class="cell">5 hrs ago</div>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>
