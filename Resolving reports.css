@@ -1,0 +1,132 @@
+/* Layout base */
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: #F3F6FF;
+}
+
+.frame {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  height: 100%;
+}
+
+/* Sidebar */
+.aside {
+  width: 440px;
+  background: #5B6CFF;
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: white;
+}
+
+.brand h1 {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.menu-item {
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.menu-item.active {
+  background: #4456E6;
+}
+
+/* Main Section */
+.main {
+  width: 1000px;
+  padding: 60px 50px;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.heading {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Report Cards */
+.report-card {
+  background: white;
+  border-radius: 18px;
+  padding: 28px;
+  width: 900px;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.user-info .name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222;
+}
+
+.user-info .dept {
+  font-size: 15px;
+  color: #444;
+}
+
+.time {
+  font-size: 13px;
+  color: #777;
+}
+
+.report-text {
+  font-size: 15px;
+  color: #555;
+  margin: 0;
+}
+
+/* Buttons */
+.button-row {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  color: white;
+}
+
+.btn.resolve {
+  background: #5B6CFF;
+}
+
+.btn.delete {
+  background: #FF5B5B;
+}
