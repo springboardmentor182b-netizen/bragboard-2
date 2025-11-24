@@ -1,0 +1,155 @@
+.bb-post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.bb-post-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 16px 18px 12px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+.bb-post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bb-post-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #4c6fff, #73a2ff);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.bb-post-header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.bb-post-author-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.bb-post-author {
+  font-weight: 600;
+  color: #1b2140;
+}
+
+.bb-post-dot {
+  color: #c0c3de;
+}
+
+.bb-post-role {
+  color: #7d80a4;
+  font-size: 13px;
+}
+
+.bb-post-meta {
+  font-size: 11px;
+  color: #a4a7c5;
+}
+
+.bb-post-title {
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  color: #262a42;
+}
+
+.bb-post-tags {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.bb-chip {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #eef1ff;
+  color: #52577e;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.bb-post-body {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #424665;
+}
+
+.bb-post-reactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.bb-pill {
+  border: none;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: #f6f7ff;
+  font-size: 12px;
+  color: #4b4f72;
+  cursor: pointer;
+}
+
+.bb-post-comment-bar {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #ecefff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bb-comment-input {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid #dde0f3;
+  padding: 6px 10px;
+  font-size: 13px;
+  outline: none;
+  background: #f7f8ff;
+}
+
+.bb-comment-input::placeholder {
+  color: #b0b4d3;
+}
+
+.bb-comment-post-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #2e64ff;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.bb-pill-count {
+  margin-left: 6px;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.bb-pill--active {
+  background: #ffe9c2;
+  color: #b26000;
+}

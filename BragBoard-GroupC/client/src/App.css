@@ -1,38 +1,233 @@
-.App {
-  text-align: center;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  background: #f5f6ff;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.bb-app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: radial-gradient(circle at top right, #fbe8ff 0, #f5f7ff 50%, #eef5ff 100%);
+}
+
+/* Top bar */
+
+.bb-topbar {
+  display: flex;
+  align-items: center;
+  padding: 14px 28px;
+  border-bottom: 1px solid #e3e6ff;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+}
+
+.bb-logo {
+  font-weight: 800;
+  font-size: 20px;
+  color: #1a4fd8;
+  margin-right: 28px;
+}
+
+.bb-search-container {
+  flex: 1;
+  max-width: 480px;
+}
+
+.bb-search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: none;
+  background: #edf0ff;
+  outline: none;
+  font-size: 14px;
+  color: #555;
+}
+
+.bb-search-input::placeholder {
+  color: #a0a5c5;
+}
+
+.bb-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.bb-icon-button,
+.bb-avatar-button {
+  border: none;
+  outline: none;
+  background: #f6f7ff;
+  border-radius: 999px;
+  padding: 8px 10px;
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.bb-avatar-button {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+}
+
+/* Layout */
+
+.bb-layout {
+  display: flex;
+  flex: 1;
+  padding: 24px 24px 32px;
+  gap: 24px;
+}
+
+/* Sidebar */
+
+.bb-sidebar {
+  width: 210px;
+  min-width: 210px;
+}
+
+.bb-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  height: 100%;
+}
+
+.bb-nav-section {
+  background: white;
+  border-radius: 16px;
+  padding: 18px 14px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
+}
+
+.bb-nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  margin-bottom: 4px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555a7e;
+  text-align: left;
+}
+
+.bb-nav-item--active {
+  background: #1a4fd8;
+  color: #ffffff;
+}
+
+.bb-nav-icon {
+  width: 20px;
+  text-align: center;
+}
+
+.bb-filter-card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px 16px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
+}
+
+.bb-filter-title {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.bb-filter-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  font-size: 14px;
+  color: #4b4f72;
+}
+
+/* Main */
+
+.bb-main {
+  flex: 1;
+  background: transparent;
+}
+
+.bb-main-header {
+  margin-bottom: 18px;
+}
+
+.bb-welcome-title {
+  margin: 0 0 6px;
+  font-size: 32px;
+  font-weight: 800;
+  color: #131528;
+}
+
+.bb-tip {
+  margin: 0 0 16px;
+  font-size: 12px;
+  color: #9da0bf;
+}
+
+.bb-primary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: #2e64ff;
   color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(46, 100, 255, 0.4);
 }
 
-.App-link {
-  color: #61dafb;
+.bb-plus-icon {
+  font-size: 18px;
+  line-height: 1;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Empty state card */
+
+.bb-empty-state-card {
+  margin-top: 20px;
+  height: 320px;
+  border-radius: 24px;
+  border: 2px dashed #cfd4ff;
+  background: rgba(255, 255, 255, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.bb-empty-state-inner {
+  text-align: center;
+  color: #a1a5c5;
+  font-size: 14px;
+}
+
+.bb-empty-title {
+  margin: 0 0 4px;
+}
+
+.bb-empty-subtitle {
+  margin: 0;
+}
+
