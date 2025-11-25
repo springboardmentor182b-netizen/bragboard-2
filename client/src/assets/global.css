@@ -1,3 +1,9 @@
+ Group-A-feature/Admin-Dashboard-Sachin
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
@@ -44,4 +50,5 @@ input,
 textarea {
   font: inherit;
 }
+ main-group-A
 
