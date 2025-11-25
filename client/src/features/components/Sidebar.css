@@ -1,0 +1,14 @@
+.dashboard-sidebar {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-sidebar {
+    width: 100%;
+  }
+}
+
