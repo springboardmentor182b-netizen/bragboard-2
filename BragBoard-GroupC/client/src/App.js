@@ -1,9 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
-import VerifyOTP from "./pages/VerifyOTP";
-import ResetPassword from "./pages/ResetPassword";
-import Home from "./pages/Home";
+import React from 'react';
+import AdminDashboard from './pages/AdminDashboard';
+import './assets/global.css';
 
 function App() {
   return (
@@ -16,6 +13,9 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
+    <div className="App">
+      <AdminDashboard />
+    </div>
   );
 }
 
