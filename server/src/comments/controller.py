@@ -12,10 +12,11 @@ router = APIRouter(prefix="/comments", tags=["comments"])
 
 @router.get("", response_model=List[CommentRead])
 def read_comments(
+    post_id: Optional[int] = Query(None, ge=1, description="Filter comments by post ID"),
     author: Optional[str] = Query(None, description="Filter comments by author"),
     db: Session = Depends(get_session),
 ):
-    return service.list_comments(db, author=author)
+    return service.list_comments(db, post_id=post_id, author=author)
 
 
 @router.get("/{comment_id}", response_model=CommentRead)

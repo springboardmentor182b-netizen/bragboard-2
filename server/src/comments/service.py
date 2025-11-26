@@ -6,8 +6,14 @@ from server.src.comments.models import CommentCreate, CommentUpdate
 from server.src.entities.comment import Comment
 
 
-def list_comments(db: Session, author: Optional[str] = None) -> List[Comment]:
+def list_comments(
+    db: Session,
+    post_id: Optional[int] = None,
+    author: Optional[str] = None,
+) -> List[Comment]:
     query = db.query(Comment)
+    if post_id is not None:
+        query = query.filter(Comment.post_id == post_id)
     if author:
         query = query.filter(Comment.author == author)
     return query.order_by(Comment.created_at.desc()).all()
@@ -18,7 +24,11 @@ def get_comment(db: Session, comment_id: int) -> Optional[Comment]:
 
 
 def add_comment(db: Session, payload: CommentCreate) -> Comment:
-    comment = Comment(author=payload.author, content=payload.content)
+    comment = Comment(
+        post_id=payload.post_id,
+        author=payload.author,
+        content=payload.content,
+    )
     db.add(comment)
     db.commit()
     db.refresh(comment)
@@ -34,6 +44,8 @@ def update_comment(
     if comment is None:
         return None
 
+    if payload.post_id is not None:
+        comment.post_id = payload.post_id
     if payload.author is not None:
         comment.author = payload.author
     if payload.content is not None:
