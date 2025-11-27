@@ -1,3 +1,13 @@
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parent
+
+DOTENV_PATH = BASE_DIR.parent / '.env'
+
+load_dotenv(DOTENV_PATH)
+
 from fastapi import FastAPI, HTTPException, Depends, status
 from src.auth import models
 from src.database.core import engine, SessionLocal, Base
@@ -7,6 +17,7 @@ import src.auth.auth as auth
 from src.auth.auth import get_current_user
 from app.api.shoutout import router as shoutout_router
 from app.models import User, Shoutout, ShoutoutRecipient
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 app.include_router(auth.router)
@@ -19,6 +30,14 @@ def get_db():
         yield db
     finally:
         db.close()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/", status_code=status.HTTP_200_OK)
 async def home():

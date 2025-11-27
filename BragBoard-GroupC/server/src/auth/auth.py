@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
@@ -10,12 +11,17 @@ from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+if SECRET_KEY is None:
+    raise EnvironmentError("JWT_SECRET_KEY is not set in environment variables.")
+
 router = APIRouter(
     prefix="/auth",
     tags=["auth"],
 )
 
-SECRET_KEY = "your_secret_key"
+SECRET_KEY = "8bb7aecb8adad4c78e2e441a7583f128"
 ALGORITHM = "HS256"
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
