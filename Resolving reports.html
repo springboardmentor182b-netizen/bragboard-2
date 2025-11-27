@@ -3,21 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="styles.css" />
-  <title>BragBoard Admin</title>
+  <title>BragBoard Admin - Resolving Reports</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
   <div class="frame">
-
     <div class="container">
-
       <!-- Sidebar -->
       <aside class="aside">
         <div class="brand">
           <h1>BragBoard Admin</h1>
         </div>
-
         <nav class="sidebar-menu">
           <div class="menu-item">Admin Dashboard</div>
           <div class="menu-item">Shout-out Management</div>
@@ -26,24 +22,33 @@
         </nav>
       </aside>
 
-      <!-- Main -->
+      <!-- Main Section -->
       <main class="main">
         <h2 class="heading">Resolving Reports</h2>
 
-        <!-- Card 1 -->
+        <!-- Report Card 1 -->
         <div class="report-card">
           <div class="report-header">
             <div class="user-info">
               <div class="name">John Doe</div>
               <div class="dept">Department: Marketing</div>
             </div>
-
             <div class="time">2 hrs ago</div>
           </div>
+          <p class="report-text">Completed the new campaign ahead of schedule. Excellent teamwork!</p>
 
-          <p class="report-text">
-            Completed the new campaign ahead of schedule. Excellent teamwork!
-          </p>
+          <!-- Shoutout / Reactions -->
+          <div class="shoutout">
+            <div class="reaction-row">
+              <button class="reaction-btn" data-type="like">👍 <span>0</span></button>
+              <button class="reaction-btn" data-type="love">❤️ <span>0</span></button>
+              <button class="reaction-btn" data-type="clap">👏 <span>0</span></button>
+              <button class="reaction-btn" data-type="celebrate">🎉 <span>0</span></button>
+            </div>
+            <div class="user-reaction">
+              Your reaction: <span class="userReactionLabel">None</span>
+            </div>
+          </div>
 
           <div class="button-row">
             <button class="btn resolve">Resolve</button>
@@ -51,20 +56,29 @@
           </div>
         </div>
 
-        <!-- Card 2 -->
+        <!-- Report Card 2 -->
         <div class="report-card">
           <div class="report-header">
             <div class="user-info">
               <div class="name">Jane Smith</div>
               <div class="dept">Department: Sales</div>
             </div>
-
             <div class="time">5 hrs ago</div>
           </div>
+          <p class="report-text">Exceeded monthly sales target and helped teammates achieve their goals.</p>
 
-          <p class="report-text">
-            Exceeded monthly sales target and helped teammates achieve their goals.
-          </p>
+          <!-- Shoutout / Reactions -->
+          <div class="shoutout">
+            <div class="reaction-row">
+              <button class="reaction-btn" data-type="like">👍 <span>0</span></button>
+              <button class="reaction-btn" data-type="love">❤️ <span>0</span></button>
+              <button class="reaction-btn" data-type="clap">👏 <span>0</span></button>
+              <button class="reaction-btn" data-type="celebrate">🎉 <span>0</span></button>
+            </div>
+            <div class="user-reaction">
+              Your reaction: <span class="userReactionLabel">None</span>
+            </div>
+          </div>
 
           <div class="button-row">
             <button class="btn resolve">Resolve</button>
@@ -73,8 +87,9 @@
         </div>
 
       </main>
-
     </div>
   </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
