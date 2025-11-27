@@ -1,6 +1,8 @@
-    import React, { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { resetPassword } from "../features/authentication/services/ResetPassword";
+import BigText from "./BigText";
+import "./ResetPassword.css";
 
 const ResetPassword = () => {
   const [newPass, setNewPass] = useState("");
@@ -26,26 +28,30 @@ const ResetPassword = () => {
   };
 
   return (
-    <div>
-      <h2>Reset Password</h2>
+    <div className="reset-container">
+      <BigText />
 
-      <input
-        type="password"
-        placeholder="New password"
-        value={newPass}
-        onChange={(e) => setNewPass(e.target.value)}
-      />
+      <div className="reset-box">
+        <h2>Reset Password</h2>
 
-      <input
-        type="password"
-        placeholder="Confirm password"
-        value={confirmPass}
-        onChange={(e) => setConfirmPass(e.target.value)}
-      />
+        <input
+          type="password"
+          placeholder="New password"
+          value={newPass}
+          onChange={(e) => setNewPass(e.target.value)}
+        />
 
-      <button onClick={handleReset}>Reset Password</button>
+        <input
+          type="password"
+          placeholder="Confirm password"
+          value={confirmPass}
+          onChange={(e) => setConfirmPass(e.target.value)}
+        />
 
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
+        <button onClick={handleReset}>Reset Password</button>
+
+        {msg && <p>{msg}</p>}
+      </div>
     </div>
   );
 };

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import BigText from "./BigText";
+import "./VerifyOTP.css";
 import { verifyOtp } from "../features/authentication/services/VerifyOTP";
 
 const VerifyOTP = () => {
@@ -7,7 +9,7 @@ const VerifyOTP = () => {
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.email; // fetch email from previous screen
+  const email = location.state?.email;
 
   const handleVerify = async () => {
     try {
@@ -19,20 +21,33 @@ const VerifyOTP = () => {
   };
 
   return (
-    <div>
-      <h2>Verify OTP</h2>
-      <p>OTP sent to: {email}</p>
+    <div className="auth-container">
+      <BigText />
 
-      <input
-        type="number"
-        placeholder="Enter OTP"
-        value={otp}
-        onChange={(e) => setOtp(e.target.value)}
-      />
+      <div className="auth-box">
+        <h2 className="auth-title">Verify OTP</h2>
 
-      <button onClick={handleVerify}>Verify</button>
+        <p className="auth-subtitle">
+          OTP has been sent to <span>{email}</span>
+        </p>
 
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
+        <input
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          maxLength={6}
+          className="auth-input"
+          placeholder="Enter OTP"
+          value={otp}
+          onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+        />
+
+        <button className="auth-btn" onClick={handleVerify}>
+          Verify
+        </button>
+
+        {msg && <p className="auth-error">{msg}</p>}
+      </div>
     </div>
   );
 };
