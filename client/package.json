@@ -1,4 +1,19 @@
 {
+ Group-A-feature/Admin-Dashboard-Sachin
+  "name": "client",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "lucide-react": "^0.554.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.6"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.22",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17"
+
   "name": "bragboard-client",
   "version": "0.1.0",
   "private": true,
@@ -38,5 +53,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+main-group-A
   }
 }
