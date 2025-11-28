@@ -1,0 +1,132 @@
+/* General */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #F9F9F9;
+}
+
+.frame {
+    display: flex;
+    flex-direction: row;
+    width: 1440px;
+    height: 1024px;
+}
+
+/* Sidebar */
+.aside {
+    width: 440px;
+    background: #5B6CFF;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.menu-item {
+    background: transparent;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.menu-item.active {
+    background: #4456E6;
+}
+
+/* Main */
+.main {
+    width: 1000px;
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    overflow-y: auto;
+}
+
+h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #000;
+}
+
+/* Filters */
+.filters {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.label {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.select {
+    background: #EFEFEF;
+    padding: 9px 17px;
+    border-radius: 8px;
+    border: 1px solid #CCC;
+    min-width: 120px;
+}
+
+.select span {
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+}
+
+.btn {
+    background: #5B6CFF;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Table */
+.table {
+    width: 900px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0px 6px 20px rgba(0,0,0,0.12);
+}
+
+.table-row {
+    display: flex;
+    width: 100%;
+}
+
+.table-row.header {
+    background: #F0F4FF;
+    font-weight: 600;
+}
+
+.table-row.alt {
+    background: #F9F9F9;
+}
+
+.cell {
+    padding: 16px 12px;
+    width: 140px;
+    font-size: 15px;
+    color: #555;
+}
+
+.cell-wide {
+    width: 390px;
+}
