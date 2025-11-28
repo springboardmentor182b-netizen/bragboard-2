@@ -1,23 +1,31 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
-import VerifyOTP from "./pages/VerifyOTP";
-import ResetPassword from "./pages/ResetPassword";
 import Home from "./pages/Home";
+import AdminHome from "./pages/AdminHome";
+import Reports from "./pages/Reports";
+import Settings from "./pages/Settings";
 
-function App() {
+export default function App() {
+  // Hardcoded role: "admin" or "user"
+  const role = "user"; // change to "user" to test user view
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/verify-otp" element={<VerifyOTP />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/home" element={<Home />} />
+        {role === "admin" ? (
+          <>
+            <Route path="/home" element={<AdminHome role={role} />} />
+            <Route path="/reports" element={<Reports role={role} />} />
+            <Route path="/settings" element={<Settings role={role} />} />
+          </>
+        ) : (
+          <>
+            <Route path="/home" element={<Home role={role} />} />
+            <Route path="/reports" element={<Reports role={role} />} />
+            <Route path="/settings" element={<Settings role={role} />} />
+          </>
+        )}
+        <Route path="*" element={role === "admin" ? <AdminHome role={role} /> : <Home role={role} />} />
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default App;

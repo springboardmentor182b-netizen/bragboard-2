@@ -1,0 +1,33 @@
+.navbar {
+  height: 70px;
+  background: #ffffff;
+  border-bottom: 1px solid #e7e7e7;
+  padding: 0 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.brand {
+  color: #3f78ff;
+  font-weight: 700;
+}
+
+.search {
+  width: 350px;
+  padding: 8px 15px;
+  border-radius: 18px;
+  border: 1px solid #d2d8e5;
+  background: #edf3ff;
+}
+
+.nav-right .nav-icon {
+  margin-left: 20px;
+  cursor: pointer;
+}

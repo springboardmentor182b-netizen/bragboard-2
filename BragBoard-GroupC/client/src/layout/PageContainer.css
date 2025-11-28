@@ -1,0 +1,16 @@
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.page-body {
+  display: flex;
+  flex-grow: 1;
+}
+
+.page-content {
+  flex-grow: 1;
+  padding: 30px 45px;
+  overflow-y: auto;
+}

@@ -1,0 +1,47 @@
+.sidebar {
+  width: 240px;
+  background: #fff;
+  border-right: 1px solid #e7e7e7;
+  padding: 20px 0;
+}
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0 18px;
+}
+
+.menu li {
+  margin-bottom: 12px;
+}
+
+.menu li a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.menu li.active a,
+.menu li a:hover {
+  background: #edf3ff;
+  font-weight: 600;
+  color: #3f78ff;
+}
+
+.filter-section {
+  margin-top: 30px;
+  padding: 15px;
+  border: 1px solid #e7e7e7;
+  border-radius: 12px;
+}
+.filter-section h4 {
+  margin-bottom: 10px;
+}
+.filter-section label {
+  display: block;
+  margin: 4px 0;
+}

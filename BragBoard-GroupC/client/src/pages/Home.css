@@ -1,0 +1,39 @@
+.welcome {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.tip {
+  color: #808aa6;
+  margin-top: -8px;
+  margin-bottom: 25px;
+}
+
+.create-btn {
+  background: #3f78ff;
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 22px;
+  cursor: pointer;
+  margin-bottom: 25px;
+}
+
+.post-card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.07);
+  padding: 20px;
+  margin-top: 15px;
+}
+
+.post-card input {
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #d4d4d4;
+}
