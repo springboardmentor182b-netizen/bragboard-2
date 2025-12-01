@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import Column, DateTime, Integer, String, Text
 
-from server.src.database.core import Base
+from src.database.core import Base
 
 
 class Comment(Base):

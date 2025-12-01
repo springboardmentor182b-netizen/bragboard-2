@@ -8,11 +8,16 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
+# SQLite database (default)
 DATABASE_URL = f"sqlite:///{DATA_DIR / 'app.db'}"
+
+# Uncomment below and comment above if you want to use MySQL instead:
+# DATABASE_URL = "mysql+pymysql://root:root%40123@localhost:3306/bragboard"
 
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False},
+    connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {},
+    echo=False,
 )
 
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
@@ -21,23 +26,16 @@ Base = declarative_base()
 
 
 def get_session():
-    """FastAPI dependency that yields a database session."""
+    """FastAPI dependency that yields a database session (for comments API)."""
     session = SessionLocal()
     try:
         yield session
     finally:
         session.close()
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Update the DATABASE_URL to use your MySQL config
-DATABASE_URL = "mysql+pymysql://root:root%40123@localhost:3306/bragboard"
-
-engine = create_engine(DATABASE_URL, echo=False, future=True)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
 
 def get_db():
+    """FastAPI dependency that yields a database session (for shoutouts/reports API)."""
     db = SessionLocal()
     try:
         yield db

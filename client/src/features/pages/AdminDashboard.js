@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { Users, MessageSquare, Flag, Activity } from 'lucide-react';
 
 // Import all local admin components
-import AdminNavbar from '../features/admin/components/AdminNavbar';
-import StatCard from '../features/admin/components/StatsCard';
-import ActivityChart from '../features/admin/components/ActivityChart';
-import DepartmentChart from '../features/admin/components/DepartmentChart';
-import EmployeeDrawer from '../features/admin/components/EmployeeDrawer';
-
+import AdminNavbar from '../admin/AdminNavbar';
+import StatCard from '../admin/StatsCard';
+import ActivityChart from '../admin/ActivityChart';
+import DepartmentChart from '../admin/DepartmentChart';
+import EmployeeDrawer from '../admin/EmployeeDrawer';
 
 // --- MAIN PAGE COMPONENT ---
 const AdminDashboard = () => {

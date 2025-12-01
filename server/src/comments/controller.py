@@ -3,8 +3,8 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
-from server.src.comments.models import CommentCreate, CommentRead, CommentUpdate
-from server.src.database.core import get_session
+from src.comments.models import CommentCreate, CommentRead, CommentUpdate
+from src.database.core import get_session
 from . import service
 
 router = APIRouter(prefix="/comments", tags=["comments"])
