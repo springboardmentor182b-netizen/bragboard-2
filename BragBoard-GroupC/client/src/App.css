@@ -36,9 +36,3 @@
     transform: rotate(360deg);
   }
 }
-.body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-  background: #f4f7ff;
-}
-

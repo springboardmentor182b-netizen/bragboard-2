@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Base from "./pages/Base";
+import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
+import VerifyOTP from "./pages/VerifyOTP";
+import ResetPassword from "./pages/ResetPassword";
 import Home from "./pages/Home";
 import AdminHome from "./pages/AdminHome";
 import Reports from "./pages/Reports";
@@ -8,11 +14,19 @@ import AdminDashboard from "./pages/AdminDashboard";
 
 export default function App() {
   const role = "admin"; 
+
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
 
-        {/* Admin Routes */}
+        {/* ---------------------- COMMON ROUTES ---------------------- */}
+        <Route path="/" element={<Base />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-otp" element={<VerifyOTP />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+
+        {/* ---------------------- ADMIN ROUTES ---------------------- */}
         <Route
           path="/admin/home"
           element={
@@ -46,7 +60,7 @@ export default function App() {
           }
         />
 
-        {/* Employee Routes */}
+        {/* ---------------------- USER ROUTES ---------------------- */}
         <Route
           path="/user/home"
           element={
@@ -80,15 +94,17 @@ export default function App() {
           }
         />
 
-        {/* Unauthorized Page */}
+        {/* ---------------------- UNAUTHORIZED ---------------------- */}
         <Route path="/unauthorized" element={<h1>Unauthorized Access</h1>} />
 
-        {/* Default Route */}
+        {/* ---------------------- DEFAULT ROUTE ---------------------- */}
         <Route
           path="*"
-          element={role === "admin" ? <AdminHome role={role} /> : <Home role={role} />}
+          element={
+            role === "admin" ? <AdminHome role={role} /> : <Home role={role} />
+          }
         />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
