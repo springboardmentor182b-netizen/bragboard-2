@@ -2,8 +2,8 @@ from typing import List, Optional
 
 from sqlalchemy.orm import Session
 
-from server.src.comments.models import CommentCreate, CommentUpdate
-from server.src.entities.comment import Comment
+from src.comments.models import CommentCreate, CommentUpdate
+from src.entities.comment import Comment
 
 
 def list_comments(

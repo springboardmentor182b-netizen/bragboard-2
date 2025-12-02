@@ -1,30 +1,29 @@
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 
-from server.src import entities  # noqa: F401  # ensures models register with Base
-from server.src.comments.controller import router as comments_router
-from server.src.database.core import Base, engine
+from src import entities  # noqa: F401  # ensures models register with Base
+from src.comments.controller import router as comments_router
+from src.todos.controller import router as shoutout_router
+from src.shoutout_reports.controller import router as shoutout_reports_router
+from src.database.core import Base, engine
 
+# Create database tables
 Base.metadata.create_all(bind=engine)
 
+# Create FastAPI app
 app = FastAPI(
-    title="BragBoard Comment Service",
-    description="Minimal API to create, edit, delete, and list comments.",
+    title="BragBoard API",
+    description="API for BragBoard - Shoutouts, Comments, and Reports",
     version="1.0.0",
 )
 
+# Register routers
 app.include_router(comments_router, prefix="/api")
+app.include_router(shoutout_router)  # Shoutouts API at /shoutouts
+app.include_router(shoutout_reports_router)  # Reports API at /api/shoutout-reports
 
-from fastapi import FastAPI
-from src.todos.controller import router as shoutout_router
 
-app = FastAPI(title="Bragboard API", version="1.0.0")
-
-# Mount your shoutouts API under /shoutouts
-app.include_router(shoutout_router)
-
-# OPTIONAL: Redirect root to Swagger UI
-from fastapi.responses import RedirectResponse
-
+# Redirect root to Swagger UI
 @app.get("/", include_in_schema=False)
 def root():
     return RedirectResponse(url="/docs")

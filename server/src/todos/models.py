@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
 
 class ShoutoutCreate(BaseModel):
@@ -10,6 +10,8 @@ class ShoutoutCreate(BaseModel):
     tags: Optional[List[str]] = None
 
 class ShoutoutRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     title: str
     message: str
@@ -17,6 +19,3 @@ class ShoutoutRead(BaseModel):
     recipients: List[int] = []
     tags: List[str] = []
     created_at: datetime
-
-    class Config:
-        from_attributes = True
