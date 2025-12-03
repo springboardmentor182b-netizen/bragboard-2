@@ -1,40 +1,87 @@
-import "./SideBar.css";
-import { Home, Star, Trophy, FileText, Settings, Archive, PlusCircle } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
 
-const Sidebar = ({ role }) => {
-  const location = useLocation();
+import React, { useState } from 'react'; 
+const Sidebar = ({ activeSection, setActiveSection }) => {
+  const [isReportsExpanded, setIsReportsExpanded] = useState(true);
 
-  const adminLinks = [
-    { name: "Dashboard", path: "/admin/home", icon: <Home size={20} /> },
-    { name: "Award", path: "/admin/award", icon: <Star size={20} /> },
-    { name: "Resolve Reports", path: "/admin/reports", icon: <FileText size={20} /> },
-    { name: "Export Reports", path: "/admin/export", icon: <Archive size={20} /> },
-    { name: "Settings", path: "/admin/settings", icon: <Settings size={20} /> },
+  const menuItems = [
+    { key: 'dashboard', label: 'Admin Dashboard', type: 'link' },
+    { key: 'users', label: 'Users', type: 'link' },
+    { 
+      key: 'manage-reports', 
+      label: 'Manage Reports', 
+      type: 'parent',
+      icon: '📄', 
+      children: [
+        { key: 'resolve-reports', label: 'Resolve Reports', type: 'sub-link' },
+        { key: 'report-history', label: 'Report History', type: 'sub-link' }
+      ]
+    },
+    { key: 'notifications', label: 'Notifications', type: 'link' },
+    { key: 'settings', label: 'Settings', type: 'link' }
   ];
 
-  const userLinks = [
-    { name: "Dashboard", path: "/user/home", icon: <Home size={20} /> },
-    { name: "My Reports", path: "/user/reports", icon: <FileText size={20} /> },
-    { name: "Leaderboard", path: "/user/leaderboard", icon: <Trophy size={20} /> },
-    { name: "Settings", path: "/user/settings", icon: <Settings size={20} /> },
-  ];
-
-  const links = role === "admin" ? adminLinks : userLinks;
+  const departments = ['HR', 'CyberSecurity', 'Deployment'];
 
   return (
-    <aside className="sidebar">
-      <ul className="menu">
-        {links.map((l) => (
-          <li key={l.path} className={location.pathname === l.path ? "active" : ""}>
-            <Link to={l.path}>
-              {l.icon}
-              <span>{l.name}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </aside>
+    <div className="sidebar">
+      <div className="sidebar-header">
+        <h2>BragBoard</h2>
+      </div>
+      
+      <nav className="sidebar-nav">
+        <ul className="nav-menu">
+          {menuItems.map(item => (
+            <React.Fragment key={item.key}>
+              <li className="nav-item">
+                {item.type === 'parent' ? (
+                  <button
+                    className={`nav-link ${activeSection.startsWith(item.key) ? 'active' : ''}`}
+                    onClick={() => setIsReportsExpanded(!isReportsExpanded)} // Toggle reports submenu
+                  >
+                    {item.label} {item.icon}
+                  </button>
+                ) : (
+                  <button
+                    className={`nav-link ${activeSection === item.key ? 'active' : ''}`}
+                    onClick={() => setActiveSection(item.key)}
+                  >
+                    {item.label}
+                  </button>
+                )}
+              </li>
+              {item.type === 'parent' && item.key === 'manage-reports' && isReportsExpanded && (
+                <ul className="sub-menu">
+                  {item.children.map(child => (
+                    <li key={child.key} className="nav-item">
+                      <button
+                        className={`nav-link ${activeSection === child.key ? 'active' : ''}`}
+                        onClick={() => setActiveSection(child.key)}
+                      >
+                        {child.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </React.Fragment>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="sidebar-filters">
+        <h3>Filter</h3>
+        <ul className="filter-list">
+          {departments.map(dept => (
+            <li key={dept} className="filter-item">
+              <label className="filter-label">
+                <input type="checkbox" />
+                <span>{dept}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 };
 

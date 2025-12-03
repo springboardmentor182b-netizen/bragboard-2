@@ -1,0 +1,50 @@
+.admin-header {
+  height: 72px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 1px solid #eef2f6;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  margin-left: 230px; /* aligned with sidebar */
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-search {
+  width: 420px;
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #e6e9ee;
+  background: #fbfdff;
+  font-size: 14px;
+  outline: none;
+}
+
+.header-search:focus {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.06);
+  border-color: #2563eb;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.notification {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.notification:hover {
+  transform: scale(1.2);
+}

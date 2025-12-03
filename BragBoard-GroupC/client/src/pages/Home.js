@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 
 const Home = ({ role }) => {
   return (
-    <PageContainer role={role}>
+   <PageContainer role={role}>
       <h1 className="welcome">Welcome back, Arshit Rawat!</h1>
       {role !== "admin" && (
         <>
@@ -20,6 +20,7 @@ const Home = ({ role }) => {
         <input placeholder="Add a comment..." />
       </div>
     </PageContainer>
+
   );
 };
 

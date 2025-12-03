@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+/*.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 10px 0;
+}
+
+.sidebar li ul li {
+  margin: 5px 0;
+}
+*/

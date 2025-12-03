@@ -11,7 +11,8 @@ import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
-
+import ResolveReports from "./pages/ResolveReports";
+import ReportHistory from "./pages/ReportHistory";
 export default function App() {
   const role = "admin"; 
 
@@ -48,7 +49,58 @@ export default function App() {
             />
           }
         />
+        <Route
+  path="/admin/reports"
+  element={
+    <ProtectedRoute
+      element={<Reports role={role} />}
+      allowedRoles={["admin"]}
+      role={role}
+    />
+  }
+/>
 
+<Route
+  path="/admin/resolve-reports"
+  element={
+    <ProtectedRoute
+      element={<ResolveReports role={role} />}
+      allowedRoles={["admin"]}
+      role={role}
+    />
+  }
+/>
+
+<Route
+  path="/admin/report-history"
+  element={
+    <ProtectedRoute
+      element={<ReportHistory role={role} />}
+      allowedRoles={["admin"]}
+      role={role}
+    />
+  }
+/>
+       {/* ---------------------- COMMON ROUTES ----------------------*/}  <Route
+          path="/admin/manage/resolve"
+          element={
+            <ProtectedRoute
+              element={<ResolveReports role={role} />}
+              allowedRoles={["admin"]}
+              role={role}
+            />
+          }
+        />
+        <Route
+          path="/admin/manage/history"
+          element={
+            <ProtectedRoute
+              element={<ReportHistory role={role} />}
+              allowedRoles={["admin"]}
+              role={role}
+            />
+          }
+        />
         <Route
           path="/admin/settings"
           element={

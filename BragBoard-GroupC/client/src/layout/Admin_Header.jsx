@@ -1,25 +1,24 @@
-import React from 'react';
+import React from "react";
+import { LucideBell } from "lucide-react";
+import "./Admin_Header.css";
 
 const Header = ({ searchQuery, setSearchQuery }) => {
   return (
-    <header className="header">
+    <header className="admin-header">
       <div className="header-left">
         <div className="search-bar">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search for shoutouts and teammates.."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
+            className="header-search"
           />
         </div>
       </div>
       <div className="header-right">
-        <div className="user-info">
-          <span className="user-role">Admin</span>
-          <div className="user-avatar">
-            <span>A</span>
-          </div>
+        <div className="notification">
+          <LucideBell size={20} />
         </div>
       </div>
     </header>
