@@ -1,3 +1,17 @@
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+# 1. Database URL (Replace with your actual PostgreSQL connection string)
+SQLALCHEMY_DATABASE_URL = "postgresql://user:password@localhost/bragboard_db"
+
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
 from pathlib import Path
 
 from sqlalchemy import create_engine
@@ -22,7 +36,11 @@ engine = create_engine(
 
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
+
 Base = declarative_base()
+
+
+
 
 
 def get_session():
@@ -36,8 +54,15 @@ def get_session():
 
 def get_db():
     """FastAPI dependency that yields a database session (for shoutouts/reports API)."""
+
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+
+
+def create_db_tables():
+    Base.metadata.create_all(bind=engine)
+
