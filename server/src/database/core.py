@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from sqlalchemy import create_engine
@@ -8,36 +9,49 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
-# SQLite database (default)
-DATABASE_URL = f"sqlite:///{DATA_DIR / 'app.db'}"
 
-# Uncomment below and comment above if you want to use MySQL instead:
-# DATABASE_URL = "mysql+pymysql://root:root%40123@localhost:3306/bragboard"
+POSTGRES_DATABASE_URL = "postgresql://user:password@localhost/bragboard_db"
+
+
+SQLITE_DATABASE_URL = f"sqlite:///{DATA_DIR / 'app.db'}"
+
+
+
+DATABASE_URL = os.getenv("DATABASE_URL", SQLITE_DATABASE_URL)
+
+connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
 
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {},
+    connect_args=connect_args,
     echo=False,
 )
 
-SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 Base = declarative_base()
 
 
-def get_session():
-    """FastAPI dependency that yields a database session (for comments API)."""
-    session = SessionLocal()
-    try:
-        yield session
-    finally:
-        session.close()
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
 
 
 def get_db():
-    """FastAPI dependency that yields a database session (for shoutouts/reports API)."""
+    """
+    FastAPI dependency that yields a database session.
+    It handles session creation and automatic closing.
+    """
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+
+
+
+def create_db_tables():
+    """Creates all database tables defined in the Base metadata."""
+    Base.metadata.create_all(bind=engine)
