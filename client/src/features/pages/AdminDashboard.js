@@ -31,30 +31,26 @@ const DEMO_USERS = [
   { id: 5, name: "Eve", department: "Operations" },
 ];
 
-
 export default function AdminDashboard() {
   const [shoutouts, setShoutouts] = useState([]);
-  const [users] = useState(DEMO_USERS); // list of users for form/select
+  const [users] = useState(DEMO_USERS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Create modal state
   const [showCreate, setShowCreate] = useState(false);
   const [form, setForm] = useState({
     title: "",
     message: "",
-    sender_id: "", // will be user id
-    recipient_id: "", // single recipient for simplicity; change to array if needed
+    sender_id: "",
+    recipient_id: "",
     department: "",
-    tags: "", // comma separated
+    tags: "",
   });
 
-  // Fetch users and shoutouts
   useEffect(() => {
     loadShoutouts();
     // eslint-disable-next-line
   }, []);
-
 
   async function loadShoutouts() {
     setLoading(true);
@@ -63,7 +59,6 @@ export default function AdminDashboard() {
       const res = await fetch(`${API_URL}/shoutouts`);
       if (!res.ok) throw new Error("Failed to fetch shoutouts");
       const data = await res.json();
-      // Ensure created_at is valid date; backend should provide ISO strings
       setShoutouts(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
@@ -76,47 +71,35 @@ export default function AdminDashboard() {
   async function handleDelete(id) {
     if (!window.confirm("Delete this shoutout?")) return;
     try {
-      const res = await fetch(`${API_URL}/shoutouts/${id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || "Delete failed");
-      }
-      // remove locally
-      setShoutouts((prev) => prev.filter((s) => s.id !== id));
+      const res = await fetch(`${API_URL}/shoutouts/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Delete failed");
+      setShoutouts(prev => prev.filter(s => s.id !== id));
     } catch (err) {
       alert("Delete failed: " + (err.message || err));
     }
   }
 
-  // Create shoutout
   async function handleCreate(e) {
     e.preventDefault();
-    // basic validation
     if (!form.title || !form.message) {
       alert("Please add title and message");
       return;
     }
 
-    // tags -> array
     const tagsArray = form.tags
       .split(",")
-      .map((t) => t.trim())
+      .map(t => t.trim())
       .filter(Boolean);
 
-    // pick the selected sender from DEMO_USERS
-const senderUser = users.find(
-  (u) => String(u.id) === String(form.sender_id)
-);
+    const senderUser = users.find(u => String(u.id) === String(form.sender_id));
 
-const createPayload = {
-  title: form.title,
-  description: form.message, // backend expects "description"
-  department: form.department || (senderUser?.department ?? "Unknown"),
-  created_by: senderUser ? senderUser.name : "Unknown", // backend expects "created_by"
-  is_flagged: false,
-};
+    const createPayload = {
+      title: form.title,
+      description: form.message,
+      department: form.department || (senderUser?.department ?? "Unknown"),
+      created_by: senderUser ? senderUser.name : "Unknown",
+      is_flagged: false,
+    };
 
     try {
       const res = await fetch(`${API_URL}/shoutouts`, {
@@ -124,50 +107,58 @@ const createPayload = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(createPayload),
       });
-      if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(errText || "Failed to create shoutout");
-      }
+      if (!res.ok) throw new Error("Create failed");
       const newShoutout = await res.json();
-      // If backend returns created object, append it; otherwise reload list
-      if (newShoutout && newShoutout.id) {
-        setShoutouts((prev) => [newShoutout, ...prev]);
+      if (newShoutout?.id) {
+        setShoutouts(prev => [newShoutout, ...prev]);
       } else {
         await loadShoutouts();
       }
       setShowCreate(false);
-      setForm({ title: "", message: "", sender_id: "", recipient_id: "", department: "", tags: "" });
+      setForm({
+        title: "",
+        message: "",
+        sender_id: "",
+        recipient_id: "",
+        department: "",
+        tags: "",
+      });
     } catch (err) {
       alert("Create failed: " + (err.message || err));
     }
   }
 
-  // flagged list
-  const flagged = useMemo(() => shoutouts.filter((s) => s.is_flagged), [shoutouts]);
+  const flagged = useMemo(
+    () => shoutouts.filter(s => s.is_flagged),
+    [shoutouts]
+  );
 
-  // weekly activity chart (Mon..Sun)
   const weeklyData = useMemo(() => {
     const map = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const counts = { Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0 };
-    shoutouts.forEach((s) => {
+    shoutouts.forEach(s => {
       if (!s.created_at) return;
       const d = new Date(s.created_at);
       if (isNaN(d)) return;
       const day = map[d.getDay()];
-      if (counts[day] !== undefined) counts[day] += 1;
+      counts[day] = (counts[day] || 0) + 1;
     });
-    // keep Mon->Sun order
-    return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => ({ day: d, count: counts[d] || 0 }));
+    return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(d => ({
+      day: d,
+      count: counts[d] || 0,
+    }));
   }, [shoutouts]);
 
-  // department chart
   const deptData = useMemo(() => {
     const counts = {};
-    shoutouts.forEach((s) => {
-      const dept = (s.department && s.department.trim()) || "Unknown";
+    shoutouts.forEach(s => {
+      const dept = (s.department || "Unknown").trim();
       counts[dept] = (counts[dept] || 0) + 1;
     });
-    return Object.entries(counts).map(([name, value]) => ({ name, value }));
+    return Object.entries(counts).map(([name, value]) => ({
+      name,
+      value,
+    }));
   }, [shoutouts]);
 
   return (
@@ -175,7 +166,8 @@ const createPayload = {
       <header className="dashboard-header">
         <h1>Admin Dashboard</h1>
         <div className="header-actions">
-          <button className="btn primary" onClick={() => { loadShoutouts(); fetchUsers(); }}>
+          {/* ✔ FIXED HERE */}
+          <button className="btn primary" onClick={loadShoutouts}>
             🔄 Refresh
           </button>
           <button className="btn" onClick={() => setShowCreate(true)}>＋ New Shoutout</button>
@@ -195,10 +187,12 @@ const createPayload = {
         </div>
         <div className="stat-card">
           <div className="stat-label">Departments</div>
-          <div className="stat-value">{new Set(shoutouts.map((s) => (s.department || "Unknown"))).size}</div>
+          <div className="stat-value">
+            {new Set(shoutouts.map(s => s.department || "Unknown")).size}
+          </div>
         </div>
         <div className="stat-card">
-          <div className="stat-label">Users (fetched)</div>
+          <div className="stat-label">Users</div>
           <div className="stat-value">{users.length}</div>
         </div>
       </section>
@@ -236,21 +230,27 @@ const createPayload = {
       <section className="moderation-box">
         <div className="moderation-header">
           <h3>Moderation</h3>
-          <button className="btn outline">Pending reports ({flagged.length})</button>
+          <button className="btn outline">
+            Pending reports ({flagged.length})
+          </button>
         </div>
 
         {flagged.length === 0 ? (
           <div className="empty">No flagged shoutouts.</div>
         ) : (
           <div className="flagged-list">
-            {flagged.map((f) => (
+            {flagged.map(f => (
               <div className="flagged-item" key={f.id}>
                 <div>
                   <strong>{f.title}</strong>
-                  <div className="muted">By: {f.created_by || f.sender_id || "Unknown"}</div>
+                  <div className="muted">
+                    By: {f.created_by || f.sender_id || "Unknown"}
+                  </div>
                 </div>
                 <div className="flagged-actions">
-                  <button className="btn danger" onClick={() => handleDelete(f.id)}>Delete</button>
+                  <button className="btn danger" onClick={() => handleDelete(f.id)}>
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
@@ -280,15 +280,15 @@ const createPayload = {
                 </tr>
               </thead>
               <tbody>
-                {shoutouts.map((s) => (
+                {shoutouts.map(s => (
                   <tr key={s.id}>
                     <td className="title-col">{s.title}</td>
                     <td>{s.department || "N/A"}</td>
                     <td>{s.created_by || s.sender_name || s.sender_id || "N/A"}</td>
                     <td>
                       {Array.isArray(s.recipients) && s.recipients.length > 0
-                        ? s.recipients.map((r) => r.name || r.id).join(", ")
-                        : s.recipient_names || "—"}
+                        ? s.recipients.map(r => r.name || r.id).join(", ")
+                        : "—"}
                     </td>
                     <td>{s.created_at ? new Date(s.created_at).toLocaleDateString() : "—"}</td>
                     <td>
@@ -297,9 +297,12 @@ const createPayload = {
                       </span>
                     </td>
                     <td>
-                      <div className="actions-cell">
-                        <button className="btn small" onClick={() => handleDelete(s.id)}>🗑️ Delete</button>
-                      </div>
+                      <button
+                        className="btn small"
+                        onClick={() => handleDelete(s.id)}
+                      >
+                        🗑️ Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -309,17 +312,16 @@ const createPayload = {
         </div>
       </section>
 
-      {/* Create modal */}
       {showCreate && (
         <div className="modal-backdrop" onClick={() => setShowCreate(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
             <h3>Create Shoutout</h3>
             <form onSubmit={handleCreate} className="create-form">
               <label>
                 Title
                 <input
                   value={form.title}
-                  onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
+                  onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
                   required
                 />
               </label>
@@ -328,7 +330,7 @@ const createPayload = {
                 Message
                 <textarea
                   value={form.message}
-                  onChange={(e) => setForm((p) => ({ ...p, message: e.target.value }))}
+                  onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
                   required
                 />
               </label>
@@ -337,12 +339,12 @@ const createPayload = {
                 Sender (created by)
                 <select
                   value={form.sender_id}
-                  onChange={(e) => setForm((p) => ({ ...p, sender_id: e.target.value }))}
+                  onChange={e => setForm(p => ({ ...p, sender_id: e.target.value }))}
                 >
                   <option value="">(none)</option>
-                  {users.map((u) => (
+                  {users.map(u => (
                     <option key={u.id} value={u.id}>
-                      {u.name} — {u.department || "N/A"}
+                      {u.name} — {u.department}
                     </option>
                   ))}
                 </select>
@@ -352,10 +354,10 @@ const createPayload = {
                 Recipient
                 <select
                   value={form.recipient_id}
-                  onChange={(e) => setForm((p) => ({ ...p, recipient_id: e.target.value }))}
+                  onChange={e => setForm(p => ({ ...p, recipient_id: e.target.value }))}
                 >
                   <option value="">(none)</option>
-                  {users.map((u) => (
+                  {users.map(u => (
                     <option key={u.id} value={u.id}>
                       {u.name}
                     </option>
@@ -367,7 +369,7 @@ const createPayload = {
                 Department
                 <input
                   value={form.department}
-                  onChange={(e) => setForm((p) => ({ ...p, department: e.target.value }))}
+                  onChange={e => setForm(p => ({ ...p, department: e.target.value }))}
                 />
               </label>
 
@@ -375,12 +377,16 @@ const createPayload = {
                 Tags (comma separated)
                 <input
                   value={form.tags}
-                  onChange={(e) => setForm((p) => ({ ...p, tags: e.target.value }))}
+                  onChange={e => setForm(p => ({ ...p, tags: e.target.value }))}
                 />
               </label>
 
               <div className="form-actions">
-                <button type="button" className="btn outline" onClick={() => setShowCreate(false)}>
+                <button
+                  type="button"
+                  className="btn outline"
+                  onClick={() => setShowCreate(false)}
+                >
                   Cancel
                 </button>
                 <button className="btn primary" type="submit">
