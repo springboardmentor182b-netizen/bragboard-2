@@ -6,38 +6,28 @@ from datetime import datetime, timedelta
 import random
 from .config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
-# --- helpers: SHA256 pre-hash, then bcrypt ---
+# Pre-hash the password with SHA256 before applying bcrypt
 def _prehash(password: str) -> bytes:
-    """
-    Return SHA256 digest of password as bytes.
-    This guarantees a fixed-length input (32 bytes) for bcrypt and avoids
-    the 72-byte limitation completely.
-    """
+    """Convert the password to a SHA256 digest (32 bytes)."""
     if isinstance(password, str):
         password = password.encode("utf-8")
     return hashlib.sha256(password).digest()
 
 def hash_password(password: str) -> str:
-    """
-    Hash password: sha256(password) -> bcrypt.
-    Returns the bcrypt hash as utf-8 string (so it can be stored in DB).
-    """
+    """Hash the password using SHA256 + bcrypt."""
     ph = _prehash(password)
     hashed = bcrypt.hashpw(ph, bcrypt.gensalt())
-    # hashed is bytes, decode to str for DB storage
     return hashed.decode("utf-8")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """
-    Verify: prehash plain_password and check against stored bcrypt hash.
-    hashed_password: string from DB (utf-8). bcrypt.checkpw expects bytes.
-    """
+    """Check a plain password against a stored bcrypt hash."""
     if isinstance(hashed_password, str):
+        # hashed is bytes, decode to str for DB storage
         hashed_password = hashed_password.encode("utf-8")
     ph = _prehash(plain_password)
     return bcrypt.checkpw(ph, hashed_password)
 
-# --- OTP + JWT helpers (unchanged) ---
+# OTP and JWT utilities
 def generate_otp() -> str:
     return str(random.randint(100000, 999999))
 
