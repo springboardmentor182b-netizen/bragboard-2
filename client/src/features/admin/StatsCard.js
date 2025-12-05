@@ -1,19 +1,19 @@
 import React from 'react';
 
-// --- WIDGETS COMPONENT (Stat Card) ---
-const StatCard = ({ title, value, change, icon: Icon, isNegative }) => (
-  <div className="bg-gray-800/50 p-5 rounded-xl border border-gray-700 flex flex-col justify-between min-h-[140px]">
-    <div className="flex justify-between items-start">
-      <span className="text-gray-400 text-sm font-medium">{title}</span>
-      <Icon className="text-blue-500" size={20} />
+const StatsCard = ({ title, value, trend, className = '' }) => {
+  return (
+    <div className={`p-8 rounded-2xl shadow-2xl border-2 backdrop-blur-lg ${className} border-blue-500/30 hover:border-blue-400/70 transition-all hover:shadow-3xl hover:-translate-y-2`}>
+      <h3 className="text-sm font-semibold text-blue-200 uppercase tracking-wider opacity-90 mb-2">
+        {title}
+      </h3>
+      <div className="mt-4">
+        <p className="text-4xl font-black text-white leading-tight">{value}</p>
+        <p className={`text-sm font-medium mt-2 px-3 py-1 inline-block rounded-full text-xs ${trend.startsWith('+') ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
+          {trend}
+        </p>
+      </div>
     </div>
-    <div>
-      <h3 className="text-3xl font-bold text-white mt-2">{value}</h3>
-      <span className={`text-xs font-bold mt-1 inline-block ${isNegative ? 'text-red-400' : 'text-green-400'}`}>
-        {change}
-      </span>
-    </div>
-  </div>
-);
+  );
+};
 
-export default StatCard;
+export default StatsCard;
