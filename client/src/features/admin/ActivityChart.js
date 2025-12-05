@@ -1,36 +1,54 @@
-import React from 'react';
-import ChartPlaceholder from './ChartPlaceholder'; // Assuming you create this helper
+import React, { useEffect, useState } from 'react';
 
-// --- Weekly Activity Line Chart ---
-const WeeklyActivityLineChart = () => (
-  <div className="relative h-64 border-l border-b border-gray-700 w-full">
-    {[0, 1, 2, 3].map(i => (
-      <div key={i} className="absolute w-full border-t border-gray-700/30" style={{ bottom: `${i * 25}%` }}></div>
-    ))}
-    <svg className="absolute inset-0 w-full h-full overflow-visible">
-       <polyline 
-         fill="none" 
-         stroke="#3b82f6" 
-         strokeWidth="3" 
-         points="0,200 100,180 200,190 300,150 400,170 500,220 600,240" 
-       />
-       <polyline 
-         fill="none" 
-         stroke="#10b981" 
-         strokeWidth="3" 
-         points="0,150 100,130 200,140 300,100 400,120 500,180 600,190" 
-       />
-    </svg>
-    <div className="absolute bottom-0 w-full flex justify-between text-xs text-gray-500 pt-2">
-      <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+export default function ActivityChart() {
+  const [data, setData] = useState({
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    values: [12, 19, 9, 17, 23, 8, 14],
+  });
+
+  useEffect(() => {
+    const fetchChart = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/admin/weekly-activity');
+        if (!res.ok) throw new Error('no chart');
+        const json = await res.json();
+        if (json.labels && json.values) setData(json);
+      } catch {
+        // keep fallback
+      }
+    };
+    fetchChart();
+  }, []);
+
+  const max = Math.max(...data.values, 1);
+
+  return (
+    <div style={{ background: '#001F54', borderRadius: 12, padding: '1rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+        <h3 style={{ fontWeight: 600, color: 'white' }}>Weekly Activity</h3>
+        <div style={{ fontSize: '0.85rem', color: '#9fb2d2' }}>Shoutouts</div>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around', height: 140, gap: 8 }}>
+        {data.values.map((v, i) => {
+          const heightPct = Math.round((v / max) * 100);
+          return (
+            <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
+              <div
+                style={{
+                  height: `${Math.max(10, heightPct)}%`,
+                  width: '100%',
+                  maxWidth: 32,
+                  borderRadius: 6,
+                  background: 'linear-gradient(180deg, #1282A2, #034078)',
+                }}
+                title={`${data.labels[i]}: ${v}`}
+              />
+              <div style={{ fontSize: '0.7rem', marginTop: 8, color: '#cfe7f6' }}>{data.labels[i]}</div>
+            </div>
+          );
+        })}
+      </div>
     </div>
-  </div>
-);
-
-const ActivityChart = () => (
-    <ChartPlaceholder title="Weekly Activity" subtitle="Shoutouts and engagement trends">
-        <WeeklyActivityLineChart />
-    </ChartPlaceholder>
-);
-
-export default ActivityChart;
+  );
+}
