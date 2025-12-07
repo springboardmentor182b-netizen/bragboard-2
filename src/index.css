@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #f5f6fa;
+}
+
+.sidebar {
+  width: 230px;
+  background: #f1f5ff;
+  height: 100vh;
+  padding: 20px;
+  position: fixed;
+}
+
+.sidebar .menu-item {
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.sidebar .menu-item.active {
+  background: #0b5cff;
+  color: white;
+}
+
+.topbar {
+  height: 70px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  margin-left: 230px;
+}
+
+.dashboard-content {
+  margin-left: 230px;
+  padding: 30px;
+}
