@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status, StreamingResponse, Response
 from sqlalchemy.orm import Session
-from typing import Optional, List
+from typing import Optional, List, Literal
+from datetime import datetime
+import io
 from src.database.core import get_db
 from src.entities.user import User
 from . import service
@@ -108,7 +110,7 @@ def get_report(
             detail="Report not found"
         )
     
-    # Check access: employees can only see their own reports, admins can see all
+    
     if user.role != "admin" and report.reporter_id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -140,3 +142,50 @@ def resolve_report(
             detail=str(e)
         )
 
+
+@router.get("/export/{file_format}")
+def export_reports(
+    file_format: Literal["csv", "pdf"],
+    admin_id: int = Query(..., ge=1, description="ID of the admin user"),
+    db: Session = Depends(get_db)
+):
+    """
+    API endpoint for admins to export a report of all shoutout reports 
+    in either CSV or PDF format.
+    """
+    verify_admin(db, admin_id)
+    
+    
+    report_data = service.get_all_reports_for_export(db)
+    
+    if not report_data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No reports found to export")
+
+    
+    filename_base = f"shoutout_moderation_report_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+
+    if file_format == "csv":
+        
+        csv_file = service.generate_reports_csv(report_data)
+        
+        
+        headers = {'Content-Disposition': f'attachment; filename="{filename_base}.csv"'}
+        return StreamingResponse(
+            iter([csv_file.getvalue()]), 
+            media_type="text/csv", 
+            headers=headers
+        )
+    
+    elif file_format == "pdf":
+        
+        pdf_buffer = service.generate_reports_pdf(report_data)
+
+        
+        headers = {'Content-Disposition': f'attachment; filename="{filename_base}.pdf"'}
+        return Response(
+            content=pdf_buffer.getvalue(), 
+            media_type="application/pdf", 
+            headers=headers
+        )
+    
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid file format requested")
