@@ -10,6 +10,7 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
+import LeaderboardWidget from "../components/LeaderboardWidget"; // <-- add this
 
 const API_URL = "http://localhost:8000";
 
@@ -36,6 +37,9 @@ export default function AdminDashboard() {
     department: "",
     tags: "",
   });
+
+  // NEW: which view is active – "dashboard" or "leaderboard"
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   useEffect(() => {
     loadShoutouts();
@@ -88,7 +92,6 @@ export default function AdminDashboard() {
       department: form.department || (senderUser?.department ?? "Unknown"),
       created_by: senderUser ? senderUser.name : "Unknown",
       is_flagged: false,
-      // optional tags field if backend expects it
       tags: form.tags,
     };
 
@@ -160,7 +163,6 @@ export default function AdminDashboard() {
     }));
   }, [shoutouts]);
 
-  // ===== NEW: Top contributors =====
   const topContributors = useMemo(() => {
     const counts = {};
     shoutouts.forEach((s) => {
@@ -178,7 +180,6 @@ export default function AdminDashboard() {
       .slice(0, 5);
   }, [shoutouts]);
 
-  // ===== NEW: Most used tags =====
   const topTags = useMemo(() => {
     const counts = {};
     shoutouts.forEach((s) => {
@@ -205,7 +206,21 @@ export default function AdminDashboard() {
       <header className="dashboard-header">
         <h1>Admin Dashboard</h1>
         <div className="header-actions">
-          <button className="btn primary" onClick={loadShoutouts}>
+          {/* NEW: tab buttons */}
+          <button
+            className={`btn ${activeTab === "dashboard" ? "primary" : ""}`}
+            onClick={() => setActiveTab("dashboard")}
+          >
+            📊 Dashboard
+          </button>
+          <button
+            className={`btn ${activeTab === "leaderboard" ? "primary" : ""}`}
+            onClick={() => setActiveTab("leaderboard")}
+          >
+            🏆 Leaderboard
+          </button>
+
+          <button className="btn" onClick={loadShoutouts}>
             🔄 Refresh
           </button>
           <button className="btn" onClick={() => setShowCreate(true)}>
@@ -216,188 +231,216 @@ export default function AdminDashboard() {
 
       {error && <div className="error-banner">Error: {error}</div>}
 
-      <section className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-label">Total Shoutouts</div>
-          <div className="stat-value">{shoutouts.length}</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Flagged</div>
-          <div className="stat-value">{flagged.length}</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Departments</div>
-          <div className="stat-value">
-            {new Set(shoutouts.map((s) => s.department || "Unknown")).size}
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Users</div>
-          <div className="stat-value">{users.length}</div>
-        </div>
-      </section>
-
-      <section className="charts-section">
-        <div className="chart-card">
-          <h3>Activity Overview (Weekly)</h3>
-          <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={weeklyData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="day" />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="count" fill="#3b82f6" animationDuration={1000} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="chart-card">
-          <h3>Shoutouts by Department</h3>
-          <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={deptData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="value" fill="#16a34a" animationDuration={1200} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </section>
-
-      {/* ===== NEW ANALYTICS SECTION ===== */}
-      <section className="analytics-section">
-        <div className="analytics-card">
-          <h3>Top Contributors</h3>
-          {topContributors.length === 0 ? (
-            <div className="empty">No contributor data yet.</div>
-          ) : (
-            <ul className="simple-list">
-              {topContributors.map((u) => (
-                <li key={u.name}>
-                  <span className="list-name">{u.name}</span>
-                  <span className="list-count">{u.count} shoutouts</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="analytics-card">
-          <h3>Most Used Tags</h3>
-          {topTags.length === 0 ? (
-            <div className="empty">No tag data yet.</div>
-          ) : (
-            <ul className="simple-list">
-              {topTags.map((t) => (
-                <li key={t.tag}>
-                  <span className="list-name">#{t.tag}</span>
-                  <span className="list-count">{t.count} uses</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </section>
-
-      <section className="moderation-box">
-        <div className="moderation-header">
-          <h3>Moderation</h3>
-          <button className="btn outline">
-            Pending reports ({flagged.length})
-          </button>
-        </div>
-
-        {flagged.length === 0 ? (
-          <div className="empty">No flagged shoutouts.</div>
-        ) : (
-          <div className="flagged-list">
-            {flagged.map((f) => (
-              <div className="flagged-item" key={f.id}>
-                <div>
-                  <strong>{f.title}</strong>
-                  <div className="muted">
-                    By: {f.created_by || f.sender_id || "Unknown"}
-                  </div>
-                </div>
-                <div className="flagged-actions">
-                  <button
-                    className="btn danger"
-                    onClick={() => handleDelete(f.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
+      {/* CONDITIONAL RENDER: DASHBOARD vs LEADERBOARD */}
+      {activeTab === "leaderboard" ? (
+        // Entire leaderboard screen
+        <section style={{ marginTop: "16px" }}>
+          <LeaderboardWidget />
+        </section>
+      ) : (
+        <>
+          {/* existing dashboard content */}
+          <section className="stats-grid">
+            <div className="stat-card">
+              <div className="stat-label">Total Shoutouts</div>
+              <div className="stat-value">{shoutouts.length}</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Flagged</div>
+              <div className="stat-value">{flagged.length}</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Departments</div>
+              <div className="stat-value">
+                {new Set(
+                  shoutouts.map((s) => s.department || "Unknown")
+                ).size}
               </div>
-            ))}
-          </div>
-        )}
-      </section>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Users</div>
+              <div className="stat-value">{users.length}</div>
+            </div>
+          </section>
 
-      <section className="all-shoutouts-box">
-        <h3>All Shoutouts</h3>
+          <section className="charts-section">
+            <div className="chart-card">
+              <h3>Activity Overview (Weekly)</h3>
+                            <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={weeklyData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="day" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="count" fill="#3b82f6" animationDuration={1000} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
 
-        <div className="table-wrapper">
-          {loading ? (
-            <div className="empty">Loading shoutouts…</div>
-          ) : shoutouts.length === 0 ? (
-            <div className="empty">No shoutouts found.</div>
-          ) : (
-            <table className="shoutouts-table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Dept</th>
-                  <th>Created By</th>
-                  <th>Recipients</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {shoutouts.map((s) => (
-                  <tr key={s.id}>
-                    <td className="title-col">{s.title}</td>
-                    <td>{s.department || "N/A"}</td>
-                    <td>{s.created_by || s.sender_name || s.sender_id || "N/A"}</td>
-                    <td>
-                      {Array.isArray(s.recipients) && s.recipients.length > 0
-                        ? s.recipients.map((r) => r.name || r.id).join(", ")
-                        : "—"}
-                    </td>
-                    <td>
-                      {s.created_at
-                        ? new Date(s.created_at).toLocaleDateString()
-                        : "—"}
-                    </td>
-                    <td>
-                      <span
-                        className={`status-pill ${
-                          s.is_flagged ? "flagged" : "active"
-                        }`}
-                      >
-                        {s.is_flagged ? "Flagged" : "Active"}
-                      </span>
-                    </td>
-                    <td>
+            <div className="chart-card">
+              <h3>Shoutouts by Department</h3>
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={deptData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar
+                    dataKey="value"
+                    fill="#16a34a"
+                    animationDuration={1200}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </section>
+
+          {/* ===== ANALYTICS SECTION ===== */}
+          <section className="analytics-section">
+            <div className="analytics-card">
+              <h3>Top Contributors</h3>
+              {topContributors.length === 0 ? (
+                <div className="empty">No contributor data yet.</div>
+              ) : (
+                <ul className="simple-list">
+                  {topContributors.map((u) => (
+                    <li key={u.name}>
+                      <span className="list-name">{u.name}</span>
+                      <span className="list-count">{u.count} shoutouts</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="analytics-card">
+              <h3>Most Used Tags</h3>
+              {topTags.length === 0 ? (
+                <div className="empty">No tag data yet.</div>
+              ) : (
+                <ul className="simple-list">
+                  {topTags.map((t) => (
+                    <li key={t.tag}>
+                      <span className="list-name">#{t.tag}</span>
+                      <span className="list-count">{t.count} uses</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </section>
+
+          {/* ===== MODERATION ===== */}
+          <section className="moderation-box">
+            <div className="moderation-header">
+              <h3>Moderation</h3>
+              <button className="btn outline">
+                Pending reports ({flagged.length})
+              </button>
+            </div>
+
+            {flagged.length === 0 ? (
+              <div className="empty">No flagged shoutouts.</div>
+            ) : (
+              <div className="flagged-list">
+                {flagged.map((f) => (
+                  <div className="flagged-item" key={f.id}>
+                    <div>
+                      <strong>{f.title}</strong>
+                      <div className="muted">
+                        By: {f.created_by || f.sender_id || "Unknown"}
+                      </div>
+                    </div>
+                    <div className="flagged-actions">
                       <button
-                        className="btn small"
-                        onClick={() => handleDelete(s.id)}
+                        className="btn danger"
+                        onClick={() => handleDelete(f.id)}
                       >
-                        🗑️ Delete
+                        Delete
                       </button>
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </section>
+              </div>
+            )}
+          </section>
 
+          {/* ===== ALL SHOUTOUTS TABLE ===== */}
+          <section className="all-shoutouts-box">
+            <h3>All Shoutouts</h3>
+
+            <div className="table-wrapper">
+              {loading ? (
+                <div className="empty">Loading shoutouts…</div>
+              ) : shoutouts.length === 0 ? (
+                <div className="empty">No shoutouts found.</div>
+              ) : (
+                <table className="shoutouts-table">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Dept</th>
+                      <th>Created By</th>
+                      <th>Recipients</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {shoutouts.map((s) => (
+                      <tr key={s.id}>
+                        <td className="title-col">{s.title}</td>
+                        <td>{s.department || "N/A"}</td>
+                        <td>
+                          {s.created_by ||
+                            s.sender_name ||
+                            s.sender_id ||
+                            "N/A"}
+                        </td>
+                        <td>
+                          {Array.isArray(s.recipients) &&
+                          s.recipients.length > 0
+                            ? s.recipients
+                                .map((r) => r.name || r.id)
+                                .join(", ")
+                            : "—"}
+                        </td>
+                        <td>
+                          {s.created_at
+                            ? new Date(s.created_at).toLocaleDateString()
+                            : "—"}
+                        </td>
+                        <td>
+                          <span
+                            className={`status-pill ${
+                              s.is_flagged ? "flagged" : "active"
+                            }`}
+                          >
+                            {s.is_flagged ? "Flagged" : "Active"}
+                          </span>
+                        </td>
+                        <td>
+                          <button
+                            className="btn small"
+                            onClick={() => handleDelete(s.id)}
+                          >
+                            🗑️ Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </section>
+        </>
+      )}
+
+            {/* ===== CREATE SHOUTOUT MODAL ===== */}
       {showCreate && (
         <div
           className="modal-backdrop"
@@ -501,3 +544,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

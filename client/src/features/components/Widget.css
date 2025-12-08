@@ -1,71 +1,279 @@
-.widget-card {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+/* Leaderboard widget */
+
+.leaderboard-widget {
+  background: linear-gradient(135deg, #020617, #0b1f3b);
+  border-radius: 18px;
+  padding: 16px 18px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #e5e7eb;
 }
 
-.widget-title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0 0 16px 0;
+.widget-header h3 {
+  margin: 0;
+  font-size: 18px;
 }
 
-.widget-content {
+.widget-subtitle {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.widget-empty,
+.widget-error {
+  padding: 18px 8px;
+  font-size: 14px;
+  color: rgba(203, 213, 225, 0.85);
+  text-align: center;
+}
+
+.widget-error {
+  color: #fecaca;
+}
+
+/* TOP 3 CARDS */
+
+.leaderboard-top3 {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.leaderboard-top-card {
+  /* before: strong border + shadow */
+  background: radial-gradient(circle at top left, #0f172a, #020617);
+  border-radius: 14px;
+  padding: 10px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.6);
+}
+
+/* override badge-specific backgrounds to be darker/muted */
+.badge-gold.leaderboard-top-card {
+  background: radial-gradient(circle at top left, #1e293b, #0b1120);
+}
+
+.badge-silver.leaderboard-top-card {
+  background: radial-gradient(circle at top left, #020617, #111827);
+}
+
+.badge-bronze.leaderboard-top-card {
+  background: radial-gradient(circle at top left, #1f2937, #020617);
+}
+
+
+.leaderboard-top-header {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.widget-item,
-.leaderboard-item {
+.leaderboard-top-rank {
+  font-size: 15px;        /* was ~13px */
+  font-weight: 700;
+  color: #bfdbfe;
+}
+
+.leaderboard-top-name {
+  font-size: 16px;        /* was 14px */
+  font-weight: 700;
+}
+
+.leaderboard-table {
+  font-size: 14px;        /* slightly larger table text */
+  font-weight: 700;
+}
+
+.lb-rank {
+  font-size: 14px;
+}
+
+.lb-name {
+  font-size: 14px;
+}
+
+.leaderboard-top-sub {
+  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(251, 253, 255, 0.8);
+}
+
+.leaderboard-top-meta {
+  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(208, 216, 228, 0.95);
+}
+
+.leaderboard-top-points {
+  font-weight: 700;
+  color: #facc15;
+}
+
+/* progress bar inside top cards */
+
+.leaderboard-progress {
+  margin-top: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(90, 117, 207, 0.45);
+  overflow: hidden;
+}
+
+.leaderboard-progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #38bdf8, #facc15);
+}
+
+/* TABLE */
+
+.leaderboard-table-wrapper {
+  margin-top: 12px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.leaderboard-table thead th {
+  text-align: left;
+  padding: 8px 6px;
+  font-weight: 600;
+  color: rgba(226, 232, 240, 0.85);
+  border-bottom: 1px solid rgba(51, 65, 85, 0.9);
+}
+
+.leaderboard-table tbody td {
+  padding: 8px 6px;
+  border-bottom: 1px solid rgba(202, 209, 219, 0.7);
+}
+
+.leaderboard-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.lb-rank {
+  font-weight: 700;
+  color: #60a5fa;
+}
+
+.lb-name {
+  font-weight: 500;
+}
+
+.lb-points {
+  font-weight: 600;
+  color: #facc15;
+}
+
+.leaderboard-filters {
+  margin-top: 10px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.filter-group {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 0;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
-.widget-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+.filter-label {
+  color: rgba(226, 232, 240, 0.7);
+  font-weight: 500;
 }
 
-.avatar-initials {
-  color: white;
+.filter-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: transparent;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.filter-chip.active {
+  background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+  border-color: transparent;
+  color: #020203;
+}
+
+.filter-select {
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  font-size: 11px;
+}
+
+/* Badges */
+
+.badge-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
   font-weight: 600;
-  font-size: 0.875rem;
+  letter-spacing: 0.02em;
 }
 
-.widget-item-info {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.badge-gold {
+  background: linear-gradient(135deg, #facc15, #eab308);
+  color: #dce3ee;
 }
 
-.widget-item-name {
-  font-weight: 600;
-  color: #1e293b;
-  font-size: 0.9rem;
+.points-hint {
+  margin-top: 4px;
+  font-size: 11px;
+  color: rgba(229, 235, 241, 0.7);
 }
 
-.widget-item-action {
-  font-size: 0.8rem;
-  color: #64748b;
+.badge-silver {
+  background: linear-gradient(135deg, #e5e7eb, #cbd5f5);
+  color: #d9dce7;
 }
 
-.widget-item-value {
-  font-weight: 700;
-  color: #2563eb;
-  font-size: 1rem;
+.badge-bronze {
+  background: linear-gradient(135deg, #f97316, #c2410c);
+  color: #f9fafb;
 }
 
+.badge-participation {
+  background: rgba(148, 163, 184, 0.25);
+  color: #e5e7eb;
+}
+
+/* Small screens */
+@media (max-width: 768px) {
+  .leaderboard-widget {
+    padding: 14px;
+  }
+
+  .leaderboard-top3 {
+    grid-template-columns: 1fr;
+  }
+
+  .leaderboard-table-wrapper {
+    max-height: 260px;
+  }
+
+  .leaderboard-table {
+    font-size: 16px;
+  }
+}

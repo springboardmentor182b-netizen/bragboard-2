@@ -1,0 +1,96 @@
+Folder PATH listing for volume New Volume
+Volume serial number is BA2C-E5E8
+F:.
+|   App.js
+|   index.js
+|   reportWebVitals.js
+|   src_structure.txt
+|   
++---assets
+|       global.css
+|       logo.svg
+|       
++---components
+|   +---Buttons
+|   |       ButtonGroup.js
+|   |       Dropdown.js
+|   |       
+|   +---Form
+|   |       Checkbox.js
+|   |       FormInput.js
+|   |       FormSelect.js
+|   |       RadioButton.js
+|   |       
+|   \---Modals
+|           Modal.js
+|           
++---context
+|       AnalyticsContext.js
+|       
++---data
+|       configValues.json
+|       constants.js
+|       defaultTools.json
+|       
+\---features
+    +---admin
+    |       ActivityChart.js
+    |       AdminNavbar.js
+    |       ChartPlaceholder.js
+    |       DepartmentChart.js
+    |       EmployeeDrawer.js
+    |       StatsCard.js
+    |       
+    +---authentication
+    |   +---components
+    |   |       LoginForm.js
+    |   |       SignupForm.js
+    |   |       
+    |   +---hooks
+    |   |       useSignup.js
+    |   |       useVerifyPassword.js
+    |   |       
+    |   \---services
+    |           getUsers.js
+    |           login.js
+    |           signup.js
+    |           
+    +---components
+    |       CreateShoutoutModal.css
+    |       CreateShoutoutModal.js
+    |       Feed.css
+    |       Feed.js
+    |       FeedPost.css
+    |       FeedPost.js
+    |       LeaderboardWidget.js
+    |       RecentReactionsWidget.js
+    |       Sidebar.css
+    |       Sidebar.js
+    |       TopTaggedWidget.js
+    |       Widget.css
+    |       
+    +---hooks
+    |       useFetch.js
+    |       useLocalStorage.js
+    |       
+    +---layout
+    |       Header.css
+    |       Header.js
+    |       Navbar.js
+    |       PageContainer.js
+    |       Sidebar.js
+    |       
+    +---pages
+    |       AdminDashboard.js
+    |       Dashboard.css
+    |       Dashboard.js
+    |       Home.js
+    |       Login.css
+    |       Login.js
+    |       Settings.css
+    |       Settings.js
+    |       
+    \---utils
+            formatCurrency.js
+            formatDate.js
+            

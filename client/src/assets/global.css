@@ -1,54 +1,56 @@
- Group-A-feature/Admin-Dashboard-Sachin
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: #1e293b;
-  background-color: #f9fafb;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  --color-primary: #2563eb;
-  --color-primary-strong: #1d4ed8;
-  --color-secondary: #38bdf8;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-  --color-text-primary: #1e293b;
-  --color-text-secondary: #64748b;
-  --color-bg-light: #f9fafb;
-  --color-card: #ffffff;
-  --color-border: #e5e7eb;
-  --shadow-card: 0 24px 45px -30px rgba(15, 23, 42, 0.45);
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-*,
-*::before,
-*::after {
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-body,
-#root {
-  margin: 0;
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1e40af 100%);
+  color: white;
   min-height: 100vh;
 }
 
-body {
-  background: radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent)
-      fixed,
-    linear-gradient(180deg, #f9fbff 0%, #f4f7fb 100%);
+.App {
+  min-height: 100vh;
 }
 
-button,
-input,
-textarea {
-  font: inherit;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
 }
- main-group-A
 
+::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
