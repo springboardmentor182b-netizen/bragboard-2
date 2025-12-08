@@ -9,7 +9,7 @@ DOTENV_PATH = BASE_DIR.parent / '.env'
 load_dotenv(DOTENV_PATH)
 
 from fastapi import FastAPI, HTTPException, Depends, status
-from src.auth import models
+from app.models import User as models
 from src.database.core import engine, SessionLocal, Base
 from typing import Annotated
 from sqlalchemy.orm import Session
@@ -18,9 +18,14 @@ from src.auth.auth import get_current_user
 from app.api.shoutout import router as shoutout_router
 from app.models import User, Shoutout, ShoutoutRecipient
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.shoutoutreaction_API import router as reaction_router
+from app.api.exportreports import router as reports_router
+
 
 app = FastAPI()
 app.include_router(auth.router)
+app.include_router(reaction_router)
+app.include_router(reports_router)
 
 models.Base.metadata.create_all(bind=engine)
 
