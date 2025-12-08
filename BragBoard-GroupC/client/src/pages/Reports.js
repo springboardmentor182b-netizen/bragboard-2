@@ -1,23 +1,9 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import "./Reports.css";
+import PageContainer from "../layout/PageContainer";
 
-export default function Reports() {
-  const navigate = useNavigate();
-
-  return (
-    <div className="report-page">
-      <h1 className="page-title">Manage Reports</h1>
-
-      <div className="reports-actions">
-        <button className="action-card" onClick={() => navigate("/admin/resolve-reports")}>
-          Resolve Reports
-        </button>
-
-        <button className="action-card" onClick={() => navigate("/admin/report-history")}>
-          Report History
-        </button>
-      </div>
-    </div>
-  );
-}
+const Reports = () => (
+  <PageContainer>
+    <h1>Reports</h1>
+    <p>Analytics and user reports.</p>
+  </PageContainer>
+);
+export default Reports;

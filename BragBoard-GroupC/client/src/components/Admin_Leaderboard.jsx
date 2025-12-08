@@ -18,9 +18,31 @@ const Leaderboard = () => {
       <h3>Top Contributors</h3>
       <div className="leaderboard-cards">
         <div className="leaderboard-card">
-    
+          <h4>Employees</h4>
+          <div className="contributors-list">
+            {topContributors.map((contributor, index) => (
+              <div key={contributor.name} className="contributor-item">
+                <span className="rank">{index + 1}.</span>
+                <span className="name">{contributor.name}</span>
+                <span className="score">{contributor.score}</span>
+              </div>
+            ))}
           </div>
         </div>
+        
+        <div className="leaderboard-card">
+          <h4>Most Tagged Phrases</h4>
+          <div className="tagged-list">
+            {mostTagged.map((item, index) => (
+              <div key={item.message} className="tagged-item">
+                <span className="rank">{index + 1}.</span>
+                <span className="message">{item.message}</span>
+                <span className="count">{item.count}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

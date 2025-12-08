@@ -1,93 +1,96 @@
-import React, { useState } from "react";
-import Sidebar from "../layout/Admin_Sidebar";
-import Header from "../layout/Admin_Header";
-import Leaderboard from "../components/Admin_Leaderboard";
-import ReportManagement from "../components/Admin_ReportManagement";
+import React, { useState } from 'react';
+import Sidebar from '../layout/Admin_Sidebar';
+import Header from '../layout/Admin_Header';
+import Leaderboard from '../components/Admin_Leaderboard';
+import Analytics from '../components/Admin_Analytics';
+import UserManagement from '../components/Admin_UserManagement';
+import SearchFilters from '../components/Admin_SearchFilters';
+import ResolveReports from '../components/ResolveReports';
+import ReportHistory from '../components/ReportHistory';
 
 const AdminDashboard = () => {
-  const [activeSection, setActiveSection] = useState("dashboard");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [activeSection, setActiveSection] = useState('dashboard');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const renderMainContent = () => {
     switch (activeSection) {
-      case "dashboard":
+      case 'dashboard':
         return (
-          <div className="p-12 space-y-10">
-           <div className="dashboard-main">
+          <div className="dashboard-main">
             <div className="dashboard-header">
-              <h1 className="welcome">Welcome back, Arshit Rawat!</h1>
+              <h1>Welcome to Admin Dashboard!!</h1>
             </div>
-            </div>
-            <div
-              className="bg-white rounded-3xl shadow-md p-10 border border-gray-200 
-              w-full transition-all"
-            ><p className="tip">Tip: You can attach images and gifs in the posts</p>
-              
-              <button className="create-btn"> + Create Shout-out
-          </button>
-
-<div classname="post-card">
-<h3 className="text-xl font-semibold text-gray-900">
-                Pranjali Randive • Design </h3>
-              <p className="mt-5 text-gray-700 text-lg leading-relaxed">
-                Pairing up Arshit and Sandeep increased our productivity by 80% 🔥🔥
-              </p>
-              <input
-                type="text"
-                placeholder="Add a comment..."
-                className="mt-8 w-full border border-gray-300 rounded-xl px-4 py-3
-                text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              /></div>
-                 </div>
-          </div>
-        );
-
-      case "resolve-reports":
-      case "report-history":
-        return (
-          <div className="p-10">
-            <ReportManagement activeSection={activeSection} />
-          </div>
-        );
-
-      case "leaderboard":
-        return (
-          <div className="p-12 space-y-10">
-            <h1 className="text-4xl font-bold text-gray-900">Leaderboard</h1>
-
-            <div className="bg-white rounded-3xl shadow-md p-10 border border-gray-200">
+            <div className="dashboard-content">
+              <Analytics />
               <Leaderboard />
             </div>
           </div>
         );
-      case "settings":
+      case 'users':
         return (
-          <div className="p-12">
-            <h2 className="text-3xl font-bold mb-6 text-gray-800">Settings</h2>
-
-            <div className="bg-white p-10 rounded-3xl shadow border border-gray-200">
-              <p className="text-gray-700 text-lg">
-                Configure admin system preferences here.
-              </p>
+          <div className="section-content">
+            <h2>User Management</h2>
+            <UserManagement />
+          </div>
+        );
+        case 'reports':
+        return (
+          <div className="reports-section">
+            <div className="reports-header">
+              <h2>Reports Management</h2>
             </div>
+            <SearchFilters />
           </div>
         );
-
-      default:
+        case 'resolve_reports':
         return (
-          <div className="p-10">
-            <p className="text-red-600 font-semibold">Section not found.</p>
+          <div className="reports-section">
+            <div className="reports-header">
+              <h2>Resolve Reports</h2>
+            </div>
+            <ResolveReports />
           </div>
         );
+      case 'report_history':
+        return (
+          <div className="reports-section">
+            <div className="reports-header">
+              <h2>Report History</h2>
+            </div>
+            <ReportHistory />
+          </div>
+        );
+      case 'notifications':
+        return (
+          <div className="section-content">
+            <h2>Notifications</h2>
+            <p>Notification settings and preferences will be displayed here.</p>
+          </div>
+        );
+      case 'settings':
+        return (
+          <div className="section-content">
+            <h2>Settings</h2>
+            <p>System configuration and preferences</p>
+          </div>
+        );
+      default:
+        return null;
     }
   };
-
   return (
-    <div>
-      <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
-      <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
-      <main style={{ marginLeft: "230px" }}>{renderMainContent()}</main>
+    <div className="admin-dashboard">
+      <Sidebar 
+        activeSection={activeSection} 
+        setActiveSection={setActiveSection} 
+      />
+      <div className="main-content">
+        <Header 
+          searchQuery={searchQuery} 
+          setSearchQuery={setSearchQuery} 
+        />
+        {renderMainContent()}
+      </div>
     </div>
   );
 };

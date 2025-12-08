@@ -1,82 +1,86 @@
-import React, { useState } from "react";
-import {
-  LucideHome,
-  LucideFileText,
-  LucideTrophy,
-  LucideSettings,
-  LucideCheckCircle,
-  LucideClock,
-} from "lucide-react";
-import "./Admin_Sidebar.css";
+// client/src/layout/Admin_Sidebar.jsx
+import React from 'react';
 
 const Sidebar = ({ activeSection, setActiveSection }) => {
-  const [reportsOpen, setReportsOpen] = useState(false);
+  const menuItems = [
+    { key: 'dashboard', label: 'Admin Dashboard' },
+    { key: 'users', label: 'Users' },
+    { key: 'reports', label: 'Reports' },
+    { key: 'notifications', label: 'Notifications' },
+    { key: 'settings', label: 'Settings' }
+  ];
+
+  const departments = ['HR', 'CyberSecurity', 'Deployment'];
 
   return (
-    <div className="admin-sidebar-container">
-      <h2 className="admin-logo">BragBoard</h2>
+    <div className="sidebar">
+      <div className="sidebar-header">
+        <h2>BragBoard</h2>
+      </div>
+      
+      <nav className="sidebar-nav">
+        <ul className="nav-menu">
+          {menuItems.map(item => (
+            <li key={item.key} className="nav-item">
+              <button
+                className={`nav-link ${activeSection === item.key ? 'active' : ''}`}
+                onClick={() => setActiveSection(item.key)}
+              >
+                {item.label}
+              </button>
+            </li>
+          ))}
 
-      <ul className="admin-menu">
-        {/* Dashboard */}
-        <li
-          className={`sidebar-item ${activeSection === "dashboard" ? "active" : ""}`}
-          onClick={() => setActiveSection("dashboard")}
-        >
-          <LucideHome className="sidebar-icon" size={18} />
-          Dashboard
-        </li>
+          {/* --- Manage Reports parent item --- */}
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeSection === 'manage_reports' || activeSection === 'resolve_reports' || activeSection === 'report_history' ? 'active' : ''}`}
+              onClick={() => setActiveSection('manage_reports')}
+            >
+              Manage Reports
+            </button>
 
-        {/* Reports */}
-        <li
-          className={`sidebar-item ${
-            activeSection === "reports" ||
-            activeSection.includes("report") ||
-            reportsOpen
-              ? "active"
-              : ""
-          }`}
-          onClick={() => setReportsOpen(!reportsOpen)}
-        >
-          <LucideFileText className="sidebar-icon" size={18} />
-          Reports ▾
-        </li>
+            {/* Submenu — keep styling simple so layout remains same */}
+            { (activeSection === 'manage_reports' || activeSection === 'resolve_reports' || activeSection === 'report_history') && (
+              <ul style={{ listStyle: 'none', paddingLeft: '12px', marginTop: '8px' }}>
+                <li style={{ marginBottom: '6px' }}>
+                  <button
+                    className={`nav-link ${activeSection === 'resolve_reports' ? 'active' : ''}`}
+                    style={{ paddingLeft: '28px', fontSize: '13px' }}
+                    onClick={() => setActiveSection('resolve_reports')}
+                  >
+                    Resolve Reports
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`nav-link ${activeSection === 'report_history' ? 'active' : ''}`}
+                    style={{ paddingLeft: '28px', fontSize: '13px' }}
+                    onClick={() => setActiveSection('report_history')}
+                  >
+                    Report History
+                  </button>
+                </li>
+              </ul>
+            )}
+          </li>
 
-        {/* Reports Dropdown */}
-        <div className={`dropdown-menu ${reportsOpen ? "open" : ""}`}>
-          <div
-            className={`dropdown-item ${activeSection === "resolve-reports" ? "active" : ""}`}
-            onClick={() => setActiveSection("resolve-reports")}
-          >
-            <LucideCheckCircle className="sidebar-icon" size={16} />
-            Resolve Reports
-          </div>
-          <div
-            className={`dropdown-item ${activeSection === "report-history" ? "active" : ""}`}
-            onClick={() => setActiveSection("report-history")}
-          >
-            <LucideClock className="sidebar-icon" size={16} />
-            Report History
-          </div>
-        </div>
+        </ul>
+      </nav>
 
-        {/* Leaderboard */}
-        <li
-          className={`sidebar-item ${activeSection === "leaderboard" ? "active" : ""}`}
-          onClick={() => setActiveSection("leaderboard")}
-        >
-          <LucideTrophy className="sidebar-icon" size={18} />
-          Leaderboard
-        </li>
-
-        {/* Settings */}
-        <li
-          className={`sidebar-item ${activeSection === "settings" ? "active" : ""}`}
-          onClick={() => setActiveSection("settings")}
-        >
-          <LucideSettings className="sidebar-icon" size={18} />
-          Settings
-        </li>
-      </ul>
+      <div className="sidebar-filters">
+        <h3>Filter</h3>
+        <ul className="filter-list">
+          {departments.map(dept => (
+            <li key={dept} className="filter-item">
+              <label className="filter-label">
+                <input type="checkbox" />
+                <span>{dept}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
