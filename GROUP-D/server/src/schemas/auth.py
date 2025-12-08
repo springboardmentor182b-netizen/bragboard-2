@@ -4,11 +4,12 @@ class Register(BaseModel):
     name: str
     email: EmailStr
     password: str
-    admin_key: str   # NEW FIELD
+    admin_key: str   # registration protection key
 
 class Login(BaseModel):
     email: EmailStr
     password: str
+    login_type: str   # NEW: "admin" or "employee"
 
 class OTPVerify(BaseModel):
     email: EmailStr
