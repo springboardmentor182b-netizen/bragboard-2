@@ -3,7 +3,8 @@ import Sidebar from '../layout/Admin_Sidebar';
 import Header from '../layout/Admin_Header';
 import Leaderboard from '../components/Admin_Leaderboard';
 import Analytics from '../components/Admin_Analytics';
-
+import ResolveReports from '../components/ResolveReports';
+import ReportHistory from '../components/ReportHistory';
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
@@ -36,6 +37,24 @@ const AdminDashboard = () => {
               <h2>Reports Management</h2>
             </div>
             <SearchFilters />
+          </div>
+        );
+        case 'resolve_reports':
+        return (
+          <div className="reports-section">
+            <div className="reports-header">
+              <h2>Resolve Reports</h2>
+            </div>
+            <ResolveReports />
+          </div>
+        );
+      case 'report_history':
+        return (
+          <div className="reports-section">
+            <div className="reports-header">
+              <h2>Report History</h2>
+            </div>
+            <ReportHistory />
           </div>
         );
       case 'notifications':

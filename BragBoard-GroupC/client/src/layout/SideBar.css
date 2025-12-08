@@ -45,3 +45,29 @@
   display: block;
   margin: 4px 0;
 }
+.submenu {
+  padding-left: 25px;
+  margin-top: 6px;
+  list-style: none !important;
+}
+
+.submenu-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 15px;
+}
+.submenu li {
+  list-style: none !important; 
+}
+.submenu li a {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #444;
+}

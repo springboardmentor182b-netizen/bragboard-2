@@ -29,6 +29,37 @@ const Sidebar = ({ activeSection, setActiveSection }) => {
               </button>
             </li>
           ))}
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeSection === 'manage_reports' || activeSection === 'resolve_reports' || activeSection === 'report_history' ? 'active' : ''}`}
+              onClick={() => setActiveSection('manage_reports')}
+            >
+              Manage Reports
+            </button>
+            { (activeSection === 'manage_reports' || activeSection === 'resolve_reports' || activeSection === 'report_history') && (
+              <ul style={{ listStyle: 'none', paddingLeft: '12px', marginTop: '8px' }}>
+                <li style={{ marginBottom: '6px' }}>
+                  <button
+                    className={`nav-link ${activeSection === 'resolve_reports' ? 'active' : ''}`}
+                    style={{ paddingLeft: '28px', fontSize: '13px' }}
+                    onClick={() => setActiveSection('resolve_reports')}
+                  >
+                    Resolve Reports
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`nav-link ${activeSection === 'report_history' ? 'active' : ''}`}
+                    style={{ paddingLeft: '28px', fontSize: '13px' }}
+                    onClick={() => setActiveSection('report_history')}
+                  >
+                    Report History
+                  </button>
+                </li>
+              </ul>
+            )}
+          </li>
+
         </ul>
       </nav>
 
