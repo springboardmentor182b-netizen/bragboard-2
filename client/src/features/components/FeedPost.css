@@ -1,190 +1,25 @@
 .feed-post {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
-  transition: box-shadow 0.2s ease;
-}
-
-.feed-post:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.post-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  position: relative;
-}
-
-.post-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.post-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.avatar-initials {
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.post-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.post-sender {
-  font-weight: 600;
-  color: #1e293b;
-  font-size: 1rem;
-  margin-bottom: 4px;
-}
-
-.post-timestamp {
-  font-size: 0.875rem;
-  color: #64748b;
-}
-
-.post-message {
-  color: #1e293b;
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 16px;
-}
-
-.tagged-user {
-  color: #2563eb;
-  font-weight: 600;
-}
-
-.post-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding-top: 12px;
-  border-top: 1px solid #f1f5f9;
-}
-
-.action-button {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: transparent;
-  border: none;
-  color: #64748b;
-  font-size: 0.875rem;
-  cursor: pointer;
-  padding: 6px 8px;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
   border-radius: 8px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.action-button:hover {
-  background: #f1f5f9;
-  color: #1e293b;
-}
-
-.action-button svg {
-  flex-shrink: 0;
-}
-
-.emoji-button {
-  gap: 4px;
-}
-
-.emoji {
-  font-size: 1.1rem;
-}
-
-.action-count {
-  font-weight: 500;
-}
-
-.post-menu-container {
-  position: relative;
-  margin-left: auto;
-}
-
-.post-menu-button {
-  background: transparent;
+.feed-delete-btn {
+  background: #ef4444;
+  color: #fff;
   border: none;
-  color: #64748b;
+  padding: 6px 10px;
+  border-radius: 6px;
   cursor: pointer;
-  padding: 6px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background 0.2s;
 }
 
-.post-menu-button:hover {
-  background: #f1f5f9;
-  color: #1e293b;
+.feed-delete-btn:hover {
+  background: #dc2626;
 }
-
-.post-menu-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 8px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  min-width: 160px;
-  z-index: 100;
-  overflow: hidden;
-  animation: slideDown 0.2s ease;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.post-menu-item {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  background: transparent;
-  border: none;
-  color: #1e293b;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  text-align: left;
-}
-
-.post-menu-item:hover {
-  background: #f1f5f9;
-}
-
-.post-menu-item svg {
-  flex-shrink: 0;
-  color: #ef4444;
-}
-
