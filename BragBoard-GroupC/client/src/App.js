@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyOTP from "./pages/VerifyOTP";
 import ResetPassword from "./pages/ResetPassword";
-import Home from "./pages/Home";
+import Home from "./pages/EmpHome";
 import AdminHome from "./pages/AdminHome";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
