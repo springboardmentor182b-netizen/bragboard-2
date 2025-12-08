@@ -85,47 +85,6 @@
   gap: 14px;
 }
 
-.user-type-toggle {
-  margin-bottom: 4px;
-}
-
-.toggle-container {
-  display: flex;
-  gap: 8px;
-  background: rgba(37, 99, 235, 0.08);
-  border-radius: 16px;
-  padding: 4px;
-  margin-top: 8px;
-}
-
-.toggle-option {
-  flex: 1;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 12px;
-  background: transparent;
-  color: var(--color-text-secondary);
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 160ms ease;
-}
-
-.toggle-option:hover {
-  color: var(--color-text-primary);
-  background: rgba(37, 99, 235, 0.1);
-}
-
-.toggle-option.active {
-  background: linear-gradient(135deg, var(--color-primary), #4f46e5);
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-}
-
-.toggle-option.active:hover {
-  background: linear-gradient(135deg, #2563eb, #4338ca);
-}
-
 .login-label {
   font-weight: 600;
   font-size: 0.9rem;
