@@ -13,6 +13,7 @@ const INITIAL_STATE = {
   password: '',
   rememberMe: false,
   otp: '',
+  userType: 'user', // 'user' or 'admin'
 };
 
 const COPY = {
@@ -69,20 +70,23 @@ function LoginPage() {
     setTimeout(() => {
       switch (mode) {
         case MODES.LOGIN: {
-          if (!formState.email || !formState.password) {
-            setStatus({
-              type: 'error',
-              text: 'Please add both email and password to continue.',
-            });
-            break;
-          }
+          // Temporary: Allow login without credentials
+          const userType = formState.userType;
+          const welcomeText = userType === 'admin' 
+            ? 'Welcome back, Admin!' 
+            : `Welcome back${formState.email ? `, ${formState.email}` : ''}!`;
+          
           setStatus({
             type: 'success',
-            text: `Welcome back, ${formState.email}!`,
+            text: welcomeText,
           });
-          // Navigate to dashboard after successful login
+          // Navigate to appropriate dashboard based on user type
           setTimeout(() => {
-            navigate('/dashboard');
+            if (userType === 'admin') {
+              navigate('/admin-dashboard');
+            } else {
+              navigate('/employee-dashboard');
+            }
           }, 1000);
           break;
         }
@@ -148,10 +152,35 @@ function LoginPage() {
         </header>
 
         <form className="login-form" onSubmit={handleSubmit}>
+          {mode === MODES.LOGIN && (
+            <>
+              {/* User Type Toggle */}
+              <div className="user-type-toggle">
+                <label className="login-label">Login as</label>
+                <div className="toggle-container">
+                  <button
+                    type="button"
+                    className={`toggle-option ${formState.userType === 'user' ? 'active' : ''}`}
+                    onClick={() => setFormState((prev) => ({ ...prev, userType: 'user' }))}
+                  >
+                    User
+                  </button>
+                  <button
+                    type="button"
+                    className={`toggle-option ${formState.userType === 'admin' ? 'active' : ''}`}
+                    onClick={() => setFormState((prev) => ({ ...prev, userType: 'admin' }))}
+                  >
+                    Admin
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+
           {(mode === MODES.LOGIN || mode === MODES.FORGOT) && (
             <>
               <label className="login-label" htmlFor="email">
-                Email address
+                Email address (optional)
               </label>
               <input
                 id="email"
@@ -161,7 +190,6 @@ function LoginPage() {
                 autoComplete="email"
                 value={formState.email}
                 onChange={handleChange}
-                required={mode === MODES.LOGIN}
               />
             </>
           )}
@@ -169,7 +197,7 @@ function LoginPage() {
           {mode === MODES.LOGIN && (
             <>
               <label className="login-label" htmlFor="password">
-                Password
+                Password (optional)
               </label>
               <input
                 id="password"
@@ -179,7 +207,6 @@ function LoginPage() {
                 autoComplete="current-password"
                 value={formState.password}
                 onChange={handleChange}
-                required
               />
               <div className="login-actions">
                 <label className="remember-toggle">
