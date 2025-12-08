@@ -11,6 +11,8 @@ import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
+import MyShoutouts from "./pages/EmployeeMyShoutouts";
+import MainLayout from "./layout/EmployeeMainLayout";
 
 export default function App() {
   const role = "admin"; 
@@ -18,6 +20,13 @@ export default function App() {
   return (
     <Router>
       <Routes>
+
+        {/* PROTECTED LAYOUT ROUTES  Employee MyShoutOuts Page*/}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<Home />} />
+          <Route path="/my-shoutouts" element={<MyShoutouts />} />
+        </Route>
 
         {/* ---------------------- COMMON ROUTES ---------------------- */}
         <Route path="/" element={<Base />} />
