@@ -6,18 +6,18 @@ const Sidebar = ({ role }) => {
   const location = useLocation();
 
   const adminLinks = [
-    { name: "Dashboard", path: "/home", icon: <Home size={20} /> },
-    { name: "Award", path: "/award", icon: <Star size={20} /> },
-    { name: "Resolve Reports", path: "/reports", icon: <FileText size={20} /> },
-    { name: "Export Reports", path: "/export", icon: <Archive size={20} /> },
-    { name: "Settings", path: "/settings", icon: <Settings size={20} /> },
+    { name: "Dashboard", path: "/admin/home", icon: <Home size={20} /> },
+    { name: "Award", path: "/admin/award", icon: <Star size={20} /> },
+    { name: "Resolve Reports", path: "/admin/reports", icon: <FileText size={20} /> },
+    { name: "Export Reports", path: "/admin/export", icon: <Archive size={20} /> },
+    { name: "Settings", path: "/admin/settings", icon: <Settings size={20} /> },
   ];
 
   const userLinks = [
-    { name: "Dashboard", path: "/home", icon: <Home size={20} /> },
-    { name: "My Reports", path: "/reports", icon: <FileText size={20} /> },
-    { name: "Leaderboard", path: "/leaderboard", icon: <Trophy size={20} /> },
-    { name: "Settings", path: "/settings", icon: <Settings size={20} /> },
+    { name: "Dashboard", path: "/user/home", icon: <Home size={20} /> },
+    { name: "My Reports", path: "/user/reports", icon: <FileText size={20} /> },
+    { name: "Leaderboard", path: "/user/leaderboard", icon: <Trophy size={20} /> },
+    { name: "Settings", path: "/user/settings", icon: <Settings size={20} /> },
   ];
 
   const links = role === "admin" ? adminLinks : userLinks;
