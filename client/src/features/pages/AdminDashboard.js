@@ -7,6 +7,7 @@ import StatCard from '../admin/StatsCard';
 import ActivityChart from '../admin/ActivityChart';
 import DepartmentChart from '../admin/DepartmentChart';
 import EmployeeDrawer from '../admin/EmployeeDrawer';
+import ShoutoutReportsPanel from '../admin/ShoutoutReportsPanel';
 
 // --- MAIN PAGE COMPONENT ---
 const AdminDashboard = () => {
@@ -51,6 +52,8 @@ const AdminDashboard = () => {
             <DepartmentChart />
           </div>
         </div>
+
+        <ShoutoutReportsPanel />
       </div>
 
       {/* Employee Drawer Overlay */}
