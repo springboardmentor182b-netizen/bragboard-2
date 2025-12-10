@@ -8,6 +8,9 @@ from src.routes.reaction_routes import router as reaction_router
 # NEW: Report Export Router
 from src.routes.report_routes import router as report_router
 
+# NEW: Comments Router
+from src.routes.comment import router as comment_router
+
 app = FastAPI()
 
 # CORS Setup
@@ -23,8 +26,11 @@ app.add_middleware(
 app.include_router(shoutout_router, prefix="/api")
 app.include_router(reaction_router, prefix="/api")
 
-# NEW Export routes
+# Export routes
 app.include_router(report_router, prefix="/api/reports")
+
+# Comment routes
+app.include_router(comment_router, prefix="/api")
 
 @app.get("/")
 def home():
