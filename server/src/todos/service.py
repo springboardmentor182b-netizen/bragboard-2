@@ -17,7 +17,7 @@ def create_shoutout(db: Session, payload: ShoutoutCreate):
     db.add(shout)
     db.commit()
     db.refresh(shout)
-    return shout
+    return format_shoutout(shout)  # ✅ Convert before returning
 
 def get_or_create_tag(db: Session, tag_name: str):
     tag_name = tag_name.strip().lower()
@@ -30,12 +30,16 @@ def get_or_create_tag(db: Session, tag_name: str):
     return tag
 
 def list_shoutouts(db: Session):
-    return db.query(Shoutout).order_by(Shoutout.created_at.desc()).all()
+    shoutouts = db.query(Shoutout).order_by(Shoutout.created_at.desc()).all()
+    return [format_shoutout(s) for s in shoutouts]  # ✅ Convert list
 
 def get_shoutout(db: Session, shoutout_id: int):
-    return db.get(Shoutout, shoutout_id)
+    shout = db.get(Shoutout, shoutout_id)
+    if shout:
+        return format_shoutout(shout)
+    return None
 
-def update_shoutout(db: Session, shoutout_id: int, payload):
+def update_shoutout(db: Session, shoutout_id: int, payload: ShoutoutCreate):
     shout = db.get(Shoutout, shoutout_id)
     if payload.title:
         shout.title = payload.title
@@ -43,9 +47,23 @@ def update_shoutout(db: Session, shoutout_id: int, payload):
         shout.message = payload.message
     db.commit()
     db.refresh(shout)
-    return shout
+    return format_shoutout(shout)
 
 def delete_shoutout(db: Session, shoutout_id: int):
     shout = db.get(Shoutout, shoutout_id)
     db.delete(shout)
     db.commit()
+
+# -----------------------------
+# Helper to convert ORM -> dict
+# -----------------------------
+def format_shoutout(shout: Shoutout):
+    return {
+        "id": shout.id,
+        "title": shout.title,
+        "message": shout.message,
+        "sender_id": shout.sender_id,
+        "recipients": [r.id for r in shout.recipients],  # convert User objects to IDs
+        "tags": [t.name for t in shout.tags],            # convert Tag objects to strings
+        "created_at": shout.created_at,
+    }

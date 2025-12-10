@@ -1,21 +1,26 @@
 from datetime import datetime
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List, Optional
+from typing import Optional
 
-class ShoutoutCreate(BaseModel):
-    title: str = Field(..., max_length=300)
-    message: str
-    sender_id: int
-    recipient_id: int
-    tags: Optional[List[str]] = None
+from pydantic import BaseModel
 
-class ShoutoutRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    
-    id: int
+
+class ShoutoutBase(BaseModel):
     title: str
-    message: str
-    sender_id: int
-    recipients: List[int] = []
-    tags: List[str] = []
+    description: str
+    department: str
+    created_by: str
+    is_flagged: bool = False
+
+
+class ShoutoutCreate(ShoutoutBase):
+    # used for POST body
+    pass
+
+
+class ShoutoutRead(ShoutoutBase):
+    # used for responses
+    id: int
     created_at: datetime
+
+    class Config:
+        orm_mode = True
