@@ -5,20 +5,34 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 
+# ---------------------------
+# Path Setup
+# ---------------------------
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
 
-# Common database URLs; override with DATABASE_URL env var.
+# ---------------------------
+# Database URLs
+# ---------------------------
+
 MYSQL_DATABASE_URL = "mysql+pymysql://root:root%40123@localhost:3306/bragboard"
 POSTGRES_DATABASE_URL = "postgresql://user:password@localhost/bragboard_db"
 SQLITE_DATABASE_URL = f"sqlite:///{DATA_DIR / 'app.db'}"
 
-# Prefer explicit env setting; fall back to MySQL string (legacy), else sqlite for local dev.
-DATABASE_URL = os.getenv("DATABASE_URL", MYSQL_DATABASE_URL) or MYSQL_DATABASE_URL
+# Priority:
+# 1. Environment variable DATABASE_URL
+# 2. Default to SQLITE for local development
+DATABASE_URL = os.getenv("DATABASE_URL", SQLITE_DATABASE_URL)
 
-connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
+
+# ---------------------------
+# Engine Configuration
+# ---------------------------
+
+# SQLite needs check_same_thread=False
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
 engine = create_engine(
     DATABASE_URL,
@@ -35,11 +49,12 @@ SessionLocal = sessionmaker(
 )
 
 
+# ---------------------------
+# Dependency for FastAPI
+# ---------------------------
+
 def get_db():
-    """
-    FastAPI dependency that yields a database session.
-    It handles session creation and automatic closing.
-    """
+    """FastAPI dependency that yields a database session."""
     db = SessionLocal()
     try:
         yield db
@@ -47,6 +62,10 @@ def get_db():
         db.close()
 
 
+# ---------------------------
+# Create tables
+# ---------------------------
+
 def create_db_tables():
-    """Creates all database tables defined in the Base metadata."""
+    """Creates all database tables defined in Base metadata."""
     Base.metadata.create_all(bind=engine)
