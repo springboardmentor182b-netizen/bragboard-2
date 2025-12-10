@@ -1,0 +1,80 @@
+/* Page Center */
+.otp-page {
+  min-height: 100vh;
+  background: var(--bg-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Card */
+.otp-card {
+  width: 420px;
+  background: #fff;
+  padding: 35px 40px;
+  border-radius: 16px;
+  border: 2px dotted var(--border);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+/* Title */
+.otp-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.otp-subtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+/* Input fields */
+.otp-card input {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  outline: none;
+  font-size: 15px;
+}
+
+.otp-card input:focus {
+  border-color: var(--primary);
+}
+
+/* Success & Error messages */
+.error {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.success {
+  color: green;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* Button */
+.otp-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--primary);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.otp-btn:hover {
+  background: var(--primary-dark);
+}

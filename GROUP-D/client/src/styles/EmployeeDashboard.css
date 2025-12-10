@@ -1,0 +1,61 @@
+:root {
+  --primary: #ff6b6b;
+  --primary-dark: #ff5252;
+  --bg-light: #f9dfe5;
+  --radius: 16px;
+}
+
+.emp-page {
+  min-height: 100vh;
+  background: var(--bg-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.emp-card {
+  width: 450px;
+  background: #fff;
+  padding: 35px;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.emp-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.emp-subtitle {
+  color: #777;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.emp-info {
+  background: #ffe5e5;
+  padding: 16px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.emp-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.emp-btn:hover {
+  background: var(--primary-dark);
+}
