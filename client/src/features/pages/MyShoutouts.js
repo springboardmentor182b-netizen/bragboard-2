@@ -1,32 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const loggedInUser = "You"; // Replace with actual logged-in user later
 
 const MyShoutouts = () => {
-  // Dummy data
-  const dummyShoutouts = [
-    { id: 1, from: 'Alice', to: 'You', message: 'Great work on project!', type: 'received' },
-    { id: 2, from: 'You', to: 'Bob', message: 'Thanks for your help!', type: 'given' },
-    { id: 3, from: 'Charlie', to: 'You', message: 'Amazing presentation!', type: 'received' },
-    { id: 4, from: 'You', to: 'Dana', message: 'Nice teamwork!', type: 'given' },
-  ];
-
+  const [shoutouts, setShoutouts] = useState([]);
   const [activeTab, setActiveTab] = useState('received');
+  const [loading, setLoading] = useState(true);
 
-  const filteredShoutouts = dummyShoutouts.filter(
-    (s) => s.type === activeTab
+  useEffect(() => {
+    const fetchShoutouts = async () => {
+      try {
+        const res = await axios.get('http://localhost:8000/shoutouts'); // your backend API
+        setShoutouts(res.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchShoutouts();
+  }, []);
+
+  const filteredShoutouts = shoutouts.filter(s =>
+    (activeTab === 'received' && s.to === loggedInUser) ||
+    (activeTab === 'given' && s.from === loggedInUser)
   );
+
+  if (loading) return <p>Loading shoutouts...</p>;
 
   return (
     <div style={{ padding: '20px' }}>
       <h1>My Shoutouts</h1>
 
-      {/* Tabs */}
       <div style={{ marginBottom: '20px' }}>
         <button
           onClick={() => setActiveTab('received')}
-          style={{
-            marginRight: '10px',
-            fontWeight: activeTab === 'received' ? 'bold' : 'normal'
-          }}
+          style={{ marginRight: '10px', fontWeight: activeTab === 'received' ? 'bold' : 'normal' }}
         >
           Received
         </button>
@@ -38,23 +48,12 @@ const MyShoutouts = () => {
         </button>
       </div>
 
-      {/* Shoutout cards */}
       {filteredShoutouts.length === 0 ? (
         <p>No shoutouts in this tab.</p>
       ) : (
         filteredShoutouts.map((s) => (
-          <div
-            key={s.id}
-            style={{
-              border: '1px solid #ccc',
-              borderRadius: '5px',
-              padding: '10px',
-              marginBottom: '10px'
-            }}
-          >
-            <p>
-              <strong>From:</strong> {s.from} <strong>To:</strong> {s.to}
-            </p>
+          <div key={s.id} style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '15px', marginBottom: '10px', backgroundColor: '#f9f9f9' }}>
+            <p><strong>From:</strong> {s.from} <strong>To:</strong> {s.to}</p>
             <p>{s.message}</p>
           </div>
         ))
