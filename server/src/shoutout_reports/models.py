@@ -8,7 +8,7 @@ class ReportStatus(str, Enum):
     PENDING = "pending"
     RESOLVED = "resolved"
     DISMISSED = "dismissed"
-
+a
 
 class ShoutoutReportCreate(BaseModel):
     shoutout_id: int = Field(..., ge=1, description="ID of the shoutout being reported")
@@ -37,7 +37,7 @@ class ShoutoutReportRead(BaseModel):
     resolution_notes: Optional[str] = None
     created_at: datetime
     
-    # Shoutout details (optional, for convenience)
+    
     shoutout_message: Optional[str] = None
     shoutout_sender_id: Optional[int] = None
 

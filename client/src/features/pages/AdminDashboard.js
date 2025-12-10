@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Users, MessageSquare, Flag, Activity } from 'lucide-react';
 
 // Corrected import paths
-import AdminNavbar from '../admin/components/AdminNavbar';
-import StatCard from '../admin/components/StatsCard';
-import ActivityChart from '../admin/components/ActivityChart';
-import DepartmentChart from '../admin/components/DepartmentChart';
-import EmployeeDrawer from '../admin/components/EmployeeDrawer';
+import AdminNavbar from '../admin/AdminNavbar';
+import StatCard from '../admin/StatsCard';
+import ActivityChart from '../admin/ActivityChart';
+import DepartmentChart from '../admin/DepartmentChart';
+import EmployeeDrawer from '../admin/EmployeeDrawer';
+import ShoutoutReports from '../admin/ShoutoutReports';
 
 const AdminDashboard = () => {
   const [isEmployeePanelOpen, setEmployeePanelOpen] = useState(false);
@@ -42,6 +43,10 @@ const AdminDashboard = () => {
           <div className="lg:col-span-1 h-96">
             <DepartmentChart />
           </div>
+        </div>
+
+        <div className="mt-10">
+          <ShoutoutReports />
         </div>
 
       </div>
