@@ -1,3 +1,4 @@
+import MyShoutouts from './features/pages/MyShoutouts';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './features/pages/Dashboard';
 import Settings from './features/pages/Settings';
@@ -12,6 +13,7 @@ function App() {
         <Route path="/employee-dashboard" element={<Dashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/my-shoutouts" element={<MyShoutouts />} />  
         <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
