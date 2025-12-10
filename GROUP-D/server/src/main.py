@@ -8,6 +8,9 @@ from src.routes.reaction_routes import router as reaction_router
 # NEW: Report Export Router
 from src.routes.report_routes import router as report_router
 
+# NEW: Comments Router
+from src.routes.comment import router as comment_router
+
 # NEW: Auth Router (your code)
 from src.routes.auth import router as auth_router
 
@@ -30,10 +33,13 @@ app.add_middleware(
 app.include_router(shoutout_router, prefix="/api")
 app.include_router(reaction_router, prefix="/api")
 
-# New Export Routes
+# Export routes
 app.include_router(report_router, prefix="/api/reports")
 
-# Add your Auth Router
+# Comment routes
+app.include_router(comment_router, prefix="/api")
+
+# Auth routes
 app.include_router(auth_router, prefix="/api")
 
 @app.get("/")
