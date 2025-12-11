@@ -1,7 +1,7 @@
 import FeedPost from './FeedPost';
 import './Feed.css';
 
-function Feed({ shoutouts }) {
+function Feed({ shoutouts, onReport }) {
   return (
     <div className="feed-container">
       {shoutouts.length === 0 ? (
@@ -10,7 +10,11 @@ function Feed({ shoutouts }) {
         </div>
       ) : (
         shoutouts.map((shoutout) => (
-          <FeedPost key={shoutout.id} shoutout={shoutout} />
+          <FeedPost
+            key={shoutout.id}
+            shoutout={shoutout}
+            onReport={() => onReport(shoutout)}
+          />
         ))
       )}
     </div>

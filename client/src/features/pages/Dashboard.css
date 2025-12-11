@@ -23,6 +23,9 @@
 }
 
 .dashboard-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 24px;
 }
 
@@ -30,7 +33,13 @@
   font-size: 2rem;
   font-weight: 700;
   color: #2563eb;
-  margin: 0 0 20px 0;
+  margin: 0;
+}
+
+.dashboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .dashboard-search-container {
@@ -135,4 +144,3 @@
     justify-content: center;
   }
 }
-

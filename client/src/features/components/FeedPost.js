@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import './FeedPost.css';
 
-function FeedPost({ shoutout }) {
+function FeedPost({ shoutout, onReport }) {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
 
@@ -26,7 +26,7 @@ function FeedPost({ shoutout }) {
   };
 
   const handleReport = () => {
-    alert(`Report submitted for post by ${shoutout.sender}. Thank you for your feedback!`);
+    onReport();
     setShowMenu(false);
   };
 
