@@ -9,6 +9,7 @@ import Home from "./pages/EmpHome";
 import AdminHome from "./pages/AdminHome";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
+import Leaderboard from './pages/Leaderboard'; 
 import ProtectedRoute from "./ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 import ResolveReports from "./components/ResolveReports.jsx";
@@ -26,7 +27,7 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-
+        <Route path="/leaderboard" element={<Leaderboard role={role} />} /> 
         {/* ---------------------- ADMIN ROUTES ---------------------- */}
         <Route path="/admin/home"
           element={ <ProtectedRoute element={<AdminHome role={role} />}allowedRoles={["admin"]}role={role}/>}
