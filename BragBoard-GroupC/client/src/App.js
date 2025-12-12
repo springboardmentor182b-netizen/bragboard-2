@@ -12,14 +12,20 @@ import Settings from "./pages/Settings";
 import Leaderboard from './pages/Leaderboard'; 
 import ProtectedRoute from "./ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
+
+import PageContainer from "./layout/PageContainer";
+import MyShoutouts from "./pages/EmployeeMyShoutouts";
 import ResolveReports from "./components/ResolveReports.jsx";
 import ReportHistory from "./components/ReportHistory.jsx";
+
 export default function App() {
-  const role = "admin"; 
+  const role = "user"; 
 
   return (
     <Router>
       <Routes>
+
+        
 
         {/* ---------------------- COMMON ROUTES ---------------------- */}
         <Route path="/" element={<Base />} />
@@ -53,20 +59,25 @@ export default function App() {
           path="/admin/settings"
           element={ <ProtectedRoute element={<Settings role={role} />} allowedRoles={["admin"]} role={role} />}
         />
-        {/* ---------------------- USER ROUTES ---------------------- */}
-        <Route
-          path="/user/home"
-          element={ <ProtectedRoute  element={<Home role={role} />} allowedRoles={["user"]} role={role} /> }
-        />
-        <Route
-          path="/user/reports"
-          element={ <ProtectedRoute element={<Reports role={role} />}allowedRoles={["user"]}role={role}/> }
-        />
 
-        <Route
-          path="/user/settings"
-          element={<ProtectedRoute element={<Settings role={role} />}allowedRoles={["user"]} role={role} /> }
-        />
+
+        {/* ---------------- USER DASHBOARD LAYOUT ---------------- */}
+      <Route
+  path="/user"
+  element={
+    <ProtectedRoute
+      element={<PageContainer role={role} />}
+      allowedRoles={["user"]}
+      role={role}
+    />
+  }
+>
+  <Route path="home" element={<Home role={role} />} />
+  <Route path="reports" element={<Reports role={role} />} />
+  <Route path="settings" element={<Settings role={role} />} />
+  <Route path="my-shoutouts" element={<MyShoutouts role={role} />} />
+</Route>
+
         {/* ---------------------- UNAUTHORIZED ---------------------- */}
         <Route path="/unauthorized" element={<h1>Unauthorized Access</h1>} />
         {/* ---------------------- DEFAULT ROUTE ---------------------- */}
