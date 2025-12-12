@@ -1,0 +1,89 @@
+/* Page container */
+.shoutouts-page {
+  padding: 30px;
+  background-color: #f9fafb; /* light gray background */
+  min-height: 100%;
+}
+
+/* Page title */
+.shoutouts-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1e40af; /* blue-800 */
+  margin-bottom: 25px;
+  border-bottom: 2px solid #e5e7eb; /* subtle underline */
+  padding-bottom: 10px;
+}
+
+/* Shoutouts list wrapper */
+.shoutouts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Individual card */
+.shoutout-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.shoutout-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Shoutout message */
+.shoutout-message {
+  font-size: 1rem;
+  color: #111827; /* dark gray */
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+/* Recipient */
+.shoutout-recipient {
+  display: inline-block;
+  background-color: #dbeafe; /* blue-100 */
+  color: #1e40af; /* blue-800 */
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+/* Category */
+.shoutout-category {
+  display: inline-block;
+  background-color: #fef3c7; /* yellow-100 */
+  color: #b45309; /* yellow-800 */
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+/* Date */
+.shoutout-date {
+  font-size: 0.85rem;
+  color: #6b7280; /* gray-500 */
+}
+
+/* No shoutouts message */
+.no-shoutouts {
+  text-align: center;
+  padding: 60px 0;
+  color: #6b7280;
+}
+
+.no-shoutouts-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+  color: #d1d5db; /* gray-300 */
+}
