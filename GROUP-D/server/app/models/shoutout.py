@@ -12,4 +12,6 @@ class Shoutout(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+
     recipients = relationship("ShoutoutRecipient", back_populates="shoutout", cascade="all, delete-orphan")
+    reports = relationship("ShoutoutReport", back_populates="shoutout", cascade="all, delete")
