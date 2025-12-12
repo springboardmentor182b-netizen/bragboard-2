@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ShoutoutCard from "./ShoutoutCard";
 import { getShoutouts } from "./shoutout.api";
-import ExportButtons from "./ExportButtons";     // ✅ Added
+import ExportButtons from "./ExportButtons";
 import { PageContainer } from "./ShoutoutPage.styles";
 
 export default function ShoutoutPage() {
@@ -13,17 +13,14 @@ export default function ShoutoutPage() {
 
   async function loadShoutouts() {
     const response = await getShoutouts();
-
-    // Handle backend API structure correctly
-    const data = response?.data || response;
-    setShoutouts(data || []);
+    const data = response?.data || response || [];
+    setShoutouts(data);
   }
 
   return (
     <PageContainer>
       <h2 className="title">Shoutouts</h2>
 
-      {/* ✅ Export Buttons for CSV & PDF */}
       <ExportButtons />
 
       <div className="grid">
