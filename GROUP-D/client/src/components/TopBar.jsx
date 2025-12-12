@@ -1,3 +1,4 @@
+import ThemeSwitcher from "../components/ThemeSwitcher";
 export default function TopBar() {
   return (
     <div className="flex items-center gap-6 mb-6">
@@ -9,9 +10,11 @@ export default function TopBar() {
               <input className="w-full bg-transparent outline-none text-sm" placeholder="Search..." />
             </div>
             <div className="text-xl">🔔</div>
+            <ThemeSwitcher />
           </div>
         </div>
       </div>
     </div>
   );
 }
+
