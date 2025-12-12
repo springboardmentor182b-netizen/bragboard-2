@@ -13,14 +13,18 @@ export default function ShoutoutPage() {
 
   async function loadShoutouts() {
     const response = await getShoutouts();
-    const data = response?.data || response || [];
-    setShoutouts(data);
+
+    // Backend returns: { data: [...] }
+    const data = response?.data ? response.data : response;
+
+    setShoutouts(data || []);
   }
 
   return (
     <PageContainer>
       <h2 className="title">Shoutouts</h2>
 
+      {/* Export buttons for CSV/PDF */}
       <ExportButtons />
 
       <div className="grid">
