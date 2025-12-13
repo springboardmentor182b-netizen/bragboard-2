@@ -1,6 +1,8 @@
+// src/features/pages/Settings.js
 import { useState } from 'react';
 import Header from '../layout/Header';
 import './Settings.css';
+import { useTheme } from '../../context/ThemeContext';
 
 function Settings() {
   const [formData, setFormData] = useState({
@@ -10,6 +12,9 @@ function Settings() {
   });
   const [status, setStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Theme toggle
+  const { toggleTheme } = useTheme();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,54 +27,31 @@ function Settings() {
     setStatus(null);
     setIsSubmitting(true);
 
-    // Validation
     if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
-      setStatus({
-        type: 'error',
-        text: 'Please fill in all fields.',
-      });
+      setStatus({ type: 'error', text: 'Please fill in all fields.' });
       setIsSubmitting(false);
       return;
     }
-
     if (formData.newPassword.length < 8) {
-      setStatus({
-        type: 'error',
-        text: 'New password must be at least 8 characters long.',
-      });
+      setStatus({ type: 'error', text: 'New password must be at least 8 characters long.' });
       setIsSubmitting(false);
       return;
     }
-
     if (formData.newPassword !== formData.confirmPassword) {
-      setStatus({
-        type: 'error',
-        text: 'New password and confirm password do not match.',
-      });
+      setStatus({ type: 'error', text: 'New password and confirm password do not match.' });
       setIsSubmitting(false);
       return;
     }
-
     if (formData.currentPassword === formData.newPassword) {
-      setStatus({
-        type: 'error',
-        text: 'New password must be different from current password.',
-      });
+      setStatus({ type: 'error', text: 'New password must be different from current password.' });
       setIsSubmitting(false);
       return;
     }
 
     // Simulate API call
     setTimeout(() => {
-      setStatus({
-        type: 'success',
-        text: 'Password changed successfully!',
-      });
-      setFormData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      });
+      setStatus({ type: 'success', text: 'Password changed successfully!' });
+      setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
       setIsSubmitting(false);
     }, 1000);
   };
@@ -84,6 +66,23 @@ function Settings() {
           <div className="settings-header">
             <h1 className="settings-title">Settings</h1>
             <p className="settings-subtitle">Manage your account settings and preferences</p>
+
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              style={{
+                padding: "8px 16px",
+                marginTop: "10px",
+                cursor: "pointer",
+                borderRadius: "4px",
+                border: "none",
+                backgroundColor: "#007bff",
+                color: "#fff",
+                fontSize: "14px",
+              }}
+            >
+              Switch Theme
+            </button>
           </div>
 
           <div className="settings-section">
@@ -151,4 +150,3 @@ function Settings() {
 }
 
 export default Settings;
-
