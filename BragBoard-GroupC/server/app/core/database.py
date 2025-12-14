@@ -1,6 +1,7 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Enum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from enum import Enum as PyEnum   # ✅ correct Python enum import
 import os
 from dotenv import load_dotenv
 
@@ -13,11 +14,11 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
-class UserRole(str, enum.Enum):
+class UserRole(str, PyEnum):
     EMPLOYEE = "employee"
     ADMIN = "admin"
 
-class ReportStatus(str, enum.Enum):
+class ReportStatus(str, PyEnum):
     PENDING = "pending"
     RESOLVED = "resolved"
     DISMISSED = "dismissed"

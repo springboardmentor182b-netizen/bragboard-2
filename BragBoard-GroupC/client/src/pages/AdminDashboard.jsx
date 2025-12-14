@@ -5,6 +5,7 @@ import Admin_Leaderboard from '../components/Admin_Leaderboard';
 import Admin_Analytics from '../components/Admin_Analytics';
 import Admin_UserManagement from '../components/Admin_UserManagement';
 import Admin_SearchFilters from '../components/Admin_SearchFilters';
+import Ad_exp_report from './Ad_exp_report';
 import '../assets/global.css';  
 
 const AdminDashboard = () => {

@@ -1,0 +1,93 @@
+.page {
+  min-height: 100vh;
+  padding: 40px 60px;
+  font-family: 'Segoe UI', sans-serif;
+  background: #ffffff;
+}
+
+.search-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;  
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;              
+  gap: 14px;
+  border: 2px solid #5b6cff;
+  border-radius: 40px;
+  padding: 18px 28px;
+  background: #f3f5ff;
+  min-width: 900px;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 15px;
+  color: #000;
+  white-space: nowrap;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 22px;
+  height: 40px;                     
+  border-radius: 22px;
+
+  border: 1.5px solid #5b6cff;
+  background: #eef1ff;
+  color: #000;
+  font-size: 14px;
+
+  white-space: nowrap;              
+  cursor: pointer;
+}
+
+.chip:hover {
+  background: #dfe4ff;
+}
+
+.list-container {
+  margin: 40px auto;
+  border: 2px solid #5b6cff;
+  border-radius: 10px;
+  padding: 26px;
+  background: #eef4ff;
+  max-width: 900px;
+}
+
+.list-item {
+  background: #f5f7ff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.list-item:nth-child(even) {
+  background: #e7efff;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.export-btn {
+  padding: 12px 26px;
+  border-radius: 30px;
+  border: 2px solid #5b6cff;
+  background: #eef1ff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.export-btn:hover {
+  background: #dfe4ff;
+}

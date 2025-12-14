@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.database.core import engine, Base
+from app.core.database import engine, SessionLocal, Base
 from src.reports.reporting_controller import router as reporting_router
 
 # Create tables

@@ -13,7 +13,7 @@ import Leaderboard from './pages/Leaderboard';
 import ProtectedRoute from "./ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 import ResolveReports from "./components/ResolveReports.jsx";
-import ReportHistory from "./components/ReportHistory.jsx";
+import Ad_exp_report from "./pages/Ad_exp_report.js";
 export default function App() {
   const role = "admin"; 
 
@@ -42,8 +42,8 @@ export default function App() {
           element={<ProtectedRoute element={<ResolveReports role={role} />} allowedRoles={["admin"]} role={role} />}
         />
        <Route
-          path="/admin/reports/history"
-          element={ <ProtectedRoute element={<ReportHistory role={role} />} allowedRoles={["admin"]} role={role}/>}
+          path="/admin/reports/export"
+          element={ <ProtectedRoute element={<Ad_exp_report role={role} />} allowedRoles={["admin"]} role={role}/>}
         />
         <Route
           path="/admin/reports"
@@ -53,6 +53,8 @@ export default function App() {
           path="/admin/settings"
           element={ <ProtectedRoute element={<Settings role={role} />} allowedRoles={["admin"]} role={role} />}
         />
+
+
         {/* ---------------------- USER ROUTES ---------------------- */}
         <Route
           path="/user/home"
