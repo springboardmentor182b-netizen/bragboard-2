@@ -12,14 +12,19 @@ import Settings from "./pages/Settings";
 import Leaderboard from './pages/Leaderboard'; 
 import ProtectedRoute from "./ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
+
+import PageContainer from "./layout/PageContainer";
+import MyShoutouts from "./pages/EmployeeMyShoutouts";
 import ResolveReports from "./components/ResolveReports.jsx";
 import Ad_exp_report from "./pages/Ad_exp_report.js";
 export default function App() {
-  const role = "admin"; 
+  const role = "user"; 
 
   return (
     <Router>
       <Routes>
+
+        
 
         {/* ---------------------- COMMON ROUTES ---------------------- */}
         <Route path="/" element={<Base />} />
@@ -53,8 +58,6 @@ export default function App() {
           path="/admin/settings"
           element={ <ProtectedRoute element={<Settings role={role} />} allowedRoles={["admin"]} role={role} />}
         />
-
-
         {/* ---------------------- USER ROUTES ---------------------- */}
         <Route
           path="/user/home"

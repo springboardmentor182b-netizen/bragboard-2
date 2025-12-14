@@ -1,9 +1,8 @@
-import PageContainer from "../layout/PageContainer";
-
 const Reports = () => (
-  <PageContainer>
+  <div className="reports-page">
     <h1>Reports</h1>
     <p>Analytics and user reports.</p>
-  </PageContainer>
+  </div>
 );
+
 export default Reports;

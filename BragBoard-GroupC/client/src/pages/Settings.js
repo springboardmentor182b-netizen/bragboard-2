@@ -1,8 +1,7 @@
-import PageContainer from "../layout/PageContainer";
-
 const Settings = () => (
-  <PageContainer>
+  <div className="settings-page">
     <h1>Settings</h1>
-  </PageContainer>
+  </div>
 );
+
 export default Settings;
