@@ -2,6 +2,8 @@ import { useState } from 'react';
 import Header from '../layout/Header';
 import './Settings.css';
 
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000';
+
 function Settings() {
   const [formData, setFormData] = useState({
     currentPassword: '',
@@ -17,12 +19,27 @@ function Settings() {
     setStatus(null);
   };
 
-  const handleSubmit = (e) => {
+  const apiPost = async (path, payload, token) => {
+    const response = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(payload),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.error) {
+      throw new Error(data.error || 'Request failed');
+    }
+    return data;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus(null);
     setIsSubmitting(true);
 
-    // Validation
     if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
       setStatus({
         type: 'error',
@@ -59,8 +76,30 @@ function Settings() {
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
+    const storedToken =
+      localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+    const email = localStorage.getItem('email') || sessionStorage.getItem('email');
+
+    if (!email) {
+      setStatus({
+        type: 'error',
+        text: 'No user email found. Please log in again.',
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      await apiPost(
+        '/auth/change-password',
+        {
+          email,
+          current_password: formData.currentPassword,
+          new_password: formData.newPassword,
+        },
+        storedToken
+      );
+
       setStatus({
         type: 'success',
         text: 'Password changed successfully!',
@@ -70,8 +109,14 @@ function Settings() {
         newPassword: '',
         confirmPassword: '',
       });
+    } catch (error) {
+      setStatus({
+        type: 'error',
+        text: error.message || 'Something went wrong. Please try again.',
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   const statusClassName = status ? `status-message status-${status.type}` : '';
