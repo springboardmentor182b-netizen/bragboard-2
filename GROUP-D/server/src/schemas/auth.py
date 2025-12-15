@@ -9,7 +9,7 @@ class Register(BaseModel):
 class Login(BaseModel):
     email: EmailStr
     password: str
-    login_type: str   # NEW: "admin" or "employee"
+    login_type: str   # "admin" or "employee"
 
 class OTPVerify(BaseModel):
     email: EmailStr
