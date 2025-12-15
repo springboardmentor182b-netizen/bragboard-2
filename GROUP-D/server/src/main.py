@@ -1,18 +1,25 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+# -------------------------
+# Database
+# -------------------------
+from src.database.connection import Base, engine
+
+# -------------------------
 # Existing routes
+# -------------------------
 from src.routes.shoutout_routes import router as shoutout_router
 from src.routes.reaction_routes import router as reaction_router
-
-# NEW: Report Export Router
 from src.routes.report_routes import router as report_router
-
-# NEW: Comments Router
 from src.routes.comment import router as comment_router
+from src.routers.auth import router as auth_router
 
-# NEW: Auth Router (your code)
-from src.routes.auth import router as auth_router
+# -------------------------
+# NEW: Admin Shoutout API
+# -------------------------
+from src.routes.admin_shoutouts import router as admin_shoutout_router
+
 
 app = FastAPI(
     title="Bragboard-2",
@@ -20,7 +27,9 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# -------------------------
 # CORS Setup
+# -------------------------
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -29,19 +38,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Existing routes
+# -------------------------
+# Create DB tables
+# -------------------------
+Base.metadata.create_all(bind=engine)
+
+# -------------------------
+# Include existing routers
+# -------------------------
 app.include_router(shoutout_router, prefix="/api")
-app.include_router(reaction_router, prefix="/api")
+#app.include_router(reaction_router, prefix="/api")
+#app.include_router(comment_router, prefix="/api")
+#app.include_router(auth_router, prefix="/api")
 
-# Export routes
-app.include_router(report_router, prefix="/api/reports")
+# Report routes (already had custom prefix)
+#app.include_router(report_router, prefix="/api/reports")
 
-# Comment routes
-app.include_router(comment_router, prefix="/api")
+# -------------------------
+# Include ADMIN shoutout router
+# -------------------------
+# Admin-only APIs
+app.include_router(admin_shoutout_router)
 
-# Auth routes
-app.include_router(auth_router, prefix="/api")
-
+# -------------------------
+# Root health check
+# -------------------------
 @app.get("/")
 def home():
     return {"message": "Backend OK"}

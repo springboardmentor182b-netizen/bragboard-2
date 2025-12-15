@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from src.database.database import get_db
 from src.middleware.auth import get_current_user
-from server.src.controllers.comment import (
+from src.controllers.comment import (
     create_comment, get_comments_by_shoutout,
     update_comment, delete_comment
 )
