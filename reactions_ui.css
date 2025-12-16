@@ -1,0 +1,30 @@
+.reactions-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Reaction button */
+.reaction-btn {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+
+  background-color: #fde2e2;   /* light peach */
+  color: #4a4a4a;              /* dark text */
+  font-size: 16px;
+
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Hover effect */
+.reaction-btn:hover {
+  background-color: #f4a6a6;   /* coral */
+  transform: scale(1.05);
+}
+
+/* Optional: active / clicked state */
+.reaction-btn:active {
+  background-color: #ec8f8f;   /* darker coral */
+}
