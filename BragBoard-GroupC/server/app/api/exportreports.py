@@ -17,6 +17,26 @@ def ensure_admin(user: User):
     if user.role != "admin":
         raise HTTPException(status_code=403, detail="Admins only")
     
+@router.get("")
+def get_reports(
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user)
+):
+    ensure_admin(user)
+
+    shoutouts = db.query(Shoutout).all()
+
+    return [
+        {
+            "id": s.id,
+            "sender_id": s.sender_id,
+            "receiver_id": s.receiver_id,
+            "message": s.message,
+            "created_at": s.created_at
+        }
+        for s in shoutouts
+    ]
+    
 #  EXPORT CSV
 
 @router.get("/export/csv")

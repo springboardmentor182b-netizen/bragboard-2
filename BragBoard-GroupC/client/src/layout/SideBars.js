@@ -2,6 +2,8 @@ import "./SideBar.css";
 import { Home, Star, Trophy, FileText, Settings, Archive, ChevronDown } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+import React from "react";
+import Ad_exp_report from "../pages/Ad_exp_report";
 
 const Sidebar = ({ role }) => {
   const location = useLocation();
@@ -12,7 +14,7 @@ const Sidebar = ({ role }) => {
     { name: "Manage Reports",icon: <FileText size={20} />,isParent: true, toggle: () => setReportsOpen(!reportsOpen),open: reportsOpen,
       submenu: [
         { name: "Resolve Reports",path: "/admin/reports/resolve",icon: <FileText size={18} />},
-        {name: "Report History",path: "/admin/reports/history",icon: <Archive size={18} />}
+        {name: "Export Reports",path: "/admin/reports/export",icon: <Archive size={18} />}
       ]
     },
     { name: "Settings", path: "/admin/settings", icon: <Settings size={20} /> },

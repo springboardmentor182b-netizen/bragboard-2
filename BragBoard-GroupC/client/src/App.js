@@ -16,10 +16,9 @@ import AdminDashboard from "./pages/AdminDashboard";
 import PageContainer from "./layout/PageContainer";
 import MyShoutouts from "./pages/EmployeeMyShoutouts";
 import ResolveReports from "./components/ResolveReports.jsx";
-import ReportHistory from "./components/ReportHistory.jsx";
-
+import Ad_exp_report from "./pages/Ad_exp_report.js";
 export default function App() {
-  const role = "user"; 
+  const role = "admin"; 
 
   return (
     <Router>
@@ -48,8 +47,8 @@ export default function App() {
           element={<ProtectedRoute element={<ResolveReports role={role} />} allowedRoles={["admin"]} role={role} />}
         />
        <Route
-          path="/admin/reports/history"
-          element={ <ProtectedRoute element={<ReportHistory role={role} />} allowedRoles={["admin"]} role={role}/>}
+          path="/admin/reports/export"
+          element={ <ProtectedRoute element={<Ad_exp_report role={role} />} allowedRoles={["admin"]} role={role}/>}
         />
         <Route
           path="/admin/reports"
@@ -59,25 +58,20 @@ export default function App() {
           path="/admin/settings"
           element={ <ProtectedRoute element={<Settings role={role} />} allowedRoles={["admin"]} role={role} />}
         />
+        {/* ---------------------- USER ROUTES ---------------------- */}
+        <Route
+          path="/user/home"
+          element={ <ProtectedRoute  element={<Home role={role} />} allowedRoles={["user"]} role={role} /> }
+        />
+        <Route
+          path="/user/reports"
+          element={ <ProtectedRoute element={<Reports role={role} />}allowedRoles={["user"]}role={role}/> }
+        />
 
-
-        {/* ---------------- USER DASHBOARD LAYOUT ---------------- */}
-      <Route
-  path="/user"
-  element={
-    <ProtectedRoute
-      element={<PageContainer role={role} />}
-      allowedRoles={["user"]}
-      role={role}
-    />
-  }
->
-  <Route path="home" element={<Home role={role} />} />
-  <Route path="reports" element={<Reports role={role} />} />
-  <Route path="settings" element={<Settings role={role} />} />
-  <Route path="my-shoutouts" element={<MyShoutouts role={role} />} />
-</Route>
-
+        <Route
+          path="/user/settings"
+          element={<ProtectedRoute element={<Settings role={role} />}allowedRoles={["user"]} role={role} /> }
+        />
         {/* ---------------------- UNAUTHORIZED ---------------------- */}
         <Route path="/unauthorized" element={<h1>Unauthorized Access</h1>} />
         {/* ---------------------- DEFAULT ROUTE ---------------------- */}
