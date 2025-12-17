@@ -11,15 +11,5 @@ root.render(
     <App />
   </React.StrictMode>
 );
-.light {
-  background-color: #ffffff;
-  color: #000000;
-  min-height: 100vh;
-}
 
-.dark {
-  background-color: #121212;
-  color: #ffffff;
-  min-height: 100vh;
-}
 

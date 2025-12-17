@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const loggedInUser = "You"; // Replace with actual logged-in user later
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
-let loggedInUser = "";
+let loggedInUser = "You";
 const token = localStorage.getItem("token"); // the key you use to store JWT
 if (token) {
-  const decoded = jwt_decode(token);
-  loggedInUser = decoded.email || decoded.username; // use the field your JWT has
+  try {
+    const decoded = jwtDecode(token);
+    loggedInUser = decoded.email || decoded.username || "You";
+  } catch (e) {
+    console.error("Invalid token", e);
+  }
 }
 
 const MyShoutouts = () => {
