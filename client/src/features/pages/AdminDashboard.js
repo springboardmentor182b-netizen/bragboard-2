@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'; // Added useEffect for API integration
+import React, { useState, useEffect } from 'react'; 
 import { Users, MessageSquare, Flag, Activity } from 'lucide-react';
 
-// Import all local admin components
+
 import AdminNavbar from '../admin/AdminNavbar';
 import StatCard from '../admin/StatsCard';
 import ActivityChart from '../admin/ActivityChart';
@@ -9,13 +9,12 @@ import DepartmentChart from '../admin/DepartmentChart';
 import EmployeeDrawer from '../admin/EmployeeDrawer';
 import ShoutoutReportsPanel from '../admin/ShoutoutReportsPanel';
 
-// --- API CONFIGURATION ---
-// This follows the service pattern described in your structure guide [cite: 68, 69]
+
 const API_BASE_URL = "http://localhost:8000/api"; 
 
 const adminAPI = {
   getStats: async () => {
-    const token = localStorage.getItem('token'); // Retrieve auth token [cite: 74]
+    const token = localStorage.getItem('token'); 
     const response = await fetch(`${API_BASE_URL}/admin/stats`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
@@ -34,11 +33,11 @@ const adminAPI = {
   }
 };
 
-// --- MAIN PAGE COMPONENT ---
+
 const AdminDashboard = () => {
   const [isEmployeePanelOpen, setEmployeePanelOpen] = useState(false);
   
-  // 1. STATE FOR LIVE DATA
+  
   const [stats, setStats] = useState({
     total_users: '0',
     shoutouts: '0',
@@ -46,7 +45,7 @@ const AdminDashboard = () => {
     engagement: '0%'
   });
 
-  // 2. USEEFFECT TO FETCH DATA ON COMPONENT MOUNT [cite: 73]
+ 
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
@@ -59,7 +58,7 @@ const AdminDashboard = () => {
     loadDashboardData();
   }, []);
 
-  // 3. API EXPORT HANDLER
+ 
   const handleExport = async (type, format) => {
     try {
       const blob = await adminAPI.exportReport(type, format);
@@ -81,7 +80,7 @@ const AdminDashboard = () => {
       <AdminNavbar />
 
       <div className="max-w-7xl mx-auto p-6 md:p-8">
-        {/* Header Section */}
+        
         <header className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-bold text-white tracking-tight">Admin Dashboard</h1>
@@ -95,7 +94,7 @@ const AdminDashboard = () => {
           </button>
         </header>
 
-        {/* Stats Grid Layout - Updated with live stats state */}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard title="Total Users" value={stats.total_users} change="+12%" icon={Users} />
           <StatCard title="Shoutouts" value={stats.shoutouts} change="+28%" icon={MessageSquare} />
@@ -103,7 +102,7 @@ const AdminDashboard = () => {
           <StatCard title="Engagement" value={stats.engagement} change="+5%" icon={Activity} />
         </div>
 
-        {/* Charts Grid Layout */}
+        
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 h-96">
             <ActivityChart />
@@ -113,11 +112,11 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Pass the handleExport function as a prop to your reports panel */}
+        
         <ShoutoutReportsPanel onExport={handleExport} />
       </div>
 
-      {/* Employee Drawer Overlay */}
+      
       <EmployeeDrawer 
         isOpen={isEmployeePanelOpen} 
         onClose={() => setEmployeePanelOpen(false)} 
