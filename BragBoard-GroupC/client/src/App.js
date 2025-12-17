@@ -18,7 +18,7 @@ import MyShoutouts from "./pages/EmployeeMyShoutouts";
 import ResolveReports from "./components/ResolveReports.jsx";
 import Ad_exp_report from "./pages/Ad_exp_report.js";
 export default function App() {
-  const role = "user"; 
+  const role = "admin"; 
 
   return (
     <Router>
