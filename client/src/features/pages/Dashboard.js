@@ -16,11 +16,14 @@ function Dashboard() {
   // Mock data for reported shoutouts
   const [reportedShoutouts, setReportedShoutouts] = useState([]);
 
+  const [sortBy, setSortBy] = useState('newest');
+
   const [shoutouts, setShoutouts] = useState([
     {
       id: 1,
       sender: 'Annette Black',
       senderAvatar: '',
+      department: 'Engineering',
       timestamp: '3 hours ago',
       message: 'Gave a shout-out to E-firar Her way helped at little project!',
       taggedUsers: ['E-firar'],
@@ -31,6 +34,7 @@ function Dashboard() {
       id: 2,
       sender: 'Albert Flores',
       senderAvatar: '',
+      department: 'Design',
       timestamp: '1 day ago',
       message: 'Gave Cody Fisher — Her always going above and beyond!',
       taggedUsers: ['Cody Fisher'],
@@ -41,6 +45,7 @@ function Dashboard() {
       id: 3,
       sender: 'Savannah Nguyen',
       senderAvatar: '',
+      department: 'Marketing',
       timestamp: '2 days ago',
       message: 'Appreciate Darlene Robertson for the team effort.',
       taggedUsers: ['Darlene Robertson'],
@@ -72,6 +77,19 @@ function Dashboard() {
     alert('Report submitted successfully!');
   };
 
+  const getSortedShoutouts = () => {
+    const shoutoutsCopy = [...shoutouts];
+    if (sortBy === 'department') {
+      return shoutoutsCopy.sort((a, b) => {
+        const deptA = a.department || '';
+        const deptB = b.department || '';
+        return deptA.localeCompare(deptB);
+      });
+    }
+    // Default to newest (assuming id or original order reflects timestamp for mock data)
+    return shoutoutsCopy; 
+  };
+
   return (
     <div className="dashboard-container">
       <Header />
@@ -80,6 +98,24 @@ function Dashboard() {
           <div className="dashboard-header-section">
             <h1 className="dashboard-title">Dashboard</h1>
             <div className="dashboard-actions">
+               <select 
+                className="sort-dropdown"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  border: '1px solid #e1e1e1',
+                  background: 'white',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                  fontWeight: '500',
+                  marginRight: '12px'
+                }}
+              >
+                <option value="newest">Sort by Date</option>
+                <option value="department">Sort by Department</option>
+              </select>
               <button
                 className="view-reports-button"
                 onClick={() => setIsViewReportsOpen(true)}
@@ -122,7 +158,7 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          <Feed shoutouts={shoutouts} onReport={handleReportClick} />
+          <Feed shoutouts={getSortedShoutouts()} onReport={handleReportClick} />
         </div>
         <Sidebar />
       </div>
@@ -143,6 +179,7 @@ function Dashboard() {
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
         <span>Create Shoutout</span>

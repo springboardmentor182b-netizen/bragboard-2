@@ -57,9 +57,14 @@ function FeedPost({ shoutout, onReport }) {
             <span className="avatar-initials">{getInitials(shoutout.sender)}</span>
           )}
         </div>
-        <div className="post-info">
-          <div className="post-sender">{shoutout.sender}</div>
-          <div className="post-timestamp">{shoutout.timestamp}</div>
+        <div className="post-header-text">
+          <span className="post-author">{shoutout.sender}</span>
+          {shoutout.department && (
+            <span className="post-department" style={{ color: '#666', fontSize: '0.85rem', marginLeft: '8px' }}>
+              • {shoutout.department}
+            </span>
+          )}
+          <span className="post-time">{shoutout.timestamp}</span>
         </div>
         <div className="post-menu-container" ref={menuRef}>
           <button
