@@ -4,12 +4,15 @@ import Header from '../layout/Header';
 import './Settings.css';
 import { useTheme } from '../../context/ThemeContext';
 
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000';
+
 function Settings() {
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
+
   const [status, setStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -22,38 +25,110 @@ function Settings() {
     setStatus(null);
   };
 
-  const handleSubmit = (e) => {
+  const apiPost = async (path, payload, token) => {
+    const response = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok || data.error) {
+      throw new Error(data.error || 'Request failed');
+    }
+
+    return data;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus(null);
     setIsSubmitting(true);
 
+    // -------- VALIDATION --------
     if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
       setStatus({ type: 'error', text: 'Please fill in all fields.' });
       setIsSubmitting(false);
       return;
     }
+
     if (formData.newPassword.length < 8) {
-      setStatus({ type: 'error', text: 'New password must be at least 8 characters long.' });
-      setIsSubmitting(false);
-      return;
-    }
-    if (formData.newPassword !== formData.confirmPassword) {
-      setStatus({ type: 'error', text: 'New password and confirm password do not match.' });
-      setIsSubmitting(false);
-      return;
-    }
-    if (formData.currentPassword === formData.newPassword) {
-      setStatus({ type: 'error', text: 'New password must be different from current password.' });
+      setStatus({
+        type: 'error',
+        text: 'New password must be at least 8 characters long.',
+      });
       setIsSubmitting(false);
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      setStatus({ type: 'success', text: 'Password changed successfully!' });
-      setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    if (formData.newPassword !== formData.confirmPassword) {
+      setStatus({
+        type: 'error',
+        text: 'New password and confirm password do not match.',
+      });
       setIsSubmitting(false);
-    }, 1000);
+      return;
+    }
+
+    if (formData.currentPassword === formData.newPassword) {
+      setStatus({
+        type: 'error',
+        text: 'New password must be different from current password.',
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    // -------- AUTH DATA --------
+    const token =
+      localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+
+    const email =
+      localStorage.getItem('email') || sessionStorage.getItem('email');
+
+    if (!email) {
+      setStatus({
+        type: 'error',
+        text: 'No user email found. Please log in again.',
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    // -------- API CALL --------
+    try {
+      await apiPost(
+        '/auth/change-password',
+        {
+          email,
+          current_password: formData.currentPassword,
+          new_password: formData.newPassword,
+        },
+        token
+      );
+
+      setStatus({
+        type: 'success',
+        text: 'Password changed successfully!',
+      });
+
+      setFormData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
+    } catch (error) {
+      setStatus({
+        type: 'error',
+        text: error.message || 'Something went wrong. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const statusClassName = status ? `status-message status-${status.type}` : '';
@@ -61,24 +136,27 @@ function Settings() {
   return (
     <div className="settings-container">
       <Header />
+
       <div className="settings-content">
         <div className="settings-card">
           <div className="settings-header">
             <h1 className="settings-title">Settings</h1>
-            <p className="settings-subtitle">Manage your account settings and preferences</p>
+            <p className="settings-subtitle">
+              Manage your account settings and preferences
+            </p>
 
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
               style={{
-                padding: "8px 16px",
-                marginTop: "10px",
-                cursor: "pointer",
-                borderRadius: "4px",
-                border: "none",
-                backgroundColor: "#007bff",
-                color: "#fff",
-                fontSize: "14px",
+                padding: '8px 16px',
+                marginTop: '10px',
+                cursor: 'pointer',
+                borderRadius: '4px',
+                border: 'none',
+                backgroundColor: '#007bff',
+                color: '#fff',
+                fontSize: '14px',
               }}
             >
               Switch Theme
@@ -87,6 +165,7 @@ function Settings() {
 
           <div className="settings-section">
             <h2 className="section-title">Change Password</h2>
+
             <form className="settings-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="currentPassword">Current Password</label>
@@ -115,7 +194,9 @@ function Settings() {
                   required
                   minLength={8}
                 />
-                <p className="form-hint">Password must be at least 8 characters long</p>
+                <p className="form-hint">
+                  Password must be at least 8 characters long
+                </p>
               </div>
 
               <div className="form-group">
@@ -138,7 +219,11 @@ function Settings() {
                 </div>
               )}
 
-              <button type="submit" className="settings-button" disabled={isSubmitting}>
+              <button
+                type="submit"
+                className="settings-button"
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? 'Changing Password...' : 'Change Password'}
               </button>
             </form>

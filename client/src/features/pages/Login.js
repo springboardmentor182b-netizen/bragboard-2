@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000';
+
 const MODES = {
   LOGIN: 'login',
   FORGOT: 'forgot',
@@ -13,7 +15,6 @@ const INITIAL_STATE = {
   password: '',
   rememberMe: false,
   otp: '',
-  userType: 'user', // 'user' or 'admin'
 };
 
 const COPY = {
@@ -43,6 +44,19 @@ function LoginPage() {
   const [status, setStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const apiPost = async (path, payload) => {
+    const response = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.error) {
+      throw new Error(data.error || 'Request failed');
+    }
+    return data;
+  };
+
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     setFormState((prev) => ({
@@ -62,32 +76,49 @@ function LoginPage() {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     resetStatus();
     setIsSubmitting(true);
 
-    setTimeout(() => {
+    try {
       switch (mode) {
         case MODES.LOGIN: {
-          // Temporary: Allow login without credentials
-          const userType = formState.userType;
-          const welcomeText = userType === 'admin' 
-            ? 'Welcome back, Admin!' 
-            : `Welcome back${formState.email ? `, ${formState.email}` : ''}!`;
-          
+          if (!formState.email || !formState.password) {
+            setStatus({
+              type: 'warning',
+              text: 'Email and password are required to sign in.',
+            });
+            return;
+          }
+
+          const data = await apiPost('/auth/login', {
+            email: formState.email,
+            password: formState.password,
+          });
+
+          const role = data.role || 'user';
+          const storage = formState.rememberMe ? localStorage : sessionStorage;
+          storage.setItem('access_token', data.access_token);
+          storage.setItem('token_type', data.token_type || 'bearer');
+          storage.setItem('role', role);
+          storage.setItem('email', formState.email);
+
           setStatus({
             type: 'success',
-            text: welcomeText,
+            text:
+              role === 'admin'
+                ? 'Welcome back, Admin!'
+                : `Welcome back${formState.email ? `, ${formState.email}` : ''}!`,
           });
-          // Navigate to appropriate dashboard based on user type
+
           setTimeout(() => {
-            if (userType === 'admin') {
+            if (role === 'admin') {
               navigate('/admin-dashboard');
             } else {
               navigate('/employee-dashboard');
             }
-          }, 1000);
+          }, 400);
           break;
         }
         case MODES.FORGOT: {
@@ -96,8 +127,10 @@ function LoginPage() {
               type: 'warning',
               text: 'Add the email associated with your account first.',
             });
-            break;
+            return;
           }
+
+          await apiPost('/auth/forgot-password', { email: formState.email });
           setStatus({
             type: 'success',
             text: `OTP sent to ${formState.email}. Check your inbox.`,
@@ -112,8 +145,20 @@ function LoginPage() {
               type: 'error',
               text: 'Enter the 6-digit OTP from your email.',
             });
-            break;
+            return;
           }
+          if (!formState.email) {
+            setStatus({
+              type: 'warning',
+              text: 'Add the email associated with your account first.',
+            });
+            return;
+          }
+
+          await apiPost('/auth/verify-otp', {
+            email: formState.email,
+            otp: formState.otp,
+          });
           setStatus({
             type: 'success',
             text: 'OTP verified! You can now set a new password.',
@@ -129,8 +174,14 @@ function LoginPage() {
         default:
           break;
       }
+    } catch (error) {
+      setStatus({
+        type: 'error',
+        text: error.message || 'Something went wrong. Please try again.',
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 500);
+    }
   };
 
   const statusClassName = useMemo(() => {
@@ -152,31 +203,6 @@ function LoginPage() {
         </header>
 
         <form className="login-form" onSubmit={handleSubmit}>
-          {mode === MODES.LOGIN && (
-            <>
-              {/* User Type Toggle */}
-              <div className="user-type-toggle">
-                <label className="login-label">Login as</label>
-                <div className="toggle-container">
-                  <button
-                    type="button"
-                    className={`toggle-option ${formState.userType === 'user' ? 'active' : ''}`}
-                    onClick={() => setFormState((prev) => ({ ...prev, userType: 'user' }))}
-                  >
-                    User
-                  </button>
-                  <button
-                    type="button"
-                    className={`toggle-option ${formState.userType === 'admin' ? 'active' : ''}`}
-                    onClick={() => setFormState((prev) => ({ ...prev, userType: 'admin' }))}
-                  >
-                    Admin
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
-
           {(mode === MODES.LOGIN || mode === MODES.FORGOT) && (
             <>
               <label className="login-label" htmlFor="email">
