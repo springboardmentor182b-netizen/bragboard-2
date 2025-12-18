@@ -1,0 +1,48 @@
+.comments {
+  margin-top: 14px;
+}
+
+.comment-box {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.comment-box input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #f3a6a3;   /* border pink */
+  font-size: 14px;
+}
+
+.comment-box button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f7bcbc;  /* soft pink */
+  color: #4a2c2a;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.comment-box button:hover {
+  background-color: #d97773;
+  color: #ffffff;
+}
+
+.comments ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comments li {
+  background-color: #fbd1cf;  /* page pink */
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #4a2c2a;
+}
