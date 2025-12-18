@@ -1,0 +1,22 @@
+.reactions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.reaction-btn {
+  background-color: #f7bcbc;   /* soft pink */
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 15px;
+  color: #4a2c2a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reaction-btn:hover {
+  background-color: #d97773;   /* darker pink */
+  color: #ffffff;
+  transform: scale(1.05);
+}
