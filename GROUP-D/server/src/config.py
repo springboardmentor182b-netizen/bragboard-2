@@ -1,10 +1,15 @@
-SECRET_KEY = "mysecretkey123"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+import os
+from pydantic import BaseModel
 
-# Used only for employee registration
-ADMIN_SECRET_KEY = "adminofbragboard"
 
-# Predefined single admin login credentials
-ADMIN_EMAIL = "admin@bragboard.com"
-ADMIN_PASSWORD = "Admin@123"
+class Settings(BaseModel):
+    DATABASE_URL: str = os.getenv(
+        "DATABASE_URL",
+        "sqlite:///./bragboard.db",  # local SQLite file
+    )
+    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "super-secret-key")
+    JWT_ALGORITHM: str = "HS256"
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+
+
+settings = Settings()
