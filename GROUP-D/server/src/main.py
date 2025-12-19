@@ -1,47 +1,36 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# Existing routes
-from src.routes.shoutout_routes import router as shoutout_router
-from src.routes.reaction_routes import router as reaction_router
-
-# NEW: Report Export Router
-from src.routes.report_routes import router as report_router
-
-# NEW: Comments Router
-from src.routes.comment import router as comment_router
-
-# NEW: Auth Router (your code)
-from src.routes.auth import router as auth_router
+from .config import settings
+from .routes.authroutes import router as auth_router
 
 app = FastAPI(
-    title="Bragboard-2",
-    description="Backend API for Bragboard-2",
-    version="1.0.0"
+    title="BragBoard API",
+    version="1.0.0",
 )
 
-# CORS Setup
+# CORS (allow React dev server)
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Existing routes
-app.include_router(shoutout_router, prefix="/api")
-app.include_router(reaction_router, prefix="/api")
+# Routes
+app.include_router(auth_router, prefix="/auth", tags=["auth"])
 
-# Export routes
-app.include_router(report_router, prefix="/api/reports")
 
-# Comment routes
-app.include_router(comment_router, prefix="/api")
+@app.get("/health", tags=["health"])
+def health_check():
+    return {"status": "ok"}
 
-# Auth routes
-app.include_router(auth_router, prefix="/api")
 
-@app.get("/")
-def home():
-    return {"message": "Backend OK"}
+# Run with:
+# uvicorn src.main:app --reload
