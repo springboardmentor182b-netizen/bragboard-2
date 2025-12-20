@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr, constr
+from typing import Optional
 
 
 class UserBase(BaseModel):
@@ -8,6 +9,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: constr(min_length=6)
+    role: str = "EMPLOYEE"
 
 
 class UserLogin(BaseModel):
@@ -16,10 +18,9 @@ class UserLogin(BaseModel):
 
 
 class UserRead(UserBase):
-    id: int
-
-    class Config:
-        from_attributes = True
+    id: str                # Mongo ObjectId as string
+    role: str = "EMPLOYEE"
+    is_active: bool = True
 
 
 class Token(BaseModel):
@@ -28,4 +29,4 @@ class Token(BaseModel):
 
 
 class TokenPayload(BaseModel):
-    sub: str | None = None
+    sub: Optional[str] = None

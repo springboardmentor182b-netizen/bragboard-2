@@ -1,26 +1,25 @@
 // src/features/authentication/pages/Login.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../AuthContext";
 import "./LoginPage.css";
-import logo from "../../../assets/logo.png"; // <-- your logo path
+import logo from "../../../assets/logo.png";
+import { loginApi } from "../services/authApi";
 
-const ADMIN_SECRET = "ADMIN123"; // demo secret code
+const ADMIN_SECRET = "ADMIN123";
 
 function Login() {
-  const { login, loading, error } = useAuth();
-  const [role, setRole] = useState("employee"); // "employee" | "admin"
+  const [role, setRole] = useState("employee");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secret, setSecret] = useState("");
   const [localError, setLocalError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLocalError("");
 
-    // Extra check for admin
     if (role === "admin") {
       if (secret.trim() !== ADMIN_SECRET) {
         setLocalError("Invalid admin secret code");
@@ -28,18 +27,22 @@ function Login() {
       }
     }
 
-    const result = await login(email, password);
-    if (result.success) {
+    try {
+      setLoading(true);
+      const data = await loginApi({ email, password }); // /auth/login (Mongo)
+      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("role", role);
       navigate("/dashboard");
-    } else if (result.message) {
-      setLocalError(result.message);
+    } catch (err) {
+      setLocalError("Login failed. Check email or password.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-page">
       <div className="auth-card">
-        {/* Centered logo + title */}
         <div className="auth-brand auth-brand--center">
           <img src={logo} alt="BragBoard logo" className="auth-logo-img" />
           <h1 className="auth-title auth-title--center">BragBoard</h1>
@@ -48,7 +51,6 @@ function Login() {
           </p>
         </div>
 
-        {/* Role switch */}
         <div className="role-switch">
           <button
             type="button"
@@ -106,7 +108,6 @@ function Login() {
             />
           </label>
 
-          {/* Admin secret field appears only for admin */}
           {role === "admin" && (
             <label className="auth-label">
               Admin Secret Code
@@ -121,9 +122,7 @@ function Login() {
             </label>
           )}
 
-          {(error || localError) && (
-            <div className="auth-error">{localError || error}</div>
-          )}
+          {localError && <div className="auth-error">{localError}</div>}
 
           <button className="auth-button" type="submit" disabled={loading}>
             {loading
@@ -131,6 +130,10 @@ function Login() {
               : `Login as ${role === "admin" ? "Admin" : "Employee"}`}
           </button>
         </form>
+
+        <p className="auth-footer">
+          Forgot password? <Link to="/forgot-password">Reset it</Link>
+        </p>
 
         <p className="auth-footer">
           New here? <Link to="/signup">Create an account</Link>

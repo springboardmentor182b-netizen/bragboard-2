@@ -10,6 +10,8 @@ import { AuthProvider } from "./features/authentication/AuthContext";
 import Login from "./features/authentication/pages/Login";
 import Signup from "./features/authentication/pages/Signup";
 import ForgotPassword from "./features/authentication/pages/ForgotPassword";
+import VerifyOtp from "./features/authentication/pages/VerifyOtp";
+import ResetPassword from "./features/authentication/pages/ResetPassword";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import "./index.css";
 
@@ -31,6 +33,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/verify-otp" element={<VerifyOtp />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           {/* Protected route */}
           <Route

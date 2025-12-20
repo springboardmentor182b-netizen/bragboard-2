@@ -1,17 +1,27 @@
-// src/features/authentication/pages/ForgotPassword.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import logo from "../../../assets/logo.png";
+import { forgotPasswordApi } from "../services/authApi";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Demo only – pretend to send email
-    setSubmitted(true);
+    setError("");
+    setSubmitted(false);
+
+    try {
+      await forgotPasswordApi(email);
+      setSubmitted(true);
+      navigate("/verify-otp", { state: { email } });
+    } catch (err) {
+      setError("Failed to start password reset. Try again.");
+    }
   };
 
   return (
@@ -21,7 +31,7 @@ function ForgotPassword() {
           <img src={logo} alt="BragBoard logo" className="auth-logo-img" />
           <h1 className="auth-title auth-title--center">Forgot password</h1>
           <p className="auth-subtitle auth-subtitle--center">
-            Enter your email to receive reset instructions
+            Enter your email to receive reset OTP
           </p>
         </div>
 
@@ -38,14 +48,16 @@ function ForgotPassword() {
             />
           </label>
 
-          {submitted && (
+          {error && <div className="auth-error">{error}</div>}
+
+          {submitted && !error && (
             <div className="auth-error" style={{ color: "#27ae60" }}>
-              If this email exists, reset instructions have been sent.
+              If this email exists, an OTP has been sent.
             </div>
           )}
 
           <button className="auth-button" type="submit">
-            Send reset link
+            Send OTP
           </button>
         </form>
 
