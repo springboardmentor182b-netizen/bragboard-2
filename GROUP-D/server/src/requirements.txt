@@ -1,4 +1,10 @@
-fastapi
-uvicorn
-sqlalchemy
-python-dotenv
+fastapi==0.110.0
+uvicorn==0.29.0
+passlib==1.7.4
+python-jose==3.3.0
+pydantic==1.10.15
+email-validator==2.0.0.post2
+python-dotenv==1.0.1
+
+motor==3.4.0
+pymongo==4.8.0
