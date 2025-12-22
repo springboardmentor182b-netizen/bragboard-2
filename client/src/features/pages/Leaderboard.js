@@ -413,7 +413,6 @@ export default function Leaderboard() {
           </tbody>
         </table>
       </div>
-
       {activePopup && (
         <MiniPerformancePopup
           weekly={activePopup.weekly}
