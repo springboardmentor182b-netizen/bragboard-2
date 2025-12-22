@@ -1,48 +1,38 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
 from src.auth.schemas import UserCreate, UserLogin, ChangePassword
-from src.auth.auth import create_access_token, hash_password, verify_password
+from src.auth.auth import create_access_token, verify_password, hash_password
 from src.auth.utils import send_otp
-
-# In-memory stores (replace with real DB in production)
-users_db = {
-    "admin@example.com": {
-        "password": hash_password("AdminPass123!"),
-        "full_name": "Admin User",
-        "role": "admin",
-    },
-    "user@example.com": {
-        "password": hash_password("UserPass123!"),
-        "full_name": "Demo User",
-        "role": "user",
-    },
-}
-otp_db = {}
+from src.database.core import get_db
+from src.users import service as user_service
 
 router = APIRouter()
 
+# In-memory OTP store (still okay for simple demo, but could be DB)
+otp_db = {}
+
 @router.post("/register")
-def register(user: UserCreate):
-    if user.email in users_db:
+def register(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = user_service.get_user_by_email(db, user.email)
+    if db_user:
         return {"error": "User already exists"}
-    hashed = hash_password(user.password)
-    users_db[user.email] = {
-        "password": hashed,
-        "full_name": user.full_name,
-        "role": user.role,
-    }
-    return {"msg": "User registered successfully", "role": user.role}
+    
+    new_user = user_service.create_user(db, user)
+    return {"msg": "User registered successfully", "role": new_user.role}
 
 @router.post("/login")
-def login(user: UserLogin):
-    db_user = users_db.get(user.email)
-    if not db_user or not verify_password(user.password, db_user["password"]):
+def login(user: UserLogin, db: Session = Depends(get_db)):
+    db_user = user_service.get_user_by_email(db, user.email)
+    if not db_user or not verify_password(user.password, db_user.password_hash):
         return {"error": "Invalid credentials"}
-    token = create_access_token({"sub": user.email, "role": db_user["role"]})
-    return {"access_token": token, "token_type": "bearer", "role": db_user["role"]}
+    
+    token = create_access_token({"sub": db_user.email, "role": db_user.role, "user_id": db_user.id})
+    return {"access_token": token, "token_type": "bearer", "role": db_user.role}
 
 @router.post("/forgot-password")
-def forgot_password(email: str):
-    if email not in users_db:
+def forgot_password(email: str, db: Session = Depends(get_db)):
+    db_user = user_service.get_user_by_email(db, email)
+    if not db_user:
         return {"error": "User not found"}
     otp = send_otp(email)
     otp_db[email] = otp
@@ -56,11 +46,12 @@ def verify_otp_endpoint(email: str, otp: str):
     otp_db.pop(email)
     return {"msg": "OTP verified"}
 
-
 @router.post("/change-password")
-def change_password(payload: ChangePassword):
-    db_user = users_db.get(payload.email)
-    if not db_user or not verify_password(payload.current_password, db_user["password"]):
+def change_password(payload: ChangePassword, db: Session = Depends(get_db)):
+    db_user = user_service.get_user_by_email(db, payload.email)
+    if not db_user or not verify_password(payload.current_password, db_user.password_hash):
         return {"error": "Invalid credentials"}
-    db_user["password"] = hash_password(payload.new_password)
+    
+    db_user.password_hash = hash_password(payload.new_password)
+    db.commit()
     return {"msg": "Password changed successfully"}

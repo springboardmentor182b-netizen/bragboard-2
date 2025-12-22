@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
-const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000';
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://127.0.0.1:8000';
 
 const MODES = {
   LOGIN: 'login',
@@ -99,7 +99,7 @@ function LoginPage() {
 
           const role = data.role || 'user';
           const storage = formState.rememberMe ? localStorage : sessionStorage;
-          storage.setItem('access_token', data.access_token);
+          storage.setItem('token', data.access_token);
           storage.setItem('token_type', data.token_type || 'bearer');
           storage.setItem('role', role);
           storage.setItem('email', formState.email);

@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import Header from '../layout/Header';
 import Feed from '../components/Feed';
 import Sidebar from '../components/Sidebar';
@@ -18,45 +20,102 @@ function Dashboard() {
 
   const [sortBy, setSortBy] = useState('newest');
 
-  const [shoutouts, setShoutouts] = useState([
-    {
-      id: 1,
-      sender: 'Annette Black',
-      senderAvatar: '',
-      department: 'Engineering',
-      timestamp: '3 hours ago',
-      message: 'Gave a shout-out to E-firar Her way helped at little project!',
-      taggedUsers: ['E-firar'],
-      reactions: { emoji: 1, thumbsUp: 1 },
-      comments: 1,
-    },
-    {
-      id: 2,
-      sender: 'Albert Flores',
-      senderAvatar: '',
-      department: 'Design',
-      timestamp: '1 day ago',
-      message: 'Gave Cody Fisher — Her always going above and beyond!',
-      taggedUsers: ['Cody Fisher'],
-      reactions: { emoji: 1, thumbsUp: 1 },
-      comments: 3,
-    },
-    {
-      id: 3,
-      sender: 'Savannah Nguyen',
-      senderAvatar: '',
-      department: 'Marketing',
-      timestamp: '2 days ago',
-      message: 'Appreciate Darlene Robertson for the team effort.',
-      taggedUsers: ['Darlene Robertson'],
-      reactions: { emoji: 0, thumbsUp: 1 },
-      comments: 4,
-    },
-  ]);
+  /* 
+  Mock data removed.
+  Using API to fetch shoutouts.
+  */
+  const [shoutouts, setShoutouts] = useState([]);
 
-  const handleCreateShoutout = (newShoutout) => {
-    setShoutouts([newShoutout, ...shoutouts]);
-    setIsCreateModalOpen(false);
+  const [currentUserId, setCurrentUserId] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setCurrentUserId(decoded.user_id);
+      } catch (e) {
+        console.error("Invalid token", e);
+      }
+    }
+    fetchShoutouts();
+  }, []);
+
+  const fetchShoutouts = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      const response = await axios.get('http://127.0.0.1:8000/shoutouts', config);
+
+      // Transform the data to match the UI's expected format if necessary
+      // The API returns: { id, title, message, sender: { name, department }, created_at, ... }
+      // The UI expects: { id, sender, department, timestamp, message, ... }
+      const formattedShoutouts = response.data.map(item => ({
+        id: item.id,
+        sender: item.sender.name,
+        senderAvatar: '', // Placeholder
+        department: item.sender.department,
+        timestamp: new Date(item.created_at).toLocaleString(), // Simple formatting
+        message: item.message, // Assuming 'message' is the main text. API has 'title' and 'message'. 
+        // If the UI is single-text, maybe combine them? Or just use message.
+        taggedUsers: item.recipients || [],
+        reactions: { emoji: 0, thumbsUp: 0 }, // Backend doesn't seem to return counts yet in ShoutoutRead
+        comments: 0
+      }));
+      setShoutouts(formattedShoutouts);
+    } catch (error) {
+      console.error("Error fetching shoutouts:", error);
+    }
+  };
+
+  const handleCreateShoutout = async (newShoutout) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert("Session expired. Please log in again.");
+        window.location.href = "/login";
+        return;
+      }
+      const decoded = jwtDecode(token);
+      // The API expects: { title, message, sender_id, recipient_id, tags }
+      // The modal returns: { message, recipient, tags, ... }
+      // We need to map modal data to API payload.
+      // NOTE: We need numeric IDs for sender/recipient. 
+      // Assuming we can get sender_id from token or user state. 
+      // Recipient selection in modal likely gives us a user object or ID.
+
+      // Use a default recipient ID for now if not selected, or ensure modal provides it.
+      // This is a critical integration point: getting the recipient's ID.
+      // For now, let's assume the backend handles basic validation.
+
+      const payload = {
+        title: "Shoutout", // Default title if not provided
+        message: newShoutout.message,
+        sender_id: decoded.user_id || 1, // Fallback/Extract from token
+        recipient_id: newShoutout.recipientId || 2, // Needs to be passed from modal
+        tags: newShoutout.tags || []
+      };
+
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+
+      const response = await axios.post('http://127.0.0.1:8000/shoutouts', payload, config);
+
+      // Add new shoutout to list (re-fetch or append)
+      fetchShoutouts();
+      setIsCreateModalOpen(false);
+    } catch (error) {
+      console.error("Failed to create shoutout", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        alert(`Failed: ${JSON.stringify(error.response.data)}`);
+      } else {
+        alert("Failed to create shoutout. Please try again.");
+      }
+    }
   };
 
   const handleReportClick = (shoutout) => {
@@ -87,7 +146,7 @@ function Dashboard() {
       });
     }
     // Default to newest (assuming id or original order reflects timestamp for mock data)
-    return shoutoutsCopy; 
+    return shoutoutsCopy;
   };
 
   return (
@@ -98,7 +157,7 @@ function Dashboard() {
           <div className="dashboard-header-section">
             <h1 className="dashboard-title">Dashboard</h1>
             <div className="dashboard-actions">
-               <select 
+              <select
                 className="sort-dropdown"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
@@ -158,7 +217,7 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          <Feed shoutouts={getSortedShoutouts()} onReport={handleReportClick} />
+          <Feed shoutouts={getSortedShoutouts()} onReport={handleReportClick} currentUserId={currentUserId} />
         </div>
         <Sidebar />
       </div>

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import './CreateShoutoutModal.css';
 
 function CreateShoutoutModal({ onClose, onSubmit }) {
@@ -7,16 +8,25 @@ function CreateShoutoutModal({ onClose, onSubmit }) {
     taggedUser: '',
   });
 
-  const availableUsers = [
-    'E-firar',
-    'Cody Fisher',
-    'Darlene Robertson',
-    'Jane Cooper',
-    'Jenny Wilson',
-    'Kristin Watson',
-    'Eleanor Pena',
-    'Eather Howard',
-  ];
+  /*
+  Mock data removed.
+  Fetching users from API.
+  */
+  const [availableUsers, setAvailableUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+        const response = await axios.get('http://127.0.0.1:8000/users', config);
+        setAvailableUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +46,9 @@ function CreateShoutoutModal({ onClose, onSubmit }) {
       senderAvatar: '',
       timestamp: 'Just now',
       message: formData.message,
-      taggedUsers: formData.taggedUser ? [formData.taggedUser] : [],
+      taggedUsers: formData.taggedUser ? [availableUsers.find(u => u.id == formData.taggedUser)?.name] : [],
+      recipientId: formData.taggedUser, // Passing ID relevant for backend logic
+
       reactions: { emoji: 0, thumbsUp: 0 },
       comments: 0,
     };
@@ -80,8 +92,8 @@ function CreateShoutoutModal({ onClose, onSubmit }) {
             >
               <option value="">Select an employee...</option>
               {availableUsers.map((user) => (
-                <option key={user} value={user}>
-                  {user}
+                <option key={user.id} value={user.id}>
+                  {user.name} ({user.department})
                 </option>
               ))}
             </select>
@@ -100,7 +112,7 @@ function CreateShoutoutModal({ onClose, onSubmit }) {
             />
             {formData.taggedUser && (
               <p className="form-hint">
-                Tip: Mention "{formData.taggedUser}" in your message to tag them.
+                Tip: Mention "{availableUsers.find(u => u.id == formData.taggedUser)?.name}" in your message to tag them.
               </p>
             )}
           </div>
