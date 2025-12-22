@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.database.core import engine, Base
 from src.reports.reporting_controller import router as reporting_router
+from src.analytics.analytics_controller import router as analytics_router
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -44,6 +45,7 @@ def root():
             }
         }
     }
+app.include_router(analytics_router)
 
 @app.get("/health")
 def health_check():
