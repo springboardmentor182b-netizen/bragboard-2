@@ -19,13 +19,13 @@ function ReportedShoutoutsModal({ onClose, reports }) {
                             <div key={report.id} className="report-item">
                                 <div className="report-info">
                                     <div className="report-sender">
-                                        Reported: {report.shoutoutSender}
+                                        Report ID: #{report.id}
                                     </div>
                                     <div className="report-category">
-                                        Reason: {report.category}
+                                        Reason: {report.reason}
                                     </div>
                                     <div className="report-message">
-                                        "{report.reason}"
+                                        "{report.description || 'No additional details'}"
                                     </div>
                                 </div>
                                 <div className="report-status-badge">

@@ -145,17 +145,40 @@ function Dashboard() {
     setIsReportModalOpen(true);
   };
 
-  const handleSubmitReport = (reportData) => {
-    const newReport = {
-      id: Date.now(),
-      shoutoutId: currentShoutoutToReport.id,
-      shoutoutSender: currentShoutoutToReport.sender,
-      ...reportData
-    };
-    setReportedShoutouts([newReport, ...reportedShoutouts]);
-    setIsReportModalOpen(false);
-    setCurrentShoutoutToReport(null);
-    alert('Report submitted successfully!');
+  const fetchMyReports = async () => {
+    try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      if (!token) return;
+      const decoded = jwtDecode(token);
+      const response = await axios.get(`http://127.0.0.1:8000/api/shoutout-reports/my-reports?reporter_id=${decoded.user_id}`);
+      setReportedShoutouts(response.data);
+    } catch (error) {
+      console.error("Error fetching my reports:", error);
+    }
+  };
+
+  const handleSubmitReport = async (reportData) => {
+    try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      if (!token) return;
+      const decoded = jwtDecode(token);
+
+      const payload = {
+        shoutout_id: currentShoutoutToReport.id,
+        reason: reportData.category, // Backend uses 'reason' for category
+        description: reportData.reason // Backend uses 'description' for details
+      };
+
+      await axios.post(`http://127.0.0.1:8000/api/shoutout-reports?reporter_id=${decoded.user_id}`, payload);
+
+      setIsReportModalOpen(false);
+      setCurrentShoutoutToReport(null);
+      alert('Report submitted successfully!');
+      fetchMyReports(); // Update the list
+    } catch (error) {
+      console.error("Failed to submit report:", error);
+      alert("Failed to submit report. Please try again.");
+    }
   };
 
   const getSortedShoutouts = () => {
@@ -199,7 +222,10 @@ function Dashboard() {
               </select>
               <button
                 className="view-reports-button"
-                onClick={() => setIsViewReportsOpen(true)}
+                onClick={() => {
+                  fetchMyReports();
+                  setIsViewReportsOpen(true);
+                }}
                 style={{
                   padding: '8px 16px',
                   borderRadius: '20px',

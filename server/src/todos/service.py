@@ -53,8 +53,10 @@ def update_shoutout(db: Session, shoutout_id: int, payload):
 
 def delete_shoutout(db: Session, shoutout_id: int):
     shout = db.get(Shoutout, shoutout_id)
-    db.delete(shout)
-    db.commit()
+    if shout:
+        db.delete(shout)
+        db.commit()
+    return True
 
 def toggle_like(db: Session, shoutout_id: int, user_id: int):
     shout = db.get(Shoutout, shoutout_id)

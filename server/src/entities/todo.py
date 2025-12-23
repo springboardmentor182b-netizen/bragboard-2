@@ -24,6 +24,7 @@ class Shoutout(Base):
     tags = relationship("Tag", secondary="shoutout_tags", back_populates="shoutouts")
     comments = relationship("Comment", back_populates="shoutout", cascade="all, delete-orphan")
     likes = relationship("User", secondary="shoutout_likes", backref="liked_shoutouts")
+    reports = relationship("ShoutoutReport", back_populates="shoutout", cascade="all, delete-orphan")
 
 class Comment(Base):
     __tablename__ = "shoutout_comments"

@@ -3,12 +3,15 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Header from '../layout/Header';
 import Feed from '../components/Feed';
+import ReportShoutoutModal from '../components/ReportShoutoutModal';
 import './Dashboard.css'; // Reusing dashboard styles for consistent layout
 
 const FeedPage = () => {
     const [shoutouts, setShoutouts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentUserId, setCurrentUserId] = useState(null);
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const [currentShoutoutToReport, setCurrentShoutoutToReport] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -58,8 +61,31 @@ const FeedPage = () => {
     };
 
     const handleReportClick = (shoutout) => {
-        // Basic report handler if needed, or link to a central reporting system
-        alert(`Reporting shoutout from ${shoutout.sender}`);
+        setCurrentShoutoutToReport(shoutout);
+        setIsReportModalOpen(true);
+    };
+
+    const handleSubmitReport = async (reportData) => {
+        try {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            if (!token) return;
+            const decoded = jwtDecode(token);
+
+            const payload = {
+                shoutout_id: currentShoutoutToReport.id,
+                reason: reportData.category,
+                description: reportData.reason
+            };
+
+            await axios.post(`http://127.0.0.1:8000/api/shoutout-reports?reporter_id=${decoded.user_id}`, payload);
+
+            setIsReportModalOpen(false);
+            setCurrentShoutoutToReport(null);
+            alert('Report submitted successfully!');
+        } catch (error) {
+            console.error("Failed to submit report:", error);
+            alert("Failed to submit report. Please try again.");
+        }
     };
 
     return (
@@ -88,6 +114,14 @@ const FeedPage = () => {
                     )}
                 </div>
             </main>
+
+            {isReportModalOpen && currentShoutoutToReport && (
+                <ReportShoutoutModal
+                    shoutoutSender={currentShoutoutToReport.sender}
+                    onClose={() => setIsReportModalOpen(false)}
+                    onSubmit={handleSubmitReport}
+                />
+            )}
         </div>
     );
 };

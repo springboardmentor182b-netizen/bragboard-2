@@ -5,6 +5,7 @@ import {
   DEFAULT_ADMIN_ID,
   fetchShoutoutReports,
   resolveShoutoutReport,
+  deleteShoutout,
 } from './shoutoutReportsApi';
 
 const statusClasses = {
@@ -21,6 +22,7 @@ const ShoutoutReportsPanel = () => {
   const [error, setError] = useState('');
   const [selectedReport, setSelectedReport] = useState(null);
   const [isResolving, setIsResolving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(null); // ID of shoutout being deleted
 
   const adminId = Number(adminIdInput) || DEFAULT_ADMIN_ID;
 
@@ -34,6 +36,7 @@ const ShoutoutReportsPanel = () => {
       });
       setReports(Array.isArray(data) ? data : []);
     } catch (err) {
+      console.error("fetchShoutoutReports failed:", err);
       setError(err?.message || 'Unable to load shoutout reports.');
     } finally {
       setLoading(false);
@@ -68,11 +71,28 @@ const ShoutoutReportsPanel = () => {
     }
   };
 
+  const handleDeleteShoutout = async (shoutoutId) => {
+    if (!window.confirm('Are you sure you want to delete this shoutout post? This action cannot be undone.')) {
+      return;
+    }
+
+    setIsDeleting(shoutoutId);
+    setError('');
+    try {
+      await deleteShoutout(shoutoutId);
+      // Refresh reports to show that shoutout message is gone or just general refresh
+      await loadReports();
+    } catch (err) {
+      setError(err?.message || 'Unable to delete shoutout.');
+    } finally {
+      setIsDeleting(null);
+    }
+  };
+
   const renderStatusPill = (status) => (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-semibold capitalize inline-flex items-center gap-1 ${
-        statusClasses[status] || 'bg-gray-800 text-gray-300 border border-gray-700'
-      }`}
+      className={`px-3 py-1 rounded-full text-xs font-semibold capitalize inline-flex items-center gap-1 ${statusClasses[status] || 'bg-gray-800 text-gray-300 border border-gray-700'
+        }`}
     >
       {status === 'pending' ? (
         <ShieldAlert size={14} />
@@ -213,12 +233,23 @@ const ShoutoutReportsPanel = () => {
                     </td>
                     <td className="py-3 pr-4">
                       {report.status === 'pending' ? (
-                        <button
-                          onClick={() => setSelectedReport(report)}
-                          className="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition-colors"
-                        >
-                          Resolve
-                        </button>
+                        <div className="flex flex-col gap-2">
+                          <button
+                            onClick={() => setSelectedReport(report)}
+                            className="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition-colors"
+                          >
+                            Resolve
+                          </button>
+                          {report.shoutout_message && report.status === 'pending' && (
+                            <button
+                              onClick={() => handleDeleteShoutout(report.shoutout_id)}
+                              disabled={isDeleting === report.shoutout_id}
+                              className="px-3 py-2 rounded-lg bg-red-600/20 text-red-400 text-xs font-semibold hover:bg-red-600 hover:text-white transition-colors disabled:opacity-50"
+                            >
+                              {isDeleting === report.shoutout_id ? 'Deleting...' : 'Delete Post'}
+                            </button>
+                          )}
+                        </div>
                       ) : (
                         <span className="text-xs text-gray-500">
                           {report.resolution_notes || 'Resolved'}

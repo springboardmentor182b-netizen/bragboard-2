@@ -27,6 +27,15 @@ engine = create_engine(
     echo=False,
 )
 
+# Enable foreign key support for SQLite
+if "sqlite" in DATABASE_URL:
+    from sqlalchemy import event
+    @event.listens_for(engine, "connect")
+    def set_sqlite_pragma(dbapi_connection, connection_record):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+
 
 Base = declarative_base()
 

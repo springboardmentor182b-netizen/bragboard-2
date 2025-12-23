@@ -26,7 +26,7 @@ class ShoutoutReport(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     
     # Relationships
-    shoutout = relationship("Shoutout", backref="reports")
+    shoutout = relationship("Shoutout", back_populates="reports")
     reporter = relationship("User", foreign_keys=[reporter_id], backref="reported_shoutouts")
     resolver = relationship("User", foreign_keys=[resolved_by])
 
