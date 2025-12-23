@@ -1,10 +1,12 @@
 .feed-post {
   background: var(--bg-secondary);
-  border-radius: 16px;
-  padding: 32px;
+  border-radius: 20px;
+  padding: 24px;
   box-shadow: var(--shadow-card);
   border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: visible;
 }
 
 .feed-post:hover {
@@ -137,7 +139,57 @@
 
 .post-menu-button:hover {
   background: var(--bg-tertiary);
+  color: var(--accent-color);
+}
+
+.post-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 6px;
+  min-width: 160px;
+  box-shadow: var(--shadow-card);
+  z-index: 100;
+  margin-top: 8px;
+  animation: fadeInDown 0.2s ease forwards;
+}
+
+.post-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
   color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.post-menu-item:hover {
+  background: var(--bg-tertiary);
+  color: #ef4444;
+  /* Alert color for reporting */
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .action-button.active {
