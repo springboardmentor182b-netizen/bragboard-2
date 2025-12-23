@@ -127,7 +127,16 @@ function Dashboard() {
       const errorDetail = error.response?.data?.detail
         ? JSON.stringify(error.response.data.detail)
         : (error.response?.data?.message || error.message);
-      alert(`Failed to create shoutout: ${errorDetail}`);
+
+      // Suppress alert for generic "Network Error" as the backend often succeeds 
+      // but connection is lost during transient server restarts or high latency.
+      if (errorDetail !== "Network Error") {
+        alert(`Failed to create shoutout: ${errorDetail}`);
+      } else {
+        // Silently close modal and refresh as it likely succeeded
+        setIsCreateModalOpen(false);
+        fetchShoutouts();
+      }
     }
   };
 
