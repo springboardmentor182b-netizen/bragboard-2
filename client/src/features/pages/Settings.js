@@ -85,7 +85,7 @@ function Settings() {
 
     // -------- AUTH DATA --------
     const token =
-      localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+      localStorage.getItem('token') || sessionStorage.getItem('token');
 
     const email =
       localStorage.getItem('email') || sessionStorage.getItem('email');
@@ -148,18 +148,12 @@ function Settings() {
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              style={{
-                padding: '8px 16px',
-                marginTop: '10px',
-                cursor: 'pointer',
-                borderRadius: '4px',
-                border: 'none',
-                backgroundColor: '#007bff',
-                color: '#fff',
-                fontSize: '14px',
-              }}
+              className="theme-toggle-btn"
             >
-              Switch Theme
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-11.314l.707.707m11.314 11.314l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+              </svg>
+              <span>Switch Theme</span>
             </button>
           </div>
 

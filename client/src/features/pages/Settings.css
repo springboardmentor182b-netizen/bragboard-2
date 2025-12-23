@@ -39,7 +39,31 @@
 .settings-subtitle {
   font-size: 1rem;
   color: var(--text-secondary);
-  margin: 0;
+  margin: 0 0 16px 0;
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-color);
+  border-color: var(--accent-color);
+}
+
+.theme-toggle-btn svg {
+  color: var(--accent-color);
 }
 
 .settings-section {
