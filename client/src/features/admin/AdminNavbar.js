@@ -38,7 +38,10 @@ const AdminNavbar = () => {
         >
           <ShieldAlert size={18} /> Moderation
         </button>
-        <button className="flex items-center gap-2 hover:text-white transition-colors">
+        <button
+          onClick={() => navigate('/admin/reports')}
+          className={`flex items-center gap-2 transition-colors ${location.pathname === '/admin/reports' ? 'text-blue-400' : 'hover:text-white'}`}
+        >
           <FileText size={18} /> Reports
         </button>
         <button

@@ -84,3 +84,16 @@ export async function deleteShoutout(shoutoutId) {
   return true;
 }
 
+export async function exportReports(format = 'csv', adminId = DEFAULT_ADMIN_ID) {
+  const search = new URLSearchParams({ admin_id: adminId });
+  const response = await fetch(`${API_URL}/shoutout-reports/export/${format}?${search.toString()}`, {
+    headers: { ...getAuthHeaders() }
+  });
+
+  if (!response.ok) {
+    throw new Error(await extractError(response));
+  }
+
+  return response.blob();
+}
+

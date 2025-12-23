@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 from datetime import datetime
 from typing import List, Optional, Dict, Any
 import io
@@ -165,9 +165,9 @@ def get_all_reports_for_export(db: Session) -> List[Dict[str, Any]]:
     Fetches all report data with necessary joined fields for export.
     This uses aliases for clarity in joins on the User table.
     """
-    Reporter = User
-    Resolver = User
-    ShoutoutSender = User
+    Reporter = aliased(User)
+    Resolver = aliased(User)
+    ShoutoutSender = aliased(User)
 
     query = db.query(
         ShoutoutReport,
@@ -175,10 +175,12 @@ def get_all_reports_for_export(db: Session) -> List[Dict[str, Any]]:
         Resolver,
         Shoutout,
         ShoutoutSender,
-    ).filter(
-        ShoutoutReport.reporter_id == Reporter.id,
-        ShoutoutReport.shoutout_id == Shoutout.id,
-        Shoutout.sender_id == ShoutoutSender.id,
+    ).join(
+        Reporter, ShoutoutReport.reporter_id == Reporter.id
+    ).join(
+        Shoutout, ShoutoutReport.shoutout_id == Shoutout.id
+    ).join(
+        ShoutoutSender, Shoutout.sender_id == ShoutoutSender.id
     ).outerjoin(
         Resolver, ShoutoutReport.resolved_by == Resolver.id
     ).order_by(ShoutoutReport.created_at.desc())
@@ -229,7 +231,7 @@ def generate_reports_pdf(data: List[Dict[str, Any]]) -> io.BytesIO:
 
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Arial", size=10)
+    pdf.set_font("Helvetica", size=10)
     
     pdf.cell(0, 10, txt="Shoutout Moderation Report", ln=1, align="C")
     pdf.ln(5)
@@ -238,12 +240,12 @@ def generate_reports_pdf(data: List[Dict[str, Any]]) -> io.BytesIO:
     col_widths = [10, 20, 30, 80, 30]
 
     
-    pdf.set_font("Arial", 'B', 9)
+    pdf.set_font("Helvetica", 'B', 9)
     for i, header in enumerate(headers):
         pdf.set_fill_color(200, 220, 255)
         pdf.cell(col_widths[i], 7, header, 1, 0, 'C', 1)
     pdf.ln()
-    pdf.set_font("Arial", size=9)
+    pdf.set_font("Helvetica", size=9)
     
     
     for row in data:

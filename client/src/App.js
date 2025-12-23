@@ -7,6 +7,7 @@ import Settings from './features/pages/Settings';
 import LoginPage from './features/pages/Login';
 import AdminDashboard from './features/pages/AdminDashboard';
 import AdminModeration from './features/pages/AdminModeration';
+import AdminReports from './features/pages/AdminReports';
 import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin/moderation" element={<AdminModeration />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/my-shoutouts" element={<MyShoutouts />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
