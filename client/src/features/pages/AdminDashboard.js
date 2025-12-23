@@ -42,7 +42,9 @@ const AdminDashboard = () => {
     total_users: '0',
     shoutouts: '0',
     flagged_items: '0',
-    engagement: '0%'
+    engagement: '0%',
+    weekly_activity: [],
+    department_stats: []
   });
 
 
@@ -96,19 +98,19 @@ const AdminDashboard = () => {
 
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard title="Total Users" value={stats.total_users} change="+12%" icon={Users} />
-          <StatCard title="Shoutouts" value={stats.shoutouts} change="+28%" icon={MessageSquare} />
-          <StatCard title="Flagged Items" value={stats.flagged_items} change="-50%" icon={Flag} isNegative={true} />
-          <StatCard title="Engagement" value={stats.engagement} change="+5%" icon={Activity} />
+          <StatCard title="Total Users" value={stats.total_users} icon={Users} />
+          <StatCard title="Shoutouts" value={stats.shoutouts} icon={MessageSquare} />
+          <StatCard title="Flagged Items" value={stats.flagged_items} icon={Flag} isNegative={stats.flagged_items > 0} />
+          <StatCard title="Engagement" value={stats.engagement} icon={Activity} />
         </div>
 
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 h-96">
-            <ActivityChart />
+            <ActivityChart data={stats.weekly_activity} />
           </div>
           <div className="lg:col-span-1 h-96">
-            <DepartmentChart />
+            <DepartmentChart data={stats.department_stats} />
           </div>
         </div>
       </div>
