@@ -1,14 +1,15 @@
 .feed-post {
-  background: white;
+  background: var(--bg-secondary);
   border-radius: 16px;
   padding: 32px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
-  transition: box-shadow 0.2s ease;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
 }
 
 .feed-post:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-card);
+  border-color: var(--accent-color);
 }
 
 .post-header {
@@ -23,12 +24,13 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--bg-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   overflow: hidden;
+  border: 1px solid var(--border-color);
 }
 
 .post-avatar img {
@@ -38,7 +40,7 @@
 }
 
 .avatar-initials {
-  color: white;
+  color: var(--accent-color);
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -50,25 +52,25 @@
 
 .post-sender {
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   font-size: 1rem;
   margin-bottom: 4px;
 }
 
 .post-timestamp {
   font-size: 0.875rem;
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .post-message {
-  color: #1e293b;
+  color: var(--text-primary);
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 16px;
 }
 
 .tagged-user {
-  color: #2563eb;
+  color: var(--accent-color);
   font-weight: 600;
 }
 
@@ -77,7 +79,7 @@
   align-items: center;
   gap: 16px;
   padding-top: 12px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--border-color);
 }
 
 .action-button {
@@ -86,17 +88,17 @@
   gap: 6px;
   background: transparent;
   border: none;
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 0.875rem;
   cursor: pointer;
   padding: 6px 8px;
   border-radius: 8px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .action-button:hover {
-  background: #f1f5f9;
-  color: #1e293b;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
 .action-button svg {
@@ -123,34 +125,34 @@
 .post-menu-button {
   background: transparent;
   border: none;
-  color: #64748b;
+  color: var(--text-secondary);
   cursor: pointer;
   padding: 6px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .post-menu-button:hover {
-  background: #f1f5f9;
-  color: #1e293b;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
 .action-button.active {
-  color: #2563eb;
-  background: #eff6ff;
+  color: var(--accent-color);
+  background: var(--bg-tertiary);
 }
 
 .action-button.active svg {
-  fill: #2563eb;
+  fill: var(--accent-color);
 }
 
 .comments-section {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--border-color);
   animation: slideDown 0.3s ease;
 }
 
@@ -173,8 +175,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #f1f5f9;
-  color: #64748b;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -184,7 +186,7 @@
 }
 
 .comment-content {
-  background: #f8fafc;
+  background: var(--bg-tertiary);
   padding: 8px 12px;
   border-radius: 12px;
   flex: 1;
@@ -193,14 +195,15 @@
 .comment-author-name {
   font-weight: 600;
   font-size: 0.85rem;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 2px;
 }
 
 .comment-text {
   font-size: 0.9rem;
-  color: #334155;
+  color: var(--text-primary);
   line-height: 1.4;
+  opacity: 0.9;
 }
 
 .comment-form {
@@ -210,23 +213,23 @@
 
 .comment-form input {
   flex: 1;
-  background: #f1f5f9;
-  border: 1px solid transparent;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 0.9rem;
+  color: var(--text-primary);
   outline: none;
   transition: all 0.2s ease;
 }
 
 .comment-form input:focus {
-  background: white;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: var(--bg-secondary);
+  border-color: var(--accent-color);
 }
 
 .comment-form button {
-  background: #2563eb;
+  background: var(--accent-color);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -234,14 +237,15 @@
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .comment-form button:hover {
-  background: #1d4ed8;
+  background: var(--accent-hover);
 }
 
 .comment-form button:disabled {
-  background: #94a3b8;
+  background: var(--text-secondary);
   cursor: not-allowed;
+  opacity: 0.5;
 }

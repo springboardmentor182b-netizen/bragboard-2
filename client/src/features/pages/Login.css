@@ -16,24 +16,21 @@
   justify-content: center;
   min-height: 100vh;
   padding: 40px 16px;
-  background: radial-gradient(
-      circle at 20% 20%,
+  background-color: var(--bg-primary);
+  background-image: radial-gradient(circle at 20% 20%,
       rgba(37, 99, 235, 0.08),
-      transparent 55%
-    ),
-    radial-gradient(
-      circle at 80% 0%,
+      transparent 55%),
+    radial-gradient(circle at 80% 0%,
       rgba(56, 189, 248, 0.12),
-      transparent 40%
-    );
+      transparent 40%);
 }
 
 .login-card {
   width: min(480px, 100%);
-  background: var(--color-card);
+  background: var(--bg-secondary);
   border-radius: 32px;
   padding: 40px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border-color);
   box-shadow: var(--shadow-card);
   animation: floatIn 360ms ease forwards;
   position: relative;
@@ -64,19 +61,19 @@
   text-transform: uppercase;
   border-radius: 999px;
   background-color: rgba(37, 99, 235, 0.12);
-  color: var(--color-primary);
+  color: var(--accent-color);
   margin-bottom: 12px;
 }
 
 .login-header h1 {
   margin: 0 0 10px;
   font-size: clamp(1.6rem, 2vw, 2rem);
-  color: var(--color-text-primary);
+  color: var(--text-primary);
 }
 
 .login-subtitle {
   margin: 0;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
 }
 
 .login-form {
@@ -104,7 +101,7 @@
   border: none;
   border-radius: 12px;
   background: transparent;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -112,44 +109,45 @@
 }
 
 .toggle-option:hover {
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   background: rgba(37, 99, 235, 0.1);
 }
 
 .toggle-option.active {
-  background: linear-gradient(135deg, var(--color-primary), #4f46e5);
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
   color: #fff;
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 
 .toggle-option.active:hover {
-  background: linear-gradient(135deg, #2563eb, #4338ca);
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
 }
 
 .login-label {
   font-weight: 600;
   font-size: 0.9rem;
-  color: var(--color-text-primary);
+  color: var(--text-primary);
 }
 
 .login-form input {
   padding: 13px 15px;
   border-radius: 16px;
-  border: 1px solid var(--color-border);
-  background-color: #fefefe;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
 .login-form input:focus {
   outline: none;
-  border-color: var(--color-primary);
+  border-color: var(--accent-color);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
 }
 
 .otp-help {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   background: rgba(56, 189, 248, 0.1);
   border-radius: 14px;
   padding: 10px 12px;
@@ -174,19 +172,19 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
 }
 
 .remember-toggle input {
   width: 16px;
   height: 16px;
-  accent-color: var(--color-primary);
+  accent-color: var(--accent-color);
 }
 
 .link-button {
   border: none;
   background: transparent;
-  color: var(--color-primary);
+  color: var(--accent-color);
   font-weight: 600;
   cursor: pointer;
   padding: 0;
@@ -194,7 +192,7 @@
 }
 
 .link-button.subtle {
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -205,7 +203,7 @@
 .forgot-help {
   margin: -4px 0 4px;
   font-size: 0.9rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   padding: 10px 12px;
   border-radius: 14px;
   background: rgba(37, 99, 235, 0.08);
@@ -217,7 +215,7 @@
   border-radius: 18px;
   padding: 14px;
   font-weight: 600;
-  background: linear-gradient(135deg, var(--color-primary), #4f46e5);
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
   color: #fff;
   cursor: pointer;
   transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;

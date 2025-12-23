@@ -59,10 +59,10 @@ function ReportShoutoutModal({ onClose, onSubmit, shoutoutSender }) {
                     </div>
 
                     <div className="modal-actions">
-                        <button type="button" className="cancel-button" onClick={onClose}>
+                        <button type="button" className="btn-secondary" onClick={onClose}>
                             Cancel
                         </button>
-                        <button type="submit" className="submit-button">
+                        <button type="submit" className="btn-primary">
                             Submit Report
                         </button>
                     </div>

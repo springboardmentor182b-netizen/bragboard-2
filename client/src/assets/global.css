@@ -7,22 +7,40 @@
     sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #1e293b;
-  background-color: #f9fafb;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+
+  /* Theme variables - Light Mode */
+  --bg-primary: #f9fafb;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f3f4f6;
+  --border-color: #e5e7eb;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --accent-color: #2563eb;
+  --accent-hover: #1d4ed8;
+
   --color-primary: #2563eb;
   --color-primary-strong: #1d4ed8;
   --color-secondary: #38bdf8;
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
-  --color-text-primary: #1e293b;
-  --color-text-secondary: #64748b;
-  --color-bg-light: #f9fafb;
-  --color-card: #ffffff;
-  --color-border: #e5e7eb;
-  --shadow-card: 0 24px 45px -30px rgba(15, 23, 42, 0.45);
+  --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.dark {
+  /* Theme variables - Dark Mode (matching Admin Dashboard) */
+  --bg-primary: #030712;    /* bg-gray-950 */
+  --bg-secondary: #111827;  /* bg-gray-900 */
+  --bg-tertiary: #1f2937;   /* bg-gray-800 */
+  --border-color: #1f2937;  /* border-gray-800 */
+  --text-primary: #f9fafb;  /* text-gray-100 */
+  --text-secondary: #9ca3af; /* text-gray-400 */
+  --accent-color: #3b82f6;  /* blue-500 */
+  --accent-hover: #60a5fa;  /* blue-400 */
+  
+  --shadow-card: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
 }
 
 *,
@@ -38,9 +56,9 @@ body,
 }
 
 body {
-  background: radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent)
-      fixed,
-    linear-gradient(180deg, #f9fbff 0%, #f4f7fb 100%);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 button,
