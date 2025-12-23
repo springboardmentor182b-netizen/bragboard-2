@@ -14,7 +14,7 @@ function TopTaggedWidget() {
       try {
         const token = localStorage.getItem('token');
         const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-        const response = await axios.get('http://localhost:8000/users/top-tagged', config);
+        const response = await axios.get('http://127.0.0.1:8000/users/top-tagged', config);
         // API returns objects { name, score, ... }, map to just names or keep objects?
         // Widget expects strings in map currently? No, map calls `employee` (string).
         // Let's adapt the map to consume objects.

@@ -8,7 +8,7 @@ function Header() {
 
   const getActivePage = () => {
     const path = location.pathname;
-    if (path === '/dashboard') return 'Dashboard';
+    if (path === '/Dashboard') return 'Dashboard';
     if (path === '/settings') return 'Settings';
     if (path === '/feed') return 'Feed';
     if (path === '/my-shoutouts') return 'My Shoutouts';
@@ -18,7 +18,7 @@ function Header() {
 
   const handleNavClick = (item) => {
     const routeMap = {
-      'Dashboard': '/dashboard',
+      'Dashboard': '/Dashboard',
       'Feed': '/feed',
       'My Shoutouts': '/my-shoutouts',
       'Leaderboard': '/leaderboard',

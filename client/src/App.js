@@ -12,10 +12,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/employee-dashboard" element={<Dashboard />} />
+          <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/my-shoutouts" element={<MyShoutouts />} />  
+          <Route path="/my-shoutouts" element={<MyShoutouts />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>

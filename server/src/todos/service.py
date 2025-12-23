@@ -32,7 +32,11 @@ def get_or_create_tag(db: Session, tag_name: str):
     return tag
 
 def list_shoutouts(db: Session):
-    return db.query(Shoutout).options(joinedload(Shoutout.sender)).order_by(Shoutout.created_at.desc()).all()
+    return db.query(Shoutout).options(
+        joinedload(Shoutout.sender),
+        joinedload(Shoutout.likes),
+        joinedload(Shoutout.comments).joinedload(Comment.author)
+    ).order_by(Shoutout.created_at.desc()).all()
 
 def get_shoutout(db: Session, shoutout_id: int):
     return db.get(Shoutout, shoutout_id)

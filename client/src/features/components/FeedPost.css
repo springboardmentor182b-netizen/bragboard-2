@@ -138,53 +138,110 @@
   color: #1e293b;
 }
 
-.post-menu-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 8px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  min-width: 160px;
-  z-index: 100;
-  overflow: hidden;
-  animation: slideDown 0.2s ease;
+.action-button.active {
+  color: #2563eb;
+  background: #eff6ff;
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.action-button.active svg {
+  fill: #2563eb;
 }
 
-.post-menu-item {
-  width: 100%;
+.comments-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+  animation: slideDown 0.3s ease;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.comment-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #64748b;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  background: transparent;
-  border: none;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.comment-content {
+  background: #f8fafc;
+  padding: 8px 12px;
+  border-radius: 12px;
+  flex: 1;
+}
+
+.comment-author-name {
+  font-weight: 600;
+  font-size: 0.85rem;
   color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.comment-text {
+  font-size: 0.9rem;
+  color: #334155;
+  line-height: 1.4;
+}
+
+.comment-form {
+  display: flex;
+  gap: 8px;
+}
+
+.comment-form input {
+  flex: 1;
+  background: #f1f5f9;
+  border: 1px solid transparent;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.comment-form input:focus {
+  background: white;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.comment-form button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  text-align: left;
 }
 
-.post-menu-item:hover {
-  background: #f1f5f9;
+.comment-form button:hover {
+  background: #1d4ed8;
 }
 
-.post-menu-item svg {
-  flex-shrink: 0;
-  color: #ef4444;
+.comment-form button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
 }

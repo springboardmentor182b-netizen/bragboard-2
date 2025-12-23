@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8000';
 export const DEFAULT_ADMIN_ID = Number(process.env.REACT_APP_ADMIN_ID) || 1;
 
 const extractError = async (response) => {

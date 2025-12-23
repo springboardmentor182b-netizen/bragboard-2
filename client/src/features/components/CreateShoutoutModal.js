@@ -17,7 +17,7 @@ function CreateShoutoutModal({ onClose, onSubmit }) {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
         const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
         const response = await axios.get('http://127.0.0.1:8000/users', config);
         setAvailableUsers(response.data);
@@ -47,7 +47,7 @@ function CreateShoutoutModal({ onClose, onSubmit }) {
       timestamp: 'Just now',
       message: formData.message,
       taggedUsers: formData.taggedUser ? [availableUsers.find(u => u.id == formData.taggedUser)?.name] : [],
-      recipientId: formData.taggedUser, // Passing ID relevant for backend logic
+      recipientId: Number(formData.taggedUser), // Passing ID relevant for backend logic
 
       reactions: { emoji: 0, thumbsUp: 0 },
       comments: 0,

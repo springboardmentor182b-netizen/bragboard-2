@@ -116,7 +116,7 @@ function LoginPage() {
             if (role === 'admin') {
               navigate('/admin-dashboard');
             } else {
-              navigate('/employee-dashboard');
+              navigate('/Dashboard');
             }
           }, 400);
           break;

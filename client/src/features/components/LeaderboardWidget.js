@@ -16,7 +16,7 @@ function LeaderboardWidget() {
         // Assuming public or use header if needed.
         const token = localStorage.getItem('token');
         const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-        const response = await axios.get('http://localhost:8000/users/leaderboard', config);
+        const response = await axios.get('http://127.0.0.1:8000/users/leaderboard', config);
         setLeaders(response.data);
       } catch (error) {
         console.error("Error fetching leaderboard:", error);

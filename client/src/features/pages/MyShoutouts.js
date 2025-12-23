@@ -26,7 +26,7 @@ const MyShoutouts = () => {
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
-        const res = await axios.get('http://localhost:8000/shoutouts', config);
+        const res = await axios.get('http://127.0.0.1:8000/shoutouts', config);
         // Backend returns generic list. Client side filtering logic remains for now since API doesn't filter yet.
         setShoutouts(res.data);
       } catch (err) {

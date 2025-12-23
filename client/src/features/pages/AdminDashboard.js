@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import { Users, MessageSquare, Flag, Activity } from 'lucide-react';
 
 
@@ -10,11 +10,11 @@ import EmployeeDrawer from '../admin/EmployeeDrawer';
 import ShoutoutReportsPanel from '../admin/ShoutoutReportsPanel';
 
 
-const API_BASE_URL = "http://localhost:8000/api"; 
+const API_BASE_URL = "http://127.0.0.1:8000/api";
 
 const adminAPI = {
   getStats: async () => {
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
     const response = await fetch(`${API_BASE_URL}/admin/stats`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
@@ -29,15 +29,15 @@ const adminAPI = {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     if (!response.ok) throw new Error("Export failed");
-    return response.blob(); 
+    return response.blob();
   }
 };
 
 
 const AdminDashboard = () => {
   const [isEmployeePanelOpen, setEmployeePanelOpen] = useState(false);
-  
-  
+
+
   const [stats, setStats] = useState({
     total_users: '0',
     shoutouts: '0',
@@ -45,7 +45,7 @@ const AdminDashboard = () => {
     engagement: '0%'
   });
 
- 
+
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
@@ -58,7 +58,7 @@ const AdminDashboard = () => {
     loadDashboardData();
   }, []);
 
- 
+
   const handleExport = async (type, format) => {
     try {
       const blob = await adminAPI.exportReport(type, format);
@@ -80,13 +80,13 @@ const AdminDashboard = () => {
       <AdminNavbar />
 
       <div className="max-w-7xl mx-auto p-6 md:p-8">
-        
+
         <header className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-bold text-white tracking-tight">Admin Dashboard</h1>
             <p className="text-gray-400 mt-1">Platform insights and analytics</p>
           </div>
-          <button 
+          <button
             onClick={() => setEmployeePanelOpen(true)}
             className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-full text-sm font-semibold transition-colors shadow-lg shadow-blue-900/20"
           >
@@ -94,7 +94,7 @@ const AdminDashboard = () => {
           </button>
         </header>
 
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard title="Total Users" value={stats.total_users} change="+12%" icon={Users} />
           <StatCard title="Shoutouts" value={stats.shoutouts} change="+28%" icon={MessageSquare} />
@@ -102,7 +102,7 @@ const AdminDashboard = () => {
           <StatCard title="Engagement" value={stats.engagement} change="+5%" icon={Activity} />
         </div>
 
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 h-96">
             <ActivityChart />
@@ -112,14 +112,14 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        
+
         <ShoutoutReportsPanel onExport={handleExport} />
       </div>
 
-      
-      <EmployeeDrawer 
-        isOpen={isEmployeePanelOpen} 
-        onClose={() => setEmployeePanelOpen(false)} 
+
+      <EmployeeDrawer
+        isOpen={isEmployeePanelOpen}
+        onClose={() => setEmployeePanelOpen(false)}
       />
     </div>
   );

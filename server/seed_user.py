@@ -17,16 +17,38 @@ def seed():
             print("Users already exist. Skipping seed.")
             return
 
-        user = User(
+        # Admin User
+        admin = User(
             email="admin@bragboard.com",
             name="Admin User",
             password_hash=hash_password("password123"),
             role="admin",
             department="HQ"
         )
-        db.add(user)
+        db.add(admin)
+
+        # XYZ User
+        xyz_user = User(
+            email="xyz@gmail.com",
+            name="xyz user",
+            password_hash=hash_password("xyz1234"),
+            role="employee",
+            department="Engineering"
+        )
+        db.add(xyz_user)
+
+        # Rishabh Sinha (as seen in screenshot)
+        rishabh = User(
+            email="rishabh@gmail.com",
+            name="Rishabh Sinha",
+            password_hash=hash_password("pass123"),
+            role="employee",
+            department="Product"
+        )
+        db.add(rishabh)
+
         db.commit()
-        print("Seeded admin user: admin@bragboard.com / password123")
+        print("Seeded users successfully.")
     except Exception as e:
         print(f"Error seeding: {e}")
     finally:
