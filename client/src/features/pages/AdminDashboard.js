@@ -111,9 +111,6 @@ const AdminDashboard = () => {
             <DepartmentChart />
           </div>
         </div>
-
-
-        <ShoutoutReportsPanel onExport={handleExport} />
       </div>
 
 
