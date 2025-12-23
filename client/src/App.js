@@ -1,5 +1,6 @@
 import MyShoutouts from './features/pages/MyShoutouts';
 import Leaderboard from './features/pages/Leaderboard';
+import FeedPage from './features/pages/FeedPage';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './features/pages/Dashboard';
 import Settings from './features/pages/Settings';
@@ -18,6 +19,7 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/my-shoutouts" element={<MyShoutouts />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/feed" element={<FeedPage />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
