@@ -19,7 +19,7 @@ def get_db():
 @router.get("/")
 def get_leaderboard(db: Session = Depends(get_db)):
     rows = (
-        db.query(User.name, Leaderboard.points)   # 🔹 change here
+        db.query(User.name, Leaderboard.points)  # now points exists
         .join(Leaderboard, User.id == Leaderboard.user_id)
         .order_by(Leaderboard.points.desc())
         .all()
@@ -28,8 +28,8 @@ def get_leaderboard(db: Session = Depends(get_db)):
     return [
         {
             "rank": idx + 1,
-            "username": row.name,                  # 🔹 and here
-            "points": row.points
+            "username": row[0],  # tuple index 0 = User.name
+            "points": row[1]     # tuple index 1 = Leaderboard.points
         }
         for idx, row in enumerate(rows)
     ]

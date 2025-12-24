@@ -1,24 +1,27 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { getUserRole } from "./utils/auth";
-import { Navigate } from "react-router-dom";
+
 import Base from "./pages/Base";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyOTP from "./pages/VerifyOTP";
 import ResetPassword from "./pages/ResetPassword";
-import Home from "./pages/EmpHome";
+
+import EmployeeDashboard from "./pages/EmployeeDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import AdminHome from "./pages/AdminHome";
+
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
-import Leaderboard from './pages/Leaderboard';
-import ProtectedRoute from "./ProtectedRoute";
-import AdminDashboard from "./pages/AdminDashboard";
+import Leaderboard from "./pages/Leaderboard";
 
-import PageContainer from "./layout/PageContainer";
-import MyShoutouts from "./pages/EmployeeMyShoutouts";
-import ResolveReports from "./components/ResolveReports.jsx";
-import ReportHistory from "./components/ReportHistory.jsx";
+import CreateShoutout from "./pages/CreateShoutout"; // ✅ ADD THIS
+
+import ProtectedRoute from "./ProtectedRoute";
+
+import ResolveReports from "./components/ResolveReports";
+import ReportHistory from "./components/ReportHistory";
 
 export default function App() {
   const role = getUserRole();
@@ -26,16 +29,12 @@ export default function App() {
   return (
     <Router>
       <Routes>
-
-
-
         {/* ---------------------- COMMON ROUTES ---------------------- */}
         <Route path="/" element={<Base />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-
         <Route path="/leaderboard" element={<Leaderboard role={role} />} />
 
         {/* ---------------------- ADMIN ROUTES ---------------------- */}
@@ -54,6 +53,16 @@ export default function App() {
           element={
             <ProtectedRoute
               element={<AdminDashboard />}
+              allowedRoles={["admin"]}
+            />
+          }
+        />
+
+        <Route
+          path="/admin/reports"
+          element={
+            <ProtectedRoute
+              element={<Reports />}
               allowedRoles={["admin"]}
             />
           }
@@ -80,16 +89,6 @@ export default function App() {
         />
 
         <Route
-          path="/admin/reports"
-          element={
-            <ProtectedRoute
-              element={<Reports />}
-              allowedRoles={["admin"]}
-            />
-          }
-        />
-
-        <Route
           path="/admin/settings"
           element={
             <ProtectedRoute
@@ -99,25 +98,31 @@ export default function App() {
           }
         />
 
-
-        {/* ---------------- USER DASHBOARD LAYOUT ---------------- */}
+        {/* ---------------------- EMPLOYEE ROUTES ---------------------- */}
         <Route
-          path="/user"
+          path="/user/home"
           element={
             <ProtectedRoute
-              element={<PageContainer />}
+              element={<EmployeeDashboard />}
               allowedRoles={["employee"]}
             />
           }
-        >
-          <Route path="home" element={<Home />} />
-          <Route path="reports" element={<Reports />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="my-shoutouts" element={<MyShoutouts />} />
-        </Route>
+        />
+
+        {/* ✅ CREATE SHOUTOUT ROUTE */}
+        <Route
+          path="/user/create"
+          element={
+            <ProtectedRoute
+              element={<CreateShoutout />}
+              allowedRoles={["employee"]}
+            />
+          }
+        />
 
         {/* ---------------------- UNAUTHORIZED ---------------------- */}
         <Route path="/unauthorized" element={<h1>Unauthorized Access</h1>} />
+
         {/* ---------------------- DEFAULT ROUTE ---------------------- */}
         <Route
           path="*"

@@ -13,3 +13,4 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     role = Column(Enum(UserRole), default=UserRole.EMPLOYEE, nullable=False)
     leaderboard = relationship("Leaderboard", back_populates="user")
+
