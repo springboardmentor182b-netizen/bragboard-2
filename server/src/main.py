@@ -14,7 +14,7 @@ from src.entities.todo import Shoutout, Comment, Tag
 from src.entities.shoutout_report import ShoutoutReport
 
 # Create tables
-# Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
