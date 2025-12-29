@@ -1,51 +1,39 @@
-import React from 'react';
+import React from "react";
+import { NavLink } from "react-router-dom";
 
-const Admin_Sidebar = ({ activeSection, setActiveSection }) => {
+const Admin_Sidebar = () => {
   const menuItems = [
-    { key: 'dashboard', label: 'Dashboard', icon: 'fa-solid fa-chart-line' },
-    { key: 'users', label: 'Users', icon: 'fa-solid fa-users' },
-    { key: 'reports', label: 'Reports', icon: 'fa-solid fa-chart-bar' },
-    { key: 'notifications', label: 'Notifications', icon: 'fa-solid fa-bell' },
-    { key: 'settings', label: 'Settings', icon: 'fa-solid fa-gear' }
+    { path: "/admin/dashboard", label: "Dashboard", icon: "fa-solid fa-chart-line" },
+    { path: "/admin/users", label: "Users", icon: "fa-solid fa-users" },
+    { path: "/admin/reports/resolve", label: "Resolve Reports", icon: "fa-solid fa-chart-bar" },
+    { path: "/admin/reports/export", label: "Export Reports", icon: "fa-solid fa-file-export" },
+    { path: "/admin/notifications", label: "Notifications", icon: "fa-solid fa-bell" },
+    { path: "/admin/settings", label: "Settings", icon: "fa-solid fa-gear" }
   ];
-
-  const departments = ['HR', 'CyberSecurity', 'Deployment'];
 
   return (
     <div className="sidebar">
       <div className="sidebar-header">
         <h2>BragBoard</h2>
       </div>
-      
+
       <nav className="sidebar-nav">
         <ul className="nav-menu">
           {menuItems.map(item => (
-            <li key={item.key} className="nav-item">
-              <button
-                className={`nav-link ${activeSection === item.key ? 'active' : ''}`}
-                onClick={() => setActiveSection(item.key)}
+            <li key={item.path} className="nav-item">
+              <NavLink
+                to={item.path}
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "active" : ""}`
+                }
               >
                 <i className={item.icon}></i>
                 {item.label}
-              </button>
+              </NavLink>
             </li>
           ))}
         </ul>
       </nav>
-
-      <div className="sidebar-filters">
-        <h3>Filter</h3>
-        <ul className="filter-list">
-          {departments.map(dept => (
-            <li key={dept} className="filter-item">
-              <label className="filter-label">
-                <input type="checkbox" />
-                <span>{dept}</span>
-              </label>
-            </li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 };

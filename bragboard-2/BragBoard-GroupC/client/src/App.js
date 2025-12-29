@@ -9,16 +9,17 @@ import VerifyOTP from "./pages/VerifyOTP";
 import ResetPassword from "./pages/ResetPassword";
 import Home from "./pages/EmpHome";
 import AdminHome from "./pages/AdminHome";
-import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import Leaderboard from './pages/Leaderboard';
+import Reports from "./pages/Reports";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 
 import PageContainer from "./layout/PageContainer";
 import MyShoutouts from "./pages/EmployeeMyShoutouts";
 import ResolveReports from "./components/ResolveReports.jsx";
-import ReportHistory from "./components/ReportHistory.jsx";
+import Admin_UserManagement from "./components/Admin_UserManagement.jsx";
+import Admin_SearchFilter from "./components/Admin_SearchFilters.jsx"; 
 
 export default function App() {
   const role = getUserRole();
@@ -60,6 +61,16 @@ export default function App() {
         />
 
         <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute
+              element={<Admin_UserManagement />}
+              allowedRoles={["admin"]}
+            />
+          }
+        />
+
+        <Route
           path="/admin/reports/resolve"
           element={
             <ProtectedRoute
@@ -70,20 +81,20 @@ export default function App() {
         />
 
         <Route
-          path="/admin/reports/history"
+          path="/admin/reports/export"
           element={
             <ProtectedRoute
-              element={<ReportHistory />}
+              element={<Admin_SearchFilter />}
               allowedRoles={["admin"]}
             />
           }
         />
 
         <Route
-          path="/admin/reports"
+          path="/admin/notifications"
           element={
             <ProtectedRoute
-              element={<Reports />}
+              element={<h2>Notifications Page</h2>}
               allowedRoles={["admin"]}
             />
           }
