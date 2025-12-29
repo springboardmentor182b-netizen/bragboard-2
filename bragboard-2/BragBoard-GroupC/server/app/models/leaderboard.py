@@ -5,7 +5,6 @@ from app.core.database import Base
 class Leaderboard(Base):
     __tablename__ = "leaderboard"
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    points = Column(Integer, default=0)  # ← must exist and match table column
     user = relationship("User", back_populates="leaderboard")

@@ -5,7 +5,7 @@ import os
 import enum
 
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+psycopg2://postgres:pranz12347%40@localhost:5432/bragboard")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+psycopg2://postgres:newpassword@localhost:5432/Bragboard")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
