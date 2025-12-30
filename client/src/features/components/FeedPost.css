@@ -301,3 +301,85 @@
   cursor: not-allowed;
   opacity: 0.5;
 }
+
+/* Nested Comments */
+.comment-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.comment-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.reply-button {
+  background: transparent;
+  border: none;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 4px;
+}
+
+.reply-button:hover {
+  text-decoration: underline;
+  color: var(--accent-color);
+}
+
+.reply-form {
+  margin-left: 42px;
+  margin-top: 8px;
+}
+
+/* Ensure children are connected visually */
+/* Ensure children are connected visually with curved lines */
+.comment-children {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  padding-left: 0;
+  border-left: none;
+  /* Reset previous */
+  gap: 0;
+  /* Handle gap individually */
+}
+
+.comment-children>.comment-thread {
+  position: relative;
+  padding-left: 36px;
+  /* Indent content */
+  margin-top: 12px;
+}
+
+/* The L-shaped Connector */
+.comment-children>.comment-thread::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 17px;
+  width: 15px;
+  height: 34px;
+  border-left: 2px solid var(--text-secondary);
+  border-bottom: 2px solid var(--text-secondary);
+  border-bottom-left-radius: 12px;
+  opacity: 0.4;
+}
+
+/* Continue the line down if not last child */
+.comment-children>.comment-thread:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 22px;
+  left: 17px;
+  width: 2px;
+  height: calc(100% - 10px);
+  background: var(--text-secondary);
+  opacity: 0.4;
+}

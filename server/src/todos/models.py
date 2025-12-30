@@ -17,11 +17,13 @@ class TagRead(BaseModel):
 
 class CommentCreate(BaseModel):
     content: str
+    parent_id: Optional[int] = None
 
 class CommentRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
     content: str
+    parent_id: Optional[int] = None
     author: UserRead
     created_at: datetime
 
@@ -36,4 +38,6 @@ class ShoutoutRead(BaseModel):
     tags: List[TagRead] = []
     comments: List[CommentRead] = []
     likes: List[UserRead] = []
+    claps: List[UserRead] = []
+    stars: List[UserRead] = []
     created_at: datetime

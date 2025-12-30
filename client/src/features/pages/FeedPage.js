@@ -35,6 +35,9 @@ const FeedPage = () => {
 
             const formattedShoutouts = response.data.map(item => {
                 const likedByMe = (item.likes || []).some(l => l.user_id === currentUserId || l.id === currentUserId);
+                const clappedByMe = (item.claps || []).some(l => l.user_id === currentUserId || l.id === currentUserId);
+                const starredByMe = (item.stars || []).some(l => l.user_id === currentUserId || l.id === currentUserId);
+
                 return {
                     id: item.id,
                     sender: item.sender.name,
@@ -46,7 +49,11 @@ const FeedPage = () => {
                     reactions: {
                         emoji: 0,
                         thumbsUp: (item.likes || []).length,
-                        likedByMe: likedByMe
+                        likedByMe: likedByMe,
+                        claps: (item.claps || []).length,
+                        clappedByMe: clappedByMe,
+                        stars: (item.stars || []).length,
+                        starredByMe: starredByMe
                     },
                     likes: item.likes || [],
                     comments: item.comments || []

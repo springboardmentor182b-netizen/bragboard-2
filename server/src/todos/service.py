@@ -35,6 +35,8 @@ def list_shoutouts(db: Session):
     return db.query(Shoutout).options(
         joinedload(Shoutout.sender),
         joinedload(Shoutout.likes),
+        joinedload(Shoutout.claps),
+        joinedload(Shoutout.stars),
         joinedload(Shoutout.comments).joinedload(Comment.author)
     ).order_by(Shoutout.created_at.desc()).all()
 
@@ -75,7 +77,42 @@ def toggle_like(db: Session, shoutout_id: int, user_id: int):
     db.refresh(shout)
     return shout
 
-def add_comment(db: Session, shoutout_id: int, user_id: int, content: str):
+def toggle_clap(db: Session, shoutout_id: int, user_id: int):
+    shout = db.get(Shoutout, shoutout_id)
+    if not shout:
+        return None
+    user = db.get(User, user_id)
+    if not user:
+        return None
+        
+    if user in shout.claps:
+        shout.claps.remove(user)
+    else:
+        shout.claps.append(user)
+    
+    db.commit()
+    db.refresh(shout)
+    return shout
+
+def toggle_star(db: Session, shoutout_id: int, user_id: int):
+    shout = db.get(Shoutout, shoutout_id)
+    if not shout:
+        return None
+    user = db.get(User, user_id)
+    if not user:
+        return None
+        
+    if user in shout.stars:
+        shout.stars.remove(user)
+    else:
+        shout.stars.append(user)
+    
+    db.commit()
+    db.refresh(shout)
+    return shout
+
+
+def add_comment(db: Session, shoutout_id: int, user_id: int, content: str, parent_id: int = None):
     shout = db.get(Shoutout, shoutout_id)
     if not shout:
         return None
@@ -83,7 +120,8 @@ def add_comment(db: Session, shoutout_id: int, user_id: int, content: str):
     comment = Comment(
         shoutout_id=shoutout_id,
         author_id=user_id, 
-        content=content
+        content=content,
+        parent_id=parent_id
     )
     db.add(comment)
     db.commit()

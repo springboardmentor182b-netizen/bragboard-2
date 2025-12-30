@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Table
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 from src.database.core import Base
 from src.entities.user import User
@@ -24,6 +24,8 @@ class Shoutout(Base):
     tags = relationship("Tag", secondary="shoutout_tags", back_populates="shoutouts")
     comments = relationship("Comment", back_populates="shoutout", cascade="all, delete-orphan")
     likes = relationship("User", secondary="shoutout_likes", backref="liked_shoutouts")
+    claps = relationship("User", secondary="shoutout_claps", backref="clapped_shoutouts")
+    stars = relationship("User", secondary="shoutout_stars", backref="starred_shoutouts")
     reports = relationship("ShoutoutReport", back_populates="shoutout", cascade="all, delete-orphan")
 
 class Comment(Base):
@@ -34,6 +36,8 @@ class Comment(Base):
     shoutout_id = Column(Integer, ForeignKey("shoutouts.id", ondelete="CASCADE"), nullable=False)
     shoutout = relationship("Shoutout", back_populates="comments")
     content = Column(Text, nullable=False)
+    parent_id = Column(Integer, ForeignKey("shoutout_comments.id", ondelete="CASCADE"), nullable=True)
+    replies = relationship("Comment", backref=backref("parent", remote_side=[id]), cascade="all, delete-orphan")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -52,6 +56,18 @@ shoutout_tag_table = Table(
 
 shoutout_likes_table = Table(
     "shoutout_likes", Base.metadata,
+    Column("shoutout_id", Integer, ForeignKey("shoutouts.id", ondelete="CASCADE"), primary_key=True),
+    Column("user_id", Integer, ForeignKey(User.id, ondelete="CASCADE"), primary_key=True),
+)
+
+shoutout_claps_table = Table(
+    "shoutout_claps", Base.metadata,
+    Column("shoutout_id", Integer, ForeignKey("shoutouts.id", ondelete="CASCADE"), primary_key=True),
+    Column("user_id", Integer, ForeignKey(User.id, ondelete="CASCADE"), primary_key=True),
+)
+
+shoutout_stars_table = Table(
+    "shoutout_stars", Base.metadata,
     Column("shoutout_id", Integer, ForeignKey("shoutouts.id", ondelete="CASCADE"), primary_key=True),
     Column("user_id", Integer, ForeignKey(User.id, ondelete="CASCADE"), primary_key=True),
 )

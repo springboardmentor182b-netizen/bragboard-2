@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from src.todos.service import create_shoutout, list_shoutouts, get_shoutout, update_shoutout, delete_shoutout, toggle_like, add_comment, get_recent_reactions
+from src.todos.service import create_shoutout, list_shoutouts, get_shoutout, update_shoutout, delete_shoutout, toggle_like, toggle_clap, toggle_star, add_comment, get_recent_reactions
 from src.todos.models import ShoutoutCreate, ShoutoutRead, CommentCreate, CommentRead
 from src.database.core import get_db
 
@@ -37,9 +37,24 @@ def api_like(shoutout_id: int, user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Shoutout or User not found")
     return shout
 
+@router.post("/{shoutout_id}/clap", response_model=ShoutoutRead)
+def api_clap(shoutout_id: int, user_id: int, db: Session = Depends(get_db)):
+    shout = toggle_clap(db, shoutout_id, user_id)
+    if not shout:
+        raise HTTPException(status_code=404, detail="Shoutout or User not found")
+    return shout
+
+@router.post("/{shoutout_id}/star", response_model=ShoutoutRead)
+def api_star(shoutout_id: int, user_id: int, db: Session = Depends(get_db)):
+    shout = toggle_star(db, shoutout_id, user_id)
+    if not shout:
+        raise HTTPException(status_code=404, detail="Shoutout or User not found")
+    return shout
+
+
 @router.post("/{shoutout_id}/comments", response_model=CommentRead)
 def api_comment(shoutout_id: int, payload: CommentCreate, user_id: int, db: Session = Depends(get_db)):
-    comment = add_comment(db, shoutout_id, user_id, payload.content)
+    comment = add_comment(db, shoutout_id, user_id, payload.content, payload.parent_id)
     if not comment:
         raise HTTPException(status_code=404, detail="Shoutout not found")
     return comment
