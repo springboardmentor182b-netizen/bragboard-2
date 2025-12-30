@@ -6,17 +6,12 @@ import Feed from '../components/Feed';
 import Sidebar from '../components/Sidebar';
 import CreateShoutoutModal from '../components/CreateShoutoutModal';
 import ReportShoutoutModal from '../components/ReportShoutoutModal';
-import ReportedShoutoutsModal from '../components/ReportedShoutoutsModal';
 import './Dashboard.css';
 
 function Dashboard() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  const [isViewReportsOpen, setIsViewReportsOpen] = useState(false);
   const [currentShoutoutToReport, setCurrentShoutoutToReport] = useState(null);
-
-  // Mock data for reported shoutouts
-  const [reportedShoutouts, setReportedShoutouts] = useState([]);
 
   const [sortBy, setSortBy] = useState('newest');
 
@@ -151,17 +146,7 @@ function Dashboard() {
     setIsReportModalOpen(true);
   };
 
-  const fetchMyReports = async () => {
-    try {
-      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-      if (!token) return;
-      const decoded = jwtDecode(token);
-      const response = await axios.get(`http://127.0.0.1:8000/api/shoutout-reports/my-reports?reporter_id=${decoded.user_id}`);
-      setReportedShoutouts(response.data);
-    } catch (error) {
-      console.error("Error fetching my reports:", error);
-    }
-  };
+
 
   const handleSubmitReport = async (reportData) => {
     try {
@@ -180,7 +165,6 @@ function Dashboard() {
       setIsReportModalOpen(false);
       setCurrentShoutoutToReport(null);
       alert('Report submitted successfully!');
-      fetchMyReports(); // Update the list
     } catch (error) {
       console.error("Failed to submit report:", error);
       alert("Failed to submit report. Please try again.");
@@ -226,24 +210,7 @@ function Dashboard() {
                 <option value="newest">Sort by Date</option>
                 <option value="department">Sort by Department</option>
               </select>
-              <button
-                className="view-reports-button"
-                onClick={() => {
-                  fetchMyReports();
-                  setIsViewReportsOpen(true);
-                }}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '20px',
-                  border: '1px solid #e1e1e1',
-                  background: 'white',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  fontWeight: '500'
-                }}
-              >
-                My Reports
-              </button>
+
               <div className="dashboard-search-container">
                 <div className="search-box">
                   <svg
@@ -313,12 +280,7 @@ function Dashboard() {
         />
       )}
 
-      {isViewReportsOpen && (
-        <ReportedShoutoutsModal
-          reports={reportedShoutouts}
-          onClose={() => setIsViewReportsOpen(false)}
-        />
-      )}
+
     </div>
   );
 }

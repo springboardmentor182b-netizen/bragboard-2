@@ -3,6 +3,9 @@ import { useState } from 'react';
 import Header from '../layout/Header';
 import './Settings.css';
 import { useTheme } from '../../context/ThemeContext';
+import ReportedShoutoutsModal from '../components/ReportedShoutoutsModal';
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://127.0.0.1:8000';
 
@@ -15,6 +18,8 @@ function Settings() {
 
   const [status, setStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isViewReportsOpen, setIsViewReportsOpen] = useState(false);
+  const [reportedShoutouts, setReportedShoutouts] = useState([]);
 
   // Theme toggle
   const { toggleTheme } = useTheme();
@@ -23,6 +28,19 @@ function Settings() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setStatus(null);
+    setStatus(null);
+  };
+
+  const fetchMyReports = async () => {
+    try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      if (!token) return;
+      const decoded = jwtDecode(token);
+      const response = await axios.get(`http://127.0.0.1:8000/api/shoutout-reports/my-reports?reporter_id=${decoded.user_id}`);
+      setReportedShoutouts(response.data);
+    } catch (error) {
+      console.error("Error fetching my reports:", error);
+    }
   };
 
   const apiPost = async (path, payload, token) => {
@@ -158,6 +176,20 @@ function Settings() {
           </div>
 
           <div className="settings-section">
+            <h2 className="section-title">Reports</h2>
+            <button
+              className="view-reports-button settings-button secondary"
+              onClick={() => {
+                fetchMyReports();
+                setIsViewReportsOpen(true);
+              }}
+              style={{ width: 'auto', display: 'inline-block' }}
+            >
+              View My Reports
+            </button>
+          </div>
+
+          <div className="settings-section">
             <h2 className="section-title">Change Password</h2>
 
             <form className="settings-form" onSubmit={handleSubmit}>
@@ -224,6 +256,13 @@ function Settings() {
           </div>
         </div>
       </div>
+
+      {isViewReportsOpen && (
+        <ReportedShoutoutsModal
+          reports={reportedShoutouts}
+          onClose={() => setIsViewReportsOpen(false)}
+        />
+      )}
     </div>
   );
 }
