@@ -7,8 +7,8 @@ client: npm install
 
 client start: npm start
 
-server: python -m venv venv
-        venv\Scripts\activate.bat (cmd)
-        pip install -r "requirements.txt"
+server: 1)python -m venv venv
+        2)venv\Scripts\activate.bat (cmd)
+        3)pip install -r "requirements.txt"
 
 server start: uvicorn src.main:app --reload
