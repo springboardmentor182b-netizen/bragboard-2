@@ -20,3 +20,4 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/auth")
+#uvicorn src.main:app --reload
