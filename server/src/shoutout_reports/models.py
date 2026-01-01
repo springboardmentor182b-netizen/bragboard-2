@@ -9,7 +9,6 @@ class ReportStatus(str, Enum):
     RESOLVED = "resolved"
     DISMISSED = "dismissed"
 
-
 class ShoutoutReportCreate(BaseModel):
     shoutout_id: int = Field(..., ge=1, description="ID of the shoutout being reported")
     reason: str = Field(..., min_length=1, max_length=200, description="Reason for reporting (e.g., 'inappropriate content', 'spam', 'harassment')")
@@ -40,4 +39,3 @@ class ShoutoutReportRead(BaseModel):
     
     shoutout_message: Optional[str] = None
     shoutout_sender_id: Optional[int] = None
-
