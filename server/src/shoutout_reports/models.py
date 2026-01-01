@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field
 from enum import Enum
 
 
@@ -22,7 +22,10 @@ class ShoutoutReportResolve(BaseModel):
 
 
 class ShoutoutReportRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True, use_enum_values=True)
+
+    class Config:
+        orm_mode = True
+        use_enum_values = True
     
     id: int
     shoutout_id: int

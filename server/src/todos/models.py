@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field
 from typing import List, Optional
 from src.users.models import UserRead
 
@@ -11,7 +11,8 @@ class ShoutoutCreate(BaseModel):
     tags: Optional[List[str]] = None
 
 class TagRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        orm_mode = True
     id: int
     name: str
 
@@ -20,7 +21,8 @@ class CommentCreate(BaseModel):
     parent_id: Optional[int] = None
 
 class CommentRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        orm_mode = True
     id: int
     content: str
     parent_id: Optional[int] = None
