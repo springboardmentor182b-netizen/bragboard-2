@@ -1,169 +1,302 @@
+:root {
+  --bg1: #1e3a8a;
+  --bg2: #2563eb;
+}
+
+/* ---------- General Body ---------- */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f3f4f6;
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
+}
+
+/* ---------- Leaderboard Container ---------- */
 .leaderboard-container {
-    min-height: 100vh;
-    background-color: var(--bg-primary);
-    display: flex;
+  background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
+  padding: 30px;
+  border-radius: 16px;
+  margin: 30px auto;
+  max-width: 1200px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  color: #ffffff;
+}
+
+/* ---------- Header ---------- */
+.leaderboard-container h1 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #ffffff;
+}
+
+/* ---------- Leaderboard Controls ---------- */
+.leaderboard-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.leaderboard-search,
+.leaderboard-sort {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #4b5563;
+  background: rgba(15, 23, 42, 0.95);
+  color: #e5e7eb;
+  font-size: 0.95rem;
+}
+
+.leaderboard-controls button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: #4f46e5;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.leaderboard-controls button:hover {
+  background-color: #4338ca;
+  transform: translateY(-2px);
+}
+
+/* ---------- Department Filter Chips ---------- */
+.chip,
+.chip-active {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #2563eb;
+  border: 1px solid #3b82f6;
+  color: #ffffff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chip:hover {
+  background: #3b82f6;
+  transform: translateY(-1px);
+}
+
+.chip-active {
+  background: #10b981;
+  border-color: #10b981;
+  font-weight: 600;
+}
+
+/* ---------- Leaderboard Table ---------- */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #ffffff;
+  margin-top: 20px;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.leaderboard-table th {
+  text-align: left;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.leaderboard-table tr:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* ---------- Rank & Points ---------- */
+.rank-number {
+  font-weight: bold;
+  font-size: 18px;
+  color: #4da3ff;
+}
+
+.points-badge {
+  background: #3b82f6;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* ---------- Medal Icons ---------- */
+.medal {
+  font-size: 18px;
+  display: inline-block;
+  width: 28px;
+  text-align: center;
+}
+
+.medal.gold { color: #FFD700; }
+.medal.silver { color: #C0C0C0; }
+.medal.bronze { color: #CD7F32; }
+.medal.small-legend { font-size: 16px; }
+
+/* ---------- Highlight Logged-in User ---------- */
+.highlight-row {
+  background-color: rgba(255,255,255,0.15);
+  font-weight: 600;
+}
+
+/* ---------- "Your Position" Card ---------- */
+.your-position-card {
+  background: rgba(59, 130, 246, 0.2);
+  color: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.your-position-card .rank,
+.your-position-card .name,
+.your-position-card .points,
+.your-position-card small {
+  color: #ffffff;
+  opacity: 1;
+}
+
+/* ---------- Mini Performance Popup ---------- */
+.mini-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.mini-popup {
+  background: var(--bg2);
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+/* ---------- Responsive Table ---------- */
+@media (max-width: 768px) {
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .leaderboard-controls {
     flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* -------------------------
+  General Buttons
+-------------------------- */
+.btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 
-.leaderboard-content {
-    margin-top: 60px;
-    padding: 40px 24px;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
+/* Outline buttons (like Clear, Export) */
+.btn.outline {
+  background-color: #1d4ed8; /* deep blue */
+  color: white;
+  border: 1px solid #1e40af; /* darker blue border */
 }
 
-.leaderboard-card {
-    background: var(--bg-secondary);
-    border-radius: 24px;
-    padding: 32px;
-    box-shadow: var(--shadow-card);
-    border: 1px solid var(--border-color);
+.btn.outline:hover {
+  background-color: #2563eb; /* lighter blue on hover */
+  border-color: #1d4ed8;
 }
 
-.leaderboard-header {
-    text-align: center;
-    margin-bottom: 40px;
+/* Filled buttons (Quick button) */
+.btn.small {
+  background-color: #2563eb;
+  color: white;
+  border: none;
 }
 
-.leaderboard-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    margin: 0 0 8px 0;
-    letter-spacing: -0.02em;
+.btn.small:hover {
+  background-color: #3b82f6; /* hover effect */
 }
 
-.leaderboard-subtitle {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
+/* -------------------------
+  Chips (department filters)
+-------------------------- */
+.chip {
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: 1px solid #3b82f6;
+  background-color: #f0f7ff;
+  color: #1e40af;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-weight: 500;
 }
 
-.leaderboard-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+.chip:hover {
+  background-color: #dbeafe;
 }
 
-.leaderboard-row {
-    display: flex;
-    align-items: center;
-    padding: 16px 24px;
-    background: var(--bg-tertiary);
-    border-radius: 16px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 1px solid transparent;
+.chip-active {
+  background-color: #1e40af;
+  color: white;
+  border-color: #1e40af;
 }
 
-.leaderboard-row:hover {
-    transform: scale(1.02);
-    box-shadow: var(--shadow-card);
-    border-color: var(--accent-color);
+/* -------------------------
+  Input search field
+-------------------------- */
+input {
+  border: 1px solid #1e40af;
+  border-radius: 8px;
+  padding: 8px 10px;
+  outline: none;
+  color: #1e3a8a;
+  font-weight: 500;
 }
 
-.rank-badge {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    font-weight: 800;
-    font-size: 1.1rem;
-    margin-right: 20px;
-    flex-shrink: 0;
-    background: var(--bg-primary);
-    color: var(--text-secondary);
+input::placeholder {
+  color: #3b82f6;
 }
 
-.rank-1 .rank-badge {
-    background: linear-gradient(135deg, #ffd700, #ff8c00);
-    color: white;
-    box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
+/* -------------------------
+  Select dropdown
+-------------------------- */
+select.small-select {
+  border-radius: 8px;
+  border: 1px solid #1e40af;
+  padding: 6px 10px;
+  background-color: white;
+  color: #1e3a8a;
+  font-weight: 500;
 }
 
-.rank-2 .rank-badge {
-    background: linear-gradient(135deg, #c0c0c0, #708090);
-    color: white;
-    box-shadow: 0 4px 12px rgba(112, 128, 144, 0.4);
+/* Hover effect for all interactive elements */
+.btn:hover,
+.chip:hover,
+select.small-select:hover {
+  filter: brightness(1.1);
 }
-
-.rank-3 .rank-badge {
-    background: linear-gradient(135deg, #cd7f32, #8b4513);
-    color: white;
-    box-shadow: 0 4px 12px rgba(139, 69, 19, 0.4);
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex: 1;
-}
-
-.user-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--bg-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid var(--border-color);
-}
-
-.initials {
-    font-weight: 700;
-    color: var(--accent-color);
-}
-
-.user-details {
-    display: flex;
-    flex-direction: column;
-}
-
-.user-name {
-    font-weight: 700;
-    color: var(--text-primary);
-    font-size: 1.1rem;
-}
-
-.user-dept {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.user-score {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--accent-color);
-    margin-left: 20px;
-}
-
-.score-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-secondary);
-    display: block;
-    text-align: right;
-    margin-top: -4px;
-}
-
-@media (max-width: 600px) {
-    .leaderboard-content {
-        padding: 24px 16px;
-    }
-
-    .rank-badge {
-        width: 32px;
-        height: 32px;
-        font-size: 0.9rem;
-        margin-right: 12px;
-    }
-
-    .user-avatar {
-        display: none;
-    }
+.page-title {
+  color: #0f172a;   /* dark visible color */
+  font-weight: 700;
+  font-size: larger;
 }
