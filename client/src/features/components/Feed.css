@@ -7,7 +7,6 @@
 .feed-empty {
   text-align: center;
   padding: 60px 20px;
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 1.1rem;
 }
-

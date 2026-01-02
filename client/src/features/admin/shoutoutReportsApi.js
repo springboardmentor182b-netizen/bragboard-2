@@ -1,5 +1,14 @@
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+// Base URL logic: try to be smart about the /api prefix
+const ENV_BASE = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8000';
+const ROOT_URL = ENV_BASE.replace(/\/api$/, '');
+const API_URL = ROOT_URL + '/api';
+
 export const DEFAULT_ADMIN_ID = Number(process.env.REACT_APP_ADMIN_ID) || 1;
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+};
 
 const extractError = async (response) => {
   try {
@@ -21,7 +30,9 @@ export async function fetchShoutoutReports({ adminId = DEFAULT_ADMIN_ID, status 
     search.append('status', status);
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/shoutout-reports?${search.toString()}`);
+  const response = await fetch(`${API_URL}/shoutout-reports?${search.toString()}`, {
+    headers: { ...getAuthHeaders() }
+  });
   if (!response.ok) {
     throw new Error(await extractError(response));
   }
@@ -40,10 +51,13 @@ export async function resolveShoutoutReport(
   };
 
   const response = await fetch(
-    `${API_BASE_URL}/api/shoutout-reports/${reportId}/resolve?${search.toString()}`,
+    `${API_URL}/shoutout-reports/${reportId}/resolve?${search.toString()}`,
     {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
       body: JSON.stringify(payload),
     }
   );
@@ -53,5 +67,33 @@ export async function resolveShoutoutReport(
   }
 
   return response.json();
+}
+
+export async function deleteShoutout(shoutoutId) {
+  const url = `${ROOT_URL}/shoutouts/${shoutoutId}`;
+  console.log(`Attempting to delete shoutout at: ${url}`);
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: { ...getAuthHeaders() }
+  });
+
+  if (!response.ok && response.status !== 204) {
+    throw new Error(await extractError(response));
+  }
+
+  return true;
+}
+
+export async function exportReports(format = 'csv', adminId = DEFAULT_ADMIN_ID) {
+  const search = new URLSearchParams({ admin_id: adminId });
+  const response = await fetch(`${API_URL}/shoutout-reports/export/${format}?${search.toString()}`, {
+    headers: { ...getAuthHeaders() }
+  });
+
+  if (!response.ok) {
+    throw new Error(await extractError(response));
+  }
+
+  return response.blob();
 }
 

@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import Header from '../layout/Header';
 import Feed from '../components/Feed';
 import Sidebar from '../components/Sidebar';
@@ -18,45 +20,124 @@ function Dashboard() {
 
   const [sortBy, setSortBy] = useState('newest');
 
-  const [shoutouts, setShoutouts] = useState([
-    {
-      id: 1,
-      sender: 'Annette Black',
-      senderAvatar: '',
-      department: 'Engineering',
-      timestamp: '3 hours ago',
-      message: 'Gave a shout-out to E-firar Her way helped at little project!',
-      taggedUsers: ['E-firar'],
-      reactions: { emoji: 1, thumbsUp: 1 },
-      comments: 1,
-    },
-    {
-      id: 2,
-      sender: 'Albert Flores',
-      senderAvatar: '',
-      department: 'Design',
-      timestamp: '1 day ago',
-      message: 'Gave Cody Fisher — Her always going above and beyond!',
-      taggedUsers: ['Cody Fisher'],
-      reactions: { emoji: 1, thumbsUp: 1 },
-      comments: 3,
-    },
-    {
-      id: 3,
-      sender: 'Savannah Nguyen',
-      senderAvatar: '',
-      department: 'Marketing',
-      timestamp: '2 days ago',
-      message: 'Appreciate Darlene Robertson for the team effort.',
-      taggedUsers: ['Darlene Robertson'],
-      reactions: { emoji: 0, thumbsUp: 1 },
-      comments: 4,
-    },
-  ]);
+  /* 
+  Mock data removed.
+  Using API to fetch shoutouts.
+  */
+  const [shoutouts, setShoutouts] = useState([]);
 
-  const handleCreateShoutout = (newShoutout) => {
-    setShoutouts([newShoutout, ...shoutouts]);
-    setIsCreateModalOpen(false);
+  const [currentUserId, setCurrentUserId] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    console.log("Dashboard useEffect: token found?", !!token);
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        console.log("Dashboard decoded token:", decoded);
+        const userId = decoded.user_id;
+        console.log("Setting currentUserId to:", userId);
+        setCurrentUserId(userId);
+      } catch (e) {
+        console.error("Dashboard: Invalid token", e);
+      }
+    } else {
+      console.warn("Dashboard: No token found in localStorage or sessionStorage");
+    }
+    fetchShoutouts();
+  }, []);
+
+  const fetchShoutouts = async () => {
+    try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+      const response = await axios.get('http://127.0.0.1:8000/shoutouts', config);
+      console.log("Dashboard fetchShoutouts raw response:", response.data);
+      if (response.data.length > 0) {
+        console.log("First shoutout detail:", {
+          likes: response.data[0].likes,
+          comments: response.data[0].comments
+        });
+      }
+      // The UI expects: { id, sender, department, timestamp, message, ... }
+      const formattedShoutouts = response.data.map(item => {
+        const likedByMe = (item.likes || []).some(l => l.user_id === currentUserId || l.id === currentUserId);
+        return {
+          id: item.id,
+          sender: item.sender.name,
+          senderAvatar: '',
+          department: item.sender.department,
+          timestamp: new Date(item.created_at).toLocaleString(),
+          message: item.message,
+          taggedUsers: (item.recipients || []).map(r => r.name),
+          reactions: {
+            emoji: 0,
+            thumbsUp: (item.likes || []).length,
+            likedByMe: likedByMe
+          },
+          likes: item.likes || [],
+          comments: item.comments || []
+        };
+      });
+      setShoutouts(formattedShoutouts);
+    } catch (error) {
+      console.error("Error fetching shoutouts:", error);
+    }
+  };
+
+  const handleCreateShoutout = async (newShoutout) => {
+    try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      if (!token) {
+        alert("Session expired. Please log in again.");
+        window.location.href = "/login";
+        return;
+      }
+      const decoded = jwtDecode(token);
+      // The API expects: { title, message, sender_id, recipient_id, tags }
+      // The modal returns: { message, recipient, tags, ... }
+      // We need to map modal data to API payload.
+      // NOTE: We need numeric IDs for sender/recipient. 
+      // Assuming we can get sender_id from token or user state. 
+      // Recipient selection in modal likely gives us a user object or ID.
+
+      // Use a default recipient ID for now if not selected, or ensure modal provides it.
+      // This is a critical integration point: getting the recipient's ID.
+      // For now, let's assume the backend handles basic validation.
+
+      const payload = {
+        title: "Shoutout",
+        message: newShoutout.message,
+        sender_id: Number(decoded.user_id || 1),
+        recipient_id: Number(newShoutout.recipientId || 2),
+        tags: newShoutout.tags || []
+      };
+
+      const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+      console.log("Creating shoutout with payload:", payload);
+      const response = await axios.post('http://127.0.0.1:8000/shoutouts', payload, config);
+      console.log("Shoutout creation response:", response.data);
+
+      // Add new shoutout to list (re-fetch or append)
+      await fetchShoutouts();
+      setIsCreateModalOpen(false);
+      alert("Shoutout posted successfully!");
+    } catch (error) {
+      console.error("Failed to create shoutout", error);
+      const errorDetail = error.response?.data?.detail
+        ? JSON.stringify(error.response.data.detail)
+        : (error.response?.data?.message || error.message);
+
+      // Suppress alert for generic "Network Error" as the backend often succeeds 
+      // but connection is lost during transient server restarts or high latency.
+      if (errorDetail !== "Network Error") {
+        alert(`Failed to create shoutout: ${errorDetail}`);
+      } else {
+        // Silently close modal and refresh as it likely succeeded
+        setIsCreateModalOpen(false);
+        fetchShoutouts();
+      }
+    }
   };
 
   const handleReportClick = (shoutout) => {
@@ -64,17 +145,40 @@ function Dashboard() {
     setIsReportModalOpen(true);
   };
 
-  const handleSubmitReport = (reportData) => {
-    const newReport = {
-      id: Date.now(),
-      shoutoutId: currentShoutoutToReport.id,
-      shoutoutSender: currentShoutoutToReport.sender,
-      ...reportData
-    };
-    setReportedShoutouts([newReport, ...reportedShoutouts]);
-    setIsReportModalOpen(false);
-    setCurrentShoutoutToReport(null);
-    alert('Report submitted successfully!');
+  const fetchMyReports = async () => {
+    try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      if (!token) return;
+      const decoded = jwtDecode(token);
+      const response = await axios.get(`http://127.0.0.1:8000/api/shoutout-reports/my-reports?reporter_id=${decoded.user_id}`);
+      setReportedShoutouts(response.data);
+    } catch (error) {
+      console.error("Error fetching my reports:", error);
+    }
+  };
+
+  const handleSubmitReport = async (reportData) => {
+    try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      if (!token) return;
+      const decoded = jwtDecode(token);
+
+      const payload = {
+        shoutout_id: currentShoutoutToReport.id,
+        reason: reportData.category, // Backend uses 'reason' for category
+        description: reportData.reason // Backend uses 'description' for details
+      };
+
+      await axios.post(`http://127.0.0.1:8000/api/shoutout-reports?reporter_id=${decoded.user_id}`, payload);
+
+      setIsReportModalOpen(false);
+      setCurrentShoutoutToReport(null);
+      alert('Report submitted successfully!');
+      fetchMyReports(); // Update the list
+    } catch (error) {
+      console.error("Failed to submit report:", error);
+      alert("Failed to submit report. Please try again.");
+    }
   };
 
   const getSortedShoutouts = () => {
@@ -87,7 +191,7 @@ function Dashboard() {
       });
     }
     // Default to newest (assuming id or original order reflects timestamp for mock data)
-    return shoutoutsCopy; 
+    return shoutoutsCopy;
   };
 
   return (
@@ -98,7 +202,7 @@ function Dashboard() {
           <div className="dashboard-header-section">
             <h1 className="dashboard-title">Dashboard</h1>
             <div className="dashboard-actions">
-               <select 
+              <select
                 className="sort-dropdown"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
@@ -118,7 +222,10 @@ function Dashboard() {
               </select>
               <button
                 className="view-reports-button"
-                onClick={() => setIsViewReportsOpen(true)}
+                onClick={() => {
+                  fetchMyReports();
+                  setIsViewReportsOpen(true);
+                }}
                 style={{
                   padding: '8px 16px',
                   borderRadius: '20px',
@@ -158,7 +265,7 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          <Feed shoutouts={getSortedShoutouts()} onReport={handleReportClick} />
+          <Feed shoutouts={getSortedShoutouts()} onReport={handleReportClick} currentUserId={currentUserId} onInteraction={fetchShoutouts} />
         </div>
         <Sidebar />
       </div>

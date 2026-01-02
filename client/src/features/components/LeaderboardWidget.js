@@ -1,11 +1,29 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Widget.css';
 
 function LeaderboardWidget() {
-  const leaders = [
-    { name: 'Eleanor Pena', score: 15 },
-    { name: 'Cody Fisher', score: 15 },
-    { name: 'Eather Howard', score: 6 },
-  ];
+  /* 
+  Mock data removed.
+  Fetching leaders from API.
+  */
+  const [leaders, setLeaders] = useState([]);
+
+  useEffect(() => {
+    const fetchLeaders = async () => {
+      try {
+        // No auth needed for leaderboard? Or use token if available. 
+        // Assuming public or use header if needed.
+        const token = localStorage.getItem('token');
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+        const response = await axios.get('http://127.0.0.1:8000/users/leaderboard', config);
+        setLeaders(response.data);
+      } catch (error) {
+        console.error("Error fetching leaderboard:", error);
+      }
+    };
+    fetchLeaders();
+  }, []);
 
   const getInitials = (name) => {
     return name

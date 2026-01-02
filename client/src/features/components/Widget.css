@@ -1,15 +1,16 @@
 .widget-card {
-  background: white;
+  background: var(--bg-secondary);
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .widget-title {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   margin: 0 0 16px 0;
 }
 
@@ -31,15 +32,16 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--bg-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  border: 1px solid var(--border-color);
 }
 
 .avatar-initials {
-  color: white;
+  color: var(--accent-color);
   font-weight: 600;
   font-size: 0.875rem;
 }
@@ -54,18 +56,17 @@
 
 .widget-item-name {
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   font-size: 0.9rem;
 }
 
 .widget-item-action {
   font-size: 0.8rem;
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .widget-item-value {
   font-weight: 700;
-  color: #2563eb;
+  color: var(--accent-color);
   font-size: 1rem;
 }
-

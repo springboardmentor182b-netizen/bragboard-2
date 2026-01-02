@@ -22,12 +22,28 @@ function ReportShoutoutModal({ onClose, onSubmit, shoutoutSender }) {
             <div className="modal-content">
                 <div className="modal-header">
                     <h2>Report Shoutout</h2>
-                    <button className="close-button" onClick={onClose}>&times;</button>
+                    <button className="modal-close" onClick={onClose} aria-label="Close">
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M18 6L6 18M6 6l12 12"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                    </button>
                 </div>
-                <form onSubmit={handleSubmit}>
+                <form className="modal-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label>Report shoutout from {shoutoutSender}</label>
-                        <p className="helper-text">Please select a reason for reporting this content.</p>
+                        <p className="form-hint">Please select a reason for reporting this content.</p>
                     </div>
 
                     <div className="form-group">
@@ -36,7 +52,7 @@ function ReportShoutoutModal({ onClose, onSubmit, shoutoutSender }) {
                             id="category"
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
-                            className="modal-input"
+                            className="form-select"
                         >
                             <option value="inappropriate">Inappropriate Content</option>
                             <option value="spam">Spam</option>
@@ -52,17 +68,17 @@ function ReportShoutoutModal({ onClose, onSubmit, shoutoutSender }) {
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
                             placeholder="Please provide specific details..."
-                            className="modal-textarea"
+                            className="form-textarea"
                             rows={4}
                             required
                         />
                     </div>
 
                     <div className="modal-actions">
-                        <button type="button" className="cancel-button" onClick={onClose}>
+                        <button type="button" className="btn-secondary" onClick={onClose}>
                             Cancel
                         </button>
-                        <button type="submit" className="submit-button">
+                        <button type="submit" className="btn-primary">
                             Submit Report
                         </button>
                     </div>

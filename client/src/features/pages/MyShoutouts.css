@@ -1,0 +1,100 @@
+.my-shoutouts-container {
+    min-height: 100vh;
+    background-color: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+}
+
+.my-shoutouts-content {
+    margin-top: 60px;
+    padding: 40px 24px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.page-header {
+    margin-bottom: 32px;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 24px 0;
+    letter-spacing: -0.02em;
+}
+
+.tabs-container {
+    display: flex;
+    gap: 12px;
+    background: var(--bg-secondary);
+    padding: 6px;
+    border-radius: 16px;
+    width: fit-content;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+}
+
+.tab-button {
+    padding: 10px 24px;
+    border-radius: 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+}
+
+.tab-button.active {
+    background: var(--accent-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.shoutouts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 80px 40px;
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    border: 1px dashed var(--border-color);
+    color: var(--text-secondary);
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.shoutout-card {
+    transition: transform 0.2s ease;
+}
+
+.shoutout-card:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .my-shoutouts-content {
+        padding: 24px 16px;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+}
