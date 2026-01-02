@@ -29,8 +29,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Routers
 app.include_router(auth_router, prefix="/auth")
-app.include_router(users_router) # Prefix is defined in controller
-app.include_router(shoutouts_router) # Prefix is defined in controller
-app.include_router(reports_router)
-app.include_router(admin_router)
+app.include_router(users_router)        # /users/...
+app.include_router(shoutouts_router)    # /shoutouts/...
+app.include_router(reports_router)      # /reports/...
+app.include_router(admin_router)        # /admin/...
