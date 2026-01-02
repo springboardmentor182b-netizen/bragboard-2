@@ -1,4 +1,4 @@
-Link for Figma Designs: https://www.figma.com/files/team/1570027860587485870/project/495965258/BragBoard-Group-C?fuid=1570017231882215916
+Link for Figma Designs:- https://www.figma.com/files/team/1570027860587485870/project/495965258/BragBoard-Group-C?fuid=1570017231882215916
 
 How to Run Frontend(client) GroupC:-
 
