@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Header from '../layout/Header';
@@ -22,9 +22,9 @@ const MyShoutouts = () => {
       }
     }
     fetchShoutouts();
-  }, []);
+  }, [fetchShoutouts]);
 
-  const fetchShoutouts = async () => {
+  const fetchShoutouts = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -63,7 +63,7 @@ const MyShoutouts = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentUserId]);
 
   const filteredShoutouts = shoutouts.filter(s => {
     if (activeTab === 'received') {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Header from '../layout/Header';
@@ -24,9 +24,9 @@ const FeedPage = () => {
             }
         }
         fetchShoutouts();
-    }, []);
+    }, [fetchShoutouts]);
 
-    const fetchShoutouts = async () => {
+    const fetchShoutouts = useCallback(async () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -65,7 +65,7 @@ const FeedPage = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [currentUserId]);
 
     const handleReportClick = (shoutout) => {
         setCurrentShoutoutToReport(shoutout);
