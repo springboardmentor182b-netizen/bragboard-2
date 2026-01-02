@@ -1,9 +1,0 @@
-fastapi==0.110.0
-uvicorn==0.29.0
-sqlalchemy==2.0.25
-# psycopg2-binary
-passlib[bcrypt]==1.7.4
-python-jose==3.3.0
-pydantic==1.10.15
-email-validator==2.0.0.post2
-python-dotenv==1.0.1
