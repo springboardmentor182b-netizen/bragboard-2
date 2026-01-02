@@ -1,0 +1,7 @@
+{
+  "name": "BragBoard - Professional Recognition & AI Insights",
+  "description": "A streamlined employee recognition platform for celebrating wins, driven by AI sentiment analysis and burnout detection.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
