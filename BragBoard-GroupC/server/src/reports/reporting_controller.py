@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from typing import Optional, List
-from src.database.core import get_database_session
-from src.entities.user import User
+from app.core.database import get_database_session
+from app.models import User
 from src.entities.shoutout_report import ShoutoutReport
 from .reporting_schemas import ReportCreateRequest, ReportUpdateRequest, ReportResponse, ReportingStatsResponse
 from .reporting_service import ReportingService

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey, Enum, func
 from sqlalchemy.orm import relationship
-from src.database.core import Base
+from app.core.database import Base
 
 class ShoutoutReport(Base):
     __tablename__ = "shoutout_reports"

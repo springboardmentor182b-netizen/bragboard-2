@@ -22,12 +22,14 @@ SECRET_KEY = "8bb7aecb8adad4c78e2e441a7583f128"
 ALGORITHM = "HS256"
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 class CreateUserRequest(BaseModel):
+    name: str
     email: str
     password: str
-
+    role: str
+    
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -48,15 +50,23 @@ def authenticate_user(db: Session, email: str, password: str):
     return user
 
 
-def create_access_token(email: str, user_id: int, expires_delta: timedelta):
-    to_encode = {"sub": email, "id": user_id, "exp": datetime.utcnow() + expires_delta}
+def create_access_token(email: str, user_id: int, role: str, expires_delta: timedelta):
+    to_encode = {"sub": email, "id": user_id, "role": role, "exp": datetime.utcnow() + expires_delta}
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_user(create_user_request: CreateUserRequest, db: Session = Depends(get_db)):
+    if create_user_request.role not in ["admin", "employee"]:
+        raise HTTPException(
+            status_code=400,
+            detail="Role must be either 'admin' or 'employee'"
+        )
+
     user = User(
-        email=create_user_request.email,
+        name=create_user_request.name,
+        email=create_user_request.email,    
         hashed_password=bcrypt_context.hash(create_user_request.password),
+        role=create_user_request.role
     )
 
     db.add(user)
@@ -75,18 +85,18 @@ async def login_for_access_token(
             detail="Incorrect username or password.",
         )
 
-    token = create_access_token(user.email, user.id, timedelta(minutes=30))
+    token = create_access_token(user.email, user.id, user.role, timedelta(minutes=30))
 
     return {"access_token": token, "token_type": "bearer"}
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        user_id: int = payload.get("id")
-        if email is None or user_id is None:
-            raise HTTPException(status_code=401, detail="Invalid token")
-        return {"email": email, "id": user_id}
+        return {
+            "email": payload.get("sub"),
+            "id": payload.get("id"),
+            "role": payload.get("role")
+        }
 
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")

@@ -22,7 +22,7 @@ const Sidebar = ({ role }) => {
     { name: "Dashboard", path: "/user/home", icon: <Home size={20} /> },
     { name: "My Reports", path: "/user/reports", icon: <FileText size={20} /> },
     { name: "Leaderboard", path: "/user/leaderboard", icon: <Trophy size={20} /> },
-    { name: "My Shoutouts", path: "/user/my-shoutouts", icon: <Star size={20} /> }, //for EmployeeMyShoutouts.js
+    { name: "My Shoutouts", path: "/user/my-shoutouts", icon: <Star size={20} /> }, 
     { name: "Settings", path: "/user/settings", icon: <Settings size={20} /> },
   ];
 

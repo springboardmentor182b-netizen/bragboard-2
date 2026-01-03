@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { login } from "../features/authentication/services/login";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+
 import "./Login.css";
 
 const LoginForm = () => {
@@ -13,13 +15,25 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      await login(email, password);
+      const data = await login(email, password);
+      const token = data.access_token;
+
+      const decoded = jwtDecode(token);
+      const role = decoded.role;
+
       alert("Login Successful!");
-      navigate("/");
+
+      if (role === "admin") {
+        navigate("/admin/dashboard", { replace: true });
+      } else {
+        navigate("/user/home", { replace: true });
+      }
+
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     }
   };
+
 
   return (
     <div className="login-page-container">
@@ -28,11 +42,11 @@ const LoginForm = () => {
         <h1>BragBoard</h1>
         <p>
           Share shout-outs,<br />
-           recognize contributions,<br /> and climb the leaderboard — Together!
+          recognize contributions,<br /> and climb the leaderboard — Together!
         </p>
       </div>
 
-      
+
       <div className="login-right">
 
         <div className="big-text">

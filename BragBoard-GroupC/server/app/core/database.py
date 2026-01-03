@@ -1,12 +1,11 @@
+import psycopg2
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 import os
-from dotenv import load_dotenv
+import enum
 
-load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost/bragboard")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+psycopg2://postgres:newpassword@localhost:5432/Bragboard")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -15,8 +14,7 @@ Base = declarative_base()
 
 class UserRole(str, enum.Enum):
     EMPLOYEE = "employee"
-    ADMIN = "admin"
-
+    ADMIN = "admin" 
 class ReportStatus(str, enum.Enum):
     PENDING = "pending"
     RESOLVED = "resolved"
