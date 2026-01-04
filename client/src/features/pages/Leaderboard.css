@@ -167,3 +167,83 @@
         display: none;
     }
 }
+
+/* Highlight current user */
+.current-user {
+    border: 2px solid var(--accent-color);
+    background: rgba(255, 215, 0, 0.1);
+}
+
+/* User rank info */
+.user-rank-info {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 16px;
+}
+
+/* Top 3 vs Rest */
+.analytics-bar {
+    display: flex;
+    height: 24px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.top3-bar {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+}
+
+.rest-bar {
+    background: linear-gradient(135deg, #c0c0c0, #708090);
+}
+
+.analytics-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+/* Chart container */
+.leaderboard-chart {
+    margin-top: 40px;
+    padding: 24px;
+    border-radius: 16px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+}
+
+/* SVG stroke & points */
+.leaderboard-chart svg polyline {
+    stroke: var(--accent-color) !important;
+}
+
+.leaderboard-chart svg circle {
+    fill: var(--accent-color) !important;
+}
+
+/* Grid lines */
+.leaderboard-chart .border-gray-700,
+.leaderboard-chart .border-gray-700\/30 {
+    border-color: var(--border-color) !important;
+}
+
+/* Axis labels */
+.leaderboard-chart span {
+    color: var(--text-secondary) !important;
+}
+
+/* Chart titles */
+.leaderboard-chart h3,
+.leaderboard-chart h4 {
+    color: var(--text-primary);
+}
+
+.leaderboard-chart p {
+    color: var(--text-secondary);
+}
