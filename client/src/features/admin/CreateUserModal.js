@@ -8,7 +8,9 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
     email: '',
     password: '',
     full_name: '',
-    role: 'user'
+    full_name: '',
+    role: 'user',
+    department: 'Engineering'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -53,7 +55,9 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
           email: formData.email,
           password: formData.password,
           full_name: formData.full_name || null,
-          role: formData.role
+          full_name: formData.full_name || null,
+          role: formData.role,
+          department: formData.department
         })
       });
 
@@ -69,7 +73,9 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
           email: '',
           password: '',
           full_name: '',
-          role: 'user'
+          full_name: '',
+          role: 'user',
+          department: 'Engineering'
         });
         setSuccess(false);
         if (onSuccess) onSuccess();
@@ -88,7 +94,9 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
         email: '',
         password: '',
         full_name: '',
-        role: 'user'
+        full_name: '',
+        role: 'user',
+        department: 'Engineering'
       });
       setError(null);
       setSuccess(false);
@@ -144,6 +152,29 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
               className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
               placeholder="Minimum 6 characters"
             />
+          </div>
+
+          <div>
+            <label htmlFor="department" className="block text-sm font-medium text-gray-300 mb-2">
+              Department
+            </label>
+            <select
+              id="department"
+              name="department"
+              value={formData.department}
+              onChange={handleChange}
+              disabled={isSubmitting}
+              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+            >
+              <option value="Engineering">Engineering</option>
+              <option value="Product">Product</option>
+              <option value="Design">Design</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Sales">Sales</option>
+              <option value="HR">HR</option>
+              <option value="Operations">Operations</option>
+              <option value="Leadership">Leadership</option>
+            </select>
           </div>
 
           <div>
