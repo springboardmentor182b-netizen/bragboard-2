@@ -4,14 +4,15 @@ from src.entities.todo import Shoutout, Tag, Comment
 from src.entities.user import User
 
 def create_shoutout(db: Session, payload: ShoutoutCreate):
-    recipient = db.get(User, payload.recipient_id)
     shout = Shoutout(
         title=payload.title.strip(),
         message=payload.message,
         sender_id=payload.sender_id,
     )
-    if recipient:
-        shout.recipients.append(recipient)
+    if payload.recipient_ids:
+        # Fetch all recipients
+        recipients = db.query(User).filter(User.id.in_(payload.recipient_ids)).all()
+        shout.recipients.extend(recipients)
     tags = [get_or_create_tag(db, t) for t in (payload.tags or []) if t and t.strip()]
     shout.tags = tags
     db.add(shout)
