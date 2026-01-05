@@ -4,13 +4,12 @@ import './Header.css';
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-  const navItems = ['Dashboard', 'Feed', 'My Shoutouts', 'Leaderboard', 'Settings'];
+  const navItems = ['Dashboard', 'My Shoutouts', 'Leaderboard', 'Settings'];
 
   const getActivePage = () => {
     const path = location.pathname;
     if (path === '/Dashboard') return 'Dashboard';
     if (path === '/settings') return 'Settings';
-    if (path === '/feed') return 'Feed';
     if (path === '/my-shoutouts') return 'My Shoutouts';
     if (path === '/leaderboard') return 'Leaderboard';
     return 'Dashboard';
@@ -19,7 +18,6 @@ function Header() {
   const handleNavClick = (item) => {
     const routeMap = {
       'Dashboard': '/Dashboard',
-      'Feed': '/feed',
       'My Shoutouts': '/my-shoutouts',
       'Leaderboard': '/leaderboard',
       'Settings': '/settings',
