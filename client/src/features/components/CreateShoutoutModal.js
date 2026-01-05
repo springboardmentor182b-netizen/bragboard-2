@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { MentionsInput, Mention } from 'react-mentions';
 import './CreateShoutoutModal.css';
 
 function CreateShoutoutModal({ onClose, onSubmit }) {
   const [formData, setFormData] = useState({
     message: '',
-    taggedUser: '',
   });
 
   /*
@@ -28,9 +28,12 @@ function CreateShoutoutModal({ onClose, onSubmit }) {
     fetchUsers();
   }, []);
 
+  const usersData = availableUsers.map(u => ({ id: u.id, display: u.name }));
+  const departments = [...new Set(availableUsers.map(u => u.department))].filter(Boolean);
+  const departmentsData = departments.map(d => ({ id: `dept-${d}`, display: `${d} (Department)` }));
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, message: e.target.value }));
   };
 
   const handleSubmit = (e) => {
@@ -40,21 +43,41 @@ function CreateShoutoutModal({ onClose, onSubmit }) {
       return;
     }
 
+    // Parse mentions
+    const content = formData.message;
+    const recipientIds = new Set();
+    const regex = /@\[.*?\]\((.*?)\)/g;
+    let match;
+
+    while ((match = regex.exec(content)) !== null) {
+      const id = match[1];
+      if (id.startsWith('dept-')) {
+        const deptName = id.replace('dept-', '');
+        const deptUsers = availableUsers.filter(u => u.department === deptName);
+        deptUsers.forEach(u => recipientIds.add(u.id));
+      } else {
+        recipientIds.add(Number(id));
+      }
+    }
+
+    // Convert markup to readable text for simple display/storage
+    const cleanMessage = content.replace(/@\[(.*?)\]\((.*?)\)/g, '@$1');
+
     const newShoutout = {
       id: Date.now(),
       sender: 'You',
       senderAvatar: '',
       timestamp: 'Just now',
-      message: formData.message,
-      taggedUsers: formData.taggedUser ? [availableUsers.find(u => u.id == formData.taggedUser)?.name] : [],
-      recipientId: Number(formData.taggedUser), // Passing ID relevant for backend logic
+      message: cleanMessage,
+      taggedUsers: [], // Calculated by backend/feed from recipients
+      recipientIds: Array.from(recipientIds),
 
       reactions: { emoji: 0, thumbsUp: 0 },
       comments: 0,
     };
 
     onSubmit(newShoutout);
-    setFormData({ message: '', taggedUser: '' });
+    setFormData({ message: '' });
   };
 
   return (
@@ -82,39 +105,29 @@ function CreateShoutoutModal({ onClose, onSubmit }) {
         </div>
         <form className="modal-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="taggedUser">Tag Employee (Optional)</label>
-            <select
-              id="taggedUser"
-              name="taggedUser"
-              value={formData.taggedUser}
-              onChange={handleChange}
-              className="form-select"
-            >
-              <option value="">Select an employee...</option>
-              {availableUsers.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name} ({user.department})
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
             <label htmlFor="message">Message</label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              placeholder="Write your shoutout message here..."
-              className="form-textarea"
-              rows="6"
-              required
-            />
-            {formData.taggedUser && (
-              <p className="form-hint">
-                Tip: Mention "{availableUsers.find(u => u.id == formData.taggedUser)?.name}" in your message to tag them.
-              </p>
-            )}
+            <div className="mentions-wrapper">
+              <MentionsInput
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Write your shoutout... Use @ to tag people or departments!"
+                className="mentions-input"
+                a11ySuggestionsListLabel={"Suggested mentions"}
+              >
+                <Mention
+                  trigger="@"
+                  data={usersData}
+                  className="mentions-input__mention"
+                  displayTransform={(id, display) => `@${display}`}
+                />
+                <Mention
+                  trigger="@"
+                  data={departmentsData}
+                  className="mentions-input__mention"
+                  displayTransform={(id, display) => `@${display}`}
+                />
+              </MentionsInput>
+            </div>
           </div>
           <div className="modal-actions">
             <button type="button" className="btn-secondary" onClick={onClose}>

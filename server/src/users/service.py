@@ -15,7 +15,7 @@ def create_user(db: Session, user: UserCreate):
         name=user.full_name or user.email.split('@')[0],
         password_hash=hashed_pwd,
         role=user.role,
-        department="General" # Default department for now
+        department=user.department or "General"
     )
     db.add(db_user)
     db.commit()

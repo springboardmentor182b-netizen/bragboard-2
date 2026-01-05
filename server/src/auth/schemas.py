@@ -8,6 +8,7 @@ class UserCreate(BaseModel):
     password: str
     full_name: str | None = None
     role: Literal["admin", "user"] = "user"
+    department: str = "General"
 
 
 class UserLogin(BaseModel):

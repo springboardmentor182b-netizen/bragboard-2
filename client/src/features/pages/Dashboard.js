@@ -110,7 +110,7 @@ function Dashboard() {
         title: "Shoutout",
         message: newShoutout.message,
         sender_id: Number(decoded.user_id || 1),
-        recipient_id: Number(newShoutout.recipientId || 2),
+        recipient_ids: newShoutout.recipientIds || [],
         tags: newShoutout.tags || []
       };
 
