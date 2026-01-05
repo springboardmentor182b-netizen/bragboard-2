@@ -40,6 +40,7 @@ class Comment(Base):
     replies = relationship("Comment", backref=backref("parent", remote_side=[id]), cascade="all, delete-orphan")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    reports = relationship("CommentReport", back_populates="comment", cascade="all, delete-orphan")
 
 # Association Tables defined after Classes to ensure __tablename__ are resolved
 shoutout_recipient_table = Table(

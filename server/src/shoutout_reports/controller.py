@@ -11,10 +11,14 @@ from .models import (
     ShoutoutReportCreate,
     ShoutoutReportRead,
     ShoutoutReportResolve,
-    ReportStatus
+    ReportStatus,
+    CommentReportCreate,
+    CommentReportRead,
+    CommentReportResolve
 )
 
 router = APIRouter(prefix="/api/shoutout-reports", tags=["Shoutout Reports"])
+comment_router = APIRouter(prefix="/api/comment-reports", tags=["Comment Reports"])
 
 
 def verify_user(db: Session, user_id: int) -> User:
@@ -190,3 +194,65 @@ def export_reports(
         )
     
     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid file format requested")
+
+
+# --- Comment Reporting Endpoints ---
+
+@comment_router.post("", response_model=CommentReportRead, status_code=status.HTTP_201_CREATED)
+def create_comment_report_endpoint(
+    payload: CommentReportCreate,
+    reporter_id: int = Query(..., ge=1, description="ID of the employee"),
+    db: Session = Depends(get_db)
+):
+    try:
+        verify_user(db, reporter_id)
+        report = service.create_comment_report(db, reporter_id, payload)
+        return CommentReportRead(**service.to_comment_report_read(db, report))
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+
+@comment_router.get("/my-reports", response_model=List[CommentReportRead])
+def get_my_comment_reports_endpoint(
+    reporter_id: int = Query(..., ge=1, description="ID of the employee"),
+    db: Session = Depends(get_db)
+):
+    verify_user(db, reporter_id)
+    reports = service.get_comment_reports_by_reporter(db, reporter_id)
+    return [CommentReportRead(**service.to_comment_report_read(db, r)) for r in reports]
+
+@comment_router.get("", response_model=List[CommentReportRead])
+def get_all_comment_reports_endpoint(
+    admin_id: int = Query(..., ge=1, description="ID of the admin"),
+    status: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
+):
+    verify_admin(db, admin_id)
+    reports = service.get_all_comment_reports(db, status)
+    return [CommentReportRead(**service.to_comment_report_read(db, r)) for r in reports]
+
+@comment_router.patch("/{report_id}/resolve", response_model=CommentReportRead)
+def resolve_comment_report_endpoint(
+    report_id: int,
+    payload: CommentReportResolve,
+    admin_id: int = Query(..., ge=1, description="ID of the admin"),
+    db: Session = Depends(get_db)
+):
+    verify_admin(db, admin_id)
+    try:
+        report = service.resolve_comment_report(db, report_id, admin_id, payload)
+        return CommentReportRead(**service.to_comment_report_read(db, report))
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+@comment_router.delete("/comments/{comment_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_comment_endpoint(
+    comment_id: int,
+    admin_id: int = Query(..., ge=1, description="ID of the admin"),
+    db: Session = Depends(get_db)
+):
+    verify_admin(db, admin_id)
+    service.delete_comment(db, comment_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
