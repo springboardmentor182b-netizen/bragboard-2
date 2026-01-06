@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LogOut, LayoutDashboard, ShieldAlert, FileText } from 'lucide-react';
+import NotificationBell from '../components/NotificationBell';
 
 // --- 1. ADMIN NAVBAR COMPONENT ---
 const AdminNavbar = () => {
@@ -44,6 +45,12 @@ const AdminNavbar = () => {
         >
           <FileText size={18} /> Reports
         </button>
+
+        {/* Add NotificationBell here */}
+        <div className="flex items-center">
+          <NotificationBell />
+        </div>
+
         <button
           onClick={handleLogout}
           className="flex items-center gap-2 ml-4 hover:text-white transition-colors"

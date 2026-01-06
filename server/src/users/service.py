@@ -25,6 +25,9 @@ def create_user(db: Session, user: UserCreate):
 def list_users(db: Session):
     return db.query(User).all()
 
+def get_admin_users(db: Session):
+    return db.query(User).filter(User.role == "admin").all()
+
 def get_leaderboard(db: Session, limit: int = 5):
     """
     Returns users ordered by number of shoutouts received.

@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Enum as SQLEnum
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 import enum
 from src.database.core import Base
@@ -28,7 +28,7 @@ class ShoutoutReport(Base):
     
     # Relationships
     shoutout = relationship("Shoutout", back_populates="reports")
-    reporter = relationship("User", foreign_keys=[reporter_id], backref="reported_shoutouts")
+    reporter = relationship("User", foreign_keys=[reporter_id], backref=backref("reported_shoutouts", cascade="all, delete-orphan"))
     resolver = relationship("User", foreign_keys=[resolved_by])
 
 
@@ -47,6 +47,6 @@ class CommentReport(Base):
 
     # Relationships
     comment = relationship("Comment", back_populates="reports")
-    reporter = relationship("User", foreign_keys=[reporter_id], backref="reported_comments")
+    reporter = relationship("User", foreign_keys=[reporter_id], backref=backref("reported_comments", cascade="all, delete-orphan"))
     resolver = relationship("User", foreign_keys=[resolved_by])
 

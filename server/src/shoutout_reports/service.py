@@ -51,6 +51,22 @@ def create_report(db: Session, reporter_id: int, payload: ShoutoutReportCreate) 
     db.add(report)
     db.commit()
     db.refresh(report)
+
+    # Notify Admins
+    from src.users.service import get_admin_users
+    from src.notifications.service import create_notification
+    from src.notifications.models import NotificationCreate
+    
+    admins = get_admin_users(db)
+    for admin in admins:
+        notif = NotificationCreate(
+            recipient_id=admin.id,
+            type="report",
+            message=f"New Shoutout Report against shoutout #{payload.shoutout_id}",
+            link="/admin/moderation"
+        )
+        create_notification(db, notif)
+
     return report
 
 
@@ -120,6 +136,19 @@ def resolve_report(db: Session, report_id: int, admin_id: int, payload: Shoutout
     
     db.commit()
     db.refresh(report)
+
+            # Notify reporter
+    from src.notifications.service import create_notification
+    from src.notifications.models import NotificationCreate
+    
+    notif = NotificationCreate(
+        recipient_id=report.reporter_id,
+        type="report_resolved",
+        message=f"Your report against shoutout #{report.shoutout_id} has been resolved: {status_enum.value}",
+        link=f"/my-reports"
+    )
+    create_notification(db, notif)
+
     return report
 
 
@@ -298,6 +327,22 @@ def create_comment_report(db: Session, reporter_id: int, payload: CommentReportC
     db.add(report)
     db.commit()
     db.refresh(report)
+
+    # Notify Admins
+    from src.users.service import get_admin_users
+    from src.notifications.service import create_notification
+    from src.notifications.models import NotificationCreate
+    
+    admins = get_admin_users(db)
+    for admin in admins:
+        notif = NotificationCreate(
+            recipient_id=admin.id,
+            type="report",
+            message=f"New Comment Report against comment #{payload.comment_id}",
+            link="/admin/moderation"
+        )
+        create_notification(db, notif)
+
     return report
 
 def get_comment_reports_by_reporter(db: Session, reporter_id: int) -> List[CommentReport]:
@@ -348,6 +393,19 @@ def resolve_comment_report(db: Session, report_id: int, admin_id: int, payload: 
     
     db.commit()
     db.refresh(report)
+
+    # Notify reporter
+    from src.notifications.service import create_notification
+    from src.notifications.models import NotificationCreate
+    
+    notif = NotificationCreate(
+        recipient_id=report.reporter_id,
+        type="report_resolved",
+        message=f"Your report against comment #{report.comment_id} has been resolved: {status_enum.value}",
+        link=f"/my-reports"
+    )
+    create_notification(db, notif)
+
     return report
 
 

@@ -38,7 +38,8 @@ def send_welcome_email(to_email: str):
     msg.set_content(
         "Your account has been created successfully.\n\n"
         "You can now log in and start using the app.\n\n"
-        "Please ask for the password from the Administrator."
+        "your password is 123456.\n\n"
+        "Please change your password after first login."
     )
 
     try:

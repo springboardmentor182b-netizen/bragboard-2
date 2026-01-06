@@ -1,10 +1,18 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import NotificationBell from '../components/NotificationBell';
 import './Header.css';
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Get role from storage
+  const role = localStorage.getItem('role') || sessionStorage.getItem('role');
+
   const navItems = ['Dashboard', 'My Shoutouts', 'Leaderboard', 'Settings'];
+  if (role === 'admin') {
+    navItems.push('Admin Dashboard');
+  }
 
   const getActivePage = () => {
     const path = location.pathname;
@@ -12,6 +20,7 @@ function Header() {
     if (path === '/settings') return 'Settings';
     if (path === '/my-shoutouts') return 'My Shoutouts';
     if (path === '/leaderboard') return 'Leaderboard';
+    if (path === '/admin-dashboard') return 'Admin Dashboard';
     return 'Dashboard';
   };
 
@@ -21,6 +30,7 @@ function Header() {
       'My Shoutouts': '/my-shoutouts',
       'Leaderboard': '/leaderboard',
       'Settings': '/settings',
+      'Admin Dashboard': '/admin-dashboard',
     };
     const route = routeMap[item];
     if (route) {
@@ -70,7 +80,8 @@ function Header() {
             ))}
           </nav>
         </div>
-        <div className="header-right">
+        <div className="header-right flex items-center gap-4">
+          <NotificationBell />
           <button className="logout-button" onClick={handleLogout}>→ Logout</button>
         </div>
       </div>

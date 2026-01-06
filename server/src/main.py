@@ -16,6 +16,7 @@ from src.database.core import engine, Base
 from src.entities.user import User
 from src.entities.todo import Shoutout, Comment, Tag
 from src.entities.shoutout_report import ShoutoutReport, CommentReport
+from src.entities.notification import Notification
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -40,6 +41,9 @@ app.include_router(reports_router)
 app.include_router(comment_router)
 app.include_router(comment_router)
 app.include_router(admin_router)
+
+from src.notifications.controller import router as notifications_router
+app.include_router(notifications_router)
 
 @app.post("/test-email")
 def test_email_endpoint(email: str):
