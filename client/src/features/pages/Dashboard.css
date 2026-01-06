@@ -129,15 +129,17 @@
   }
 
   /* Stack header items */
-  .dashboard-header-section {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+  div.dashboard-header-section {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
   }
 
   .dashboard-actions {
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-between !important;
+    flex-wrap: wrap;
+    gap: 12px;
   }
 
   .sort-dropdown {

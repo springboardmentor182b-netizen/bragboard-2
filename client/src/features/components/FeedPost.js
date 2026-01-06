@@ -278,11 +278,11 @@ function FeedPost({ shoutout, onReport, currentUserId, onInteraction, onReportCo
             <span className="avatar-initials">{getInitials(shoutout.sender)}</span>
           )}
         </div>
-        <div className="post-header-text">
+        <div className="post-header-text" style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
           <span className="post-author">{shoutout.sender}</span>
           {shoutout.department && (
             <span className="post-department">
-              • {shoutout.department}
+              {shoutout.department}
             </span>
           )}
           <span className="post-time">{shoutout.timestamp}</span>

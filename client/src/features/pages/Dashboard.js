@@ -223,7 +223,7 @@ function Dashboard() {
       <Header />
       <div className="dashboard-content">
         <div className="dashboard-main">
-          <div className="dashboard-header-section">
+          <div className="dashboard-header-section" style={{ flexWrap: 'wrap' }}>
             <h1 className="dashboard-title">Dashboard</h1>
             <div className="dashboard-actions">
               <select

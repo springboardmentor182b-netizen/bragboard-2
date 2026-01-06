@@ -48,8 +48,8 @@
 }
 
 .post-header-text {
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
   justify-content: center;
   flex: 1;
   min-width: 0;

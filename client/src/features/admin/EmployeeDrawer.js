@@ -51,7 +51,7 @@ const EmployeeDrawer = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <div className="fixed inset-y-0 right-0 w-80 bg-gray-950 border-l border-gray-800 shadow-2xl transform transition-transform duration-300 z-50 p-6 flex flex-col">
+      <div className="fixed inset-0 z-[60] w-full h-full bg-gray-950 shadow-2xl transform transition-transform duration-300 p-6 flex flex-col md:inset-y-0 md:right-0 md:left-auto md:w-96 md:border-l md:border-gray-800">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-white text-lg font-bold">Manage Access</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
