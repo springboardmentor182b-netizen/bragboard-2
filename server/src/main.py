@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from src.auth.routes import router as auth_router
 from src.users.controller import router as users_router
@@ -35,4 +38,11 @@ app.include_router(users_router) # Prefix is defined in controller
 app.include_router(shoutouts_router) # Prefix is defined in controller
 app.include_router(reports_router)
 app.include_router(comment_router)
+app.include_router(comment_router)
 app.include_router(admin_router)
+
+@app.post("/test-email")
+def test_email_endpoint(email: str):
+    from src.auth.utils import send_welcome_email
+    send_welcome_email(email)
+    return {"message": f"Test email process triggered for {email}. Check server logs for details."}
