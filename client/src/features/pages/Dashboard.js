@@ -6,12 +6,17 @@ import Feed from '../components/Feed';
 import Sidebar from '../components/Sidebar';
 import CreateShoutoutModal from '../components/CreateShoutoutModal';
 import ReportShoutoutModal from '../components/ReportShoutoutModal';
+import ReportCommentModal from '../components/ReportCommentModal'; // Added import
 import './Dashboard.css';
 
 function Dashboard() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [currentShoutoutToReport, setCurrentShoutoutToReport] = useState(null);
+
+  // Added state for comment reporting
+  const [isReportCommentModalOpen, setIsReportCommentModalOpen] = useState(false);
+  const [currentCommentToReport, setCurrentCommentToReport] = useState(null);
 
   const [sortBy, setSortBy] = useState('newest');
 
@@ -171,6 +176,35 @@ function Dashboard() {
     }
   };
 
+  const handleReportCommentClick = (comment) => {
+    console.log("Reporting comment:", comment);
+    setCurrentCommentToReport(comment);
+    setIsReportCommentModalOpen(true);
+  };
+
+  const handleSubmitCommentReport = async (reportData) => {
+    try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      if (!token) return;
+      const decoded = jwtDecode(token);
+
+      const payload = {
+        comment_id: currentCommentToReport.id,
+        reason: reportData.reason,
+        description: reportData.description
+      };
+
+      await axios.post(`http://127.0.0.1:8000/api/comment-reports?reporter_id=${decoded.user_id}`, payload);
+
+      setIsReportCommentModalOpen(false);
+      setCurrentCommentToReport(null);
+      alert('Comment report submitted successfully!');
+    } catch (error) {
+      console.error("Failed to submit comment report:", error);
+      alert("Failed to submit report. Please try again.");
+    }
+  };
+
   const getSortedShoutouts = () => {
     const shoutoutsCopy = [...shoutouts];
     if (sortBy === 'department') {
@@ -238,7 +272,13 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          <Feed shoutouts={getSortedShoutouts()} onReport={handleReportClick} currentUserId={currentUserId} onInteraction={fetchShoutouts} />
+          <Feed
+            shoutouts={getSortedShoutouts()}
+            onReport={handleReportClick}
+            onReportComment={handleReportCommentClick}
+            currentUserId={currentUserId}
+            onInteraction={fetchShoutouts}
+          />
         </div>
         <Sidebar />
       </div>
@@ -277,6 +317,14 @@ function Dashboard() {
           shoutoutSender={currentShoutoutToReport.sender}
           onClose={() => setIsReportModalOpen(false)}
           onSubmit={handleSubmitReport}
+        />
+      )}
+
+      {isReportCommentModalOpen && currentCommentToReport && (
+        <ReportCommentModal
+          commentAuthor={currentCommentToReport.author?.name || 'Unknown'}
+          onClose={() => setIsReportCommentModalOpen(false)}
+          onSubmit={handleSubmitCommentReport}
         />
       )}
 

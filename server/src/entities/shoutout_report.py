@@ -4,6 +4,7 @@ from datetime import datetime
 import enum
 from src.database.core import Base
 from src.entities.user import User
+from src.entities.todo import Comment
 
 
 class ReportStatus(enum.Enum):
@@ -28,5 +29,24 @@ class ShoutoutReport(Base):
     # Relationships
     shoutout = relationship("Shoutout", back_populates="reports")
     reporter = relationship("User", foreign_keys=[reporter_id], backref="reported_shoutouts")
+    resolver = relationship("User", foreign_keys=[resolved_by])
+
+
+class CommentReport(Base):
+    __tablename__ = "comment_reports"
+    id = Column(Integer, primary_key=True, index=True)
+    comment_id = Column(Integer, ForeignKey("shoutout_comments.id", ondelete="CASCADE"), nullable=False)
+    reporter_id = Column(Integer, ForeignKey(User.id, ondelete="CASCADE"), nullable=False)
+    reason = Column(String(200), nullable=False)
+    description = Column(Text, nullable=True)
+    status = Column(SQLEnum(ReportStatus), default=ReportStatus.PENDING, nullable=False)
+    resolved_by = Column(Integer, ForeignKey(User.id, ondelete="SET NULL"), nullable=True)
+    resolved_at = Column(DateTime, nullable=True)
+    resolution_notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    # Relationships
+    comment = relationship("Comment", back_populates="reports")
+    reporter = relationship("User", foreign_keys=[reporter_id], backref="reported_comments")
     resolver = relationship("User", foreign_keys=[resolved_by])
 

@@ -4,6 +4,7 @@ import Header from '../layout/Header';
 import './Settings.css';
 import { useTheme } from '../../context/ThemeContext';
 import ReportedShoutoutsModal from '../components/ReportedShoutoutsModal';
+import ReportedCommentsModal from '../components/ReportedCommentsModal';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 
@@ -21,6 +22,9 @@ function Settings() {
   const [isViewReportsOpen, setIsViewReportsOpen] = useState(false);
   const [reportedShoutouts, setReportedShoutouts] = useState([]);
 
+  const [isViewCommentReportsOpen, setIsViewCommentReportsOpen] = useState(false);
+  const [reportedComments, setReportedComments] = useState([]);
+
   // Theme toggle
   const { toggleTheme } = useTheme();
 
@@ -36,8 +40,14 @@ function Settings() {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
       if (!token) return;
       const decoded = jwtDecode(token);
-      const response = await axios.get(`http://127.0.0.1:8000/api/shoutout-reports/my-reports?reporter_id=${decoded.user_id}`);
-      setReportedShoutouts(response.data);
+
+      const [shoutoutRes, commentRes] = await Promise.all([
+        axios.get(`http://127.0.0.1:8000/api/shoutout-reports/my-reports?reporter_id=${decoded.user_id}`),
+        axios.get(`http://127.0.0.1:8000/api/comment-reports/my-reports?reporter_id=${decoded.user_id}`)
+      ]);
+
+      setReportedShoutouts(shoutoutRes.data);
+      setReportedComments(commentRes.data);
     } catch (error) {
       console.error("Error fetching my reports:", error);
     }
@@ -177,16 +187,28 @@ function Settings() {
 
           <div className="settings-section">
             <h2 className="section-title">Reports</h2>
-            <button
-              className="view-reports-button settings-button secondary"
-              onClick={() => {
-                fetchMyReports();
-                setIsViewReportsOpen(true);
-              }}
-              style={{ width: 'auto', display: 'inline-block' }}
-            >
-              View My Reports
-            </button>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <button
+                className="view-reports-button settings-button secondary"
+                onClick={() => {
+                  fetchMyReports();
+                  setIsViewReportsOpen(true);
+                }}
+                style={{ width: 'auto' }}
+              >
+                View Shoutout Reports
+              </button>
+              <button
+                className="view-reports-button settings-button secondary"
+                onClick={() => {
+                  fetchMyReports();
+                  setIsViewCommentReportsOpen(true);
+                }}
+                style={{ width: 'auto' }}
+              >
+                View Comment Reports
+              </button>
+            </div>
           </div>
 
           <div className="settings-section">
@@ -261,6 +283,13 @@ function Settings() {
         <ReportedShoutoutsModal
           reports={reportedShoutouts}
           onClose={() => setIsViewReportsOpen(false)}
+        />
+      )}
+
+      {isViewCommentReportsOpen && (
+        <ReportedCommentsModal
+          reports={reportedComments}
+          onClose={() => setIsViewCommentReportsOpen(false)}
         />
       )}
     </div>
