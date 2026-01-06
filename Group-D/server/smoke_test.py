@@ -67,3 +67,4 @@ if __name__ == "__main__":
         fetch_users(token)
     else:
         print("Could not obtain token. Ensure the server is running on http://127.0.0.1:8000")
+
