@@ -20,10 +20,29 @@ def create_user(db: Session, user: UserCreate):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+
+    # Trigger Welcome Notification
+    from src.notifications.service import create_notification
+    from src.notifications.models import NotificationCreate
+    
+    try:
+        notif = NotificationCreate(
+            recipient_id=db_user.id,
+            type="system",
+            message="Welcome to BragBoard! We're glad you're here.",
+            link="/dashboard"
+        )
+        create_notification(db, notif)
+    except Exception as e:
+        print(f"Failed to send welcome notification: {e}")
+
     return db_user
 
 def list_users(db: Session):
     return db.query(User).all()
+
+def get_admin_users(db: Session):
+    return db.query(User).filter(User.role == "admin").all()
 
 def get_leaderboard(db: Session, limit: int = 5):
     """

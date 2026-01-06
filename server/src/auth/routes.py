@@ -18,7 +18,21 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         return {"error": "User already exists"}
     new_user = user_service.create_user(db, user)
 
-    send_welcome_email(new_user.email)  
+    try:
+        send_welcome_email(new_user.email)
+    except Exception as e:
+        print(f"Failed to send welcome email: {e}")  
+    
+    # Trigger Welcome Notification
+    from src.notifications.service import create_notification
+    from src.notifications.models import NotificationCreate
+    welcome_notif = NotificationCreate(
+        recipient_id=new_user.id,
+        type="welcome",
+        message="Welcome to Bragboard! Check out the latest shoutouts.",
+        link="/dashboard"
+    )
+    create_notification(db, welcome_notif)  
 
     return {"msg": "User registered successfully", "role": new_user.role}
 

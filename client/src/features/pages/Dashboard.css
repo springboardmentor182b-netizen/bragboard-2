@@ -128,6 +128,26 @@
     padding: 16px;
   }
 
+  /* Stack header items */
+  div.dashboard-header-section {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  .dashboard-actions {
+    width: 100%;
+    justify-content: space-between !important;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .sort-dropdown {
+    flex: 1;
+    min-width: 0;
+    /* Allow shrinking */
+  }
+
   .dashboard-title {
     font-size: 1.5rem;
   }

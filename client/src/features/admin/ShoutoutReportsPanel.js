@@ -3,6 +3,7 @@ import { AlertCircle, CheckCircle2, Loader2, RefreshCw, ShieldAlert } from 'luci
 import ResolveReportModal from './ResolveReportModal';
 import {
   DEFAULT_ADMIN_ID,
+  getCurrentUserId,
   fetchShoutoutReports,
   resolveShoutoutReport,
   deleteShoutout,
@@ -15,7 +16,7 @@ const statusClasses = {
 };
 
 const ShoutoutReportsPanel = () => {
-  const [adminIdInput, setAdminIdInput] = useState(DEFAULT_ADMIN_ID);
+  const [adminIdInput, setAdminIdInput] = useState(getCurrentUserId() || DEFAULT_ADMIN_ID);
   const [statusFilter, setStatusFilter] = useState('all');
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
