@@ -206,7 +206,7 @@ function LoginPage() {
           {(mode === MODES.LOGIN || mode === MODES.FORGOT) && (
             <>
               <label className="login-label" htmlFor="email">
-                Email address (optional)
+                Email address
               </label>
               <input
                 id="email"
@@ -223,7 +223,7 @@ function LoginPage() {
           {mode === MODES.LOGIN && (
             <>
               <label className="login-label" htmlFor="password">
-                Password (optional)
+                Password
               </label>
               <input
                 id="password"

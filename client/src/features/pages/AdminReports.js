@@ -4,6 +4,7 @@ import AdminNavbar from '../admin/AdminNavbar';
 import {
     DEFAULT_ADMIN_ID,
     fetchShoutoutReports,
+    getCurrentUserId,
     exportReports
 } from '../admin/shoutoutReportsApi';
 
@@ -12,7 +13,7 @@ const AdminReports = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [isExporting, setIsExporting] = useState(false);
-    const [adminIdInput] = useState(DEFAULT_ADMIN_ID); // Could make editable if needed
+    const [adminIdInput] = useState(getCurrentUserId() || DEFAULT_ADMIN_ID); // Use dynamic ID first
 
     const loadReportHistory = async () => {
         setLoading(true);

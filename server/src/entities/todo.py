@@ -15,7 +15,7 @@ class Shoutout(Base):
     __tablename__ = "shoutouts"
     id = Column(Integer, primary_key=True, index=True)
     sender_id = Column(Integer, ForeignKey(User.id, ondelete="CASCADE"), nullable=False)
-    sender = relationship("User", foreign_keys=[sender_id])
+    sender = relationship("User", foreign_keys=[sender_id], backref=backref("shoutouts_sent", cascade="all, delete-orphan"))
     title = Column(String(300), nullable=False)
     message = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -32,7 +32,7 @@ class Comment(Base):
     __tablename__ = "shoutout_comments"
     id = Column(Integer, primary_key=True, index=True)
     author_id = Column(Integer, ForeignKey(User.id, ondelete="CASCADE"), nullable=False)
-    author = relationship("User")
+    author = relationship("User", backref=backref("comments_made", cascade="all, delete-orphan"))
     shoutout_id = Column(Integer, ForeignKey("shoutouts.id", ondelete="CASCADE"), nullable=False)
     shoutout = relationship("Shoutout", back_populates="comments")
     content = Column(Text, nullable=False)
@@ -40,6 +40,7 @@ class Comment(Base):
     replies = relationship("Comment", backref=backref("parent", remote_side=[id]), cascade="all, delete-orphan")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    reports = relationship("CommentReport", back_populates="comment", cascade="all, delete-orphan")
 
 # Association Tables defined after Classes to ensure __tablename__ are resolved
 shoutout_recipient_table = Table(

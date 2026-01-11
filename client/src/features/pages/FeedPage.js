@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Header from '../layout/Header';
 import Feed from '../components/Feed';
 import ReportShoutoutModal from '../components/ReportShoutoutModal';
+import ReportCommentModal from '../components/ReportCommentModal';
 import './Dashboard.css'; // Reusing dashboard styles for consistent layout
 
 const FeedPage = () => {
@@ -12,6 +13,8 @@ const FeedPage = () => {
     const [currentUserId, setCurrentUserId] = useState(null);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [currentShoutoutToReport, setCurrentShoutoutToReport] = useState(null);
+    const [isReportCommentModalOpen, setIsReportCommentModalOpen] = useState(false);
+    const [currentCommentToReport, setCurrentCommentToReport] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -24,9 +27,9 @@ const FeedPage = () => {
             }
         }
         fetchShoutouts();
-    }, []);
+    }, [fetchShoutouts]);
 
-    const fetchShoutouts = async () => {
+    const fetchShoutouts = useCallback(async () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -65,7 +68,7 @@ const FeedPage = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [currentUserId]);
 
     const handleReportClick = (shoutout) => {
         setCurrentShoutoutToReport(shoutout);
@@ -95,6 +98,35 @@ const FeedPage = () => {
         }
     };
 
+    const handleReportCommentClick = (comment) => {
+        console.log("Reporting comment:", comment);
+        setCurrentCommentToReport(comment);
+        setIsReportCommentModalOpen(true);
+    };
+
+    const handleSubmitCommentReport = async (reportData) => {
+        try {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            if (!token) return;
+            const decoded = jwtDecode(token);
+
+            const payload = {
+                comment_id: currentCommentToReport.id,
+                reason: reportData.reason,
+                description: reportData.description
+            };
+
+            await axios.post(`http://127.0.0.1:8000/api/comment-reports?reporter_id=${decoded.user_id}`, payload);
+
+            setIsReportCommentModalOpen(false);
+            setCurrentCommentToReport(null);
+            alert('Comment report submitted successfully!');
+        } catch (error) {
+            console.error("Failed to submit comment report:", error);
+            alert("Failed to submit report. Please try again.");
+        }
+    };
+
     return (
         <div className="dashboard-container">
             <Header />
@@ -115,6 +147,7 @@ const FeedPage = () => {
                         <Feed
                             shoutouts={shoutouts}
                             onReport={handleReportClick}
+                            onReportComment={handleReportCommentClick}
                             currentUserId={currentUserId}
                             onInteraction={fetchShoutouts}
                         />
@@ -127,6 +160,14 @@ const FeedPage = () => {
                     shoutoutSender={currentShoutoutToReport.sender}
                     onClose={() => setIsReportModalOpen(false)}
                     onSubmit={handleSubmitReport}
+                />
+            )}
+
+            {isReportCommentModalOpen && currentCommentToReport && (
+                <ReportCommentModal
+                    commentAuthor={currentCommentToReport.author?.name || 'Unknown'}
+                    onClose={() => setIsReportCommentModalOpen(false)}
+                    onSubmit={handleSubmitCommentReport}
                 />
             )}
         </div>

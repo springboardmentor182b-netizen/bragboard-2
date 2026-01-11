@@ -7,7 +7,7 @@ class ShoutoutCreate(BaseModel):
     title: str = Field(..., max_length=300)
     message: str
     sender_id: int
-    recipient_id: int
+    recipient_ids: List[int] = []
     tags: Optional[List[str]] = None
 
 class TagRead(BaseModel):

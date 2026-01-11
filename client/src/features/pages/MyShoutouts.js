@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Header from '../layout/Header';
@@ -11,20 +11,7 @@ const MyShoutouts = () => {
   const [loading, setLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState(null);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        setCurrentUserId(decoded.user_id);
-      } catch (e) {
-        console.error("Invalid token", e);
-      }
-    }
-    fetchShoutouts();
-  }, []);
-
-  const fetchShoutouts = async () => {
+  const fetchShoutouts = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -63,7 +50,20 @@ const MyShoutouts = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentUserId]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setCurrentUserId(decoded.user_id);
+      } catch (e) {
+        console.error("Invalid token", e);
+      }
+    }
+    fetchShoutouts();
+  }, [fetchShoutouts]);
 
   const filteredShoutouts = shoutouts.filter(s => {
     if (activeTab === 'received') {

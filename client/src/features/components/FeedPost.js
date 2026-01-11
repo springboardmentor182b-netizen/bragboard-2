@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import './FeedPost.css';
 
-function FeedPost({ shoutout, onReport, currentUserId, onInteraction }) {
+function FeedPost({ shoutout, onReport, currentUserId, onInteraction, onReportComment }) {
   const [showMenu, setShowMenu] = useState(false);
   const [localComments, setLocalComments] = useState(shoutout.comments || []);
   const [showComments, setShowComments] = useState(false);
@@ -221,6 +221,26 @@ function FeedPost({ shoutout, onReport, currentUserId, onInteraction }) {
           >
             Reply
           </button>
+          {currentUserId && (
+            <button
+              className="report-icon-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log('Report button clicked');
+                if (onReportComment) onReportComment(comment);
+              }}
+              title="Report this comment"
+              style={{ marginLeft: '4px', padding: '8px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', display: 'inline-flex', alignItems: 'center', opacity: 0.7 }}
+              onMouseOver={(e) => e.currentTarget.style.opacity = 1}
+              onMouseOut={(e) => e.currentTarget.style.opacity = 0.7}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ pointerEvents: 'none' }}>
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </button>
+          )}
         </div>
       </div>
 
@@ -258,11 +278,11 @@ function FeedPost({ shoutout, onReport, currentUserId, onInteraction }) {
             <span className="avatar-initials">{getInitials(shoutout.sender)}</span>
           )}
         </div>
-        <div className="post-header-text">
+        <div className="post-header-text" style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
           <span className="post-author">{shoutout.sender}</span>
           {shoutout.department && (
             <span className="post-department">
-              • {shoutout.department}
+              {shoutout.department}
             </span>
           )}
           <span className="post-time">{shoutout.timestamp}</span>

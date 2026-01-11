@@ -10,6 +10,21 @@ const getAuthHeaders = () => {
   return token ? { 'Authorization': `Bearer ${token}` } : {};
 };
 
+export const getCurrentUserId = () => {
+  try {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    if (!token) return null;
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload).user_id;
+  } catch (e) {
+    return null;
+  }
+};
+
 const extractError = async (response) => {
   try {
     const data = await response.json();
@@ -97,3 +112,64 @@ export async function exportReports(format = 'csv', adminId = DEFAULT_ADMIN_ID) 
   return response.blob();
 }
 
+
+export async function fetchCommentReports({ adminId = DEFAULT_ADMIN_ID, status }) {
+  const search = new URLSearchParams({ admin_id: adminId });
+  if (status) {
+    search.append('status', status);
+  }
+
+  const response = await fetch(`${API_URL}/comment-reports?${search.toString()}`, {
+    headers: { ...getAuthHeaders() }
+  });
+  if (!response.ok) {
+    throw new Error(await extractError(response));
+  }
+
+  return response.json();
+}
+
+export async function resolveCommentReport(
+  reportId,
+  { adminId = DEFAULT_ADMIN_ID, status, resolutionNotes }
+) {
+  const search = new URLSearchParams({ admin_id: adminId });
+  const payload = {
+    status: status?.toLowerCase(),
+    resolution_notes: resolutionNotes || '',
+  };
+
+  const response = await fetch(
+    `${API_URL}/comment-reports/${reportId}/resolve?${search.toString()}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify(payload),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(await extractError(response));
+  }
+
+  return response.json();
+}
+
+export async function deleteComment(commentId, adminId = DEFAULT_ADMIN_ID) {
+  const search = new URLSearchParams({ admin_id: adminId });
+  const url = `${API_URL}/comment-reports/comments/${commentId}?${search.toString()}`;
+  console.log(`Attempting to delete comment at: ${url}`);
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: { ...getAuthHeaders() }
+  });
+
+  if (!response.ok && response.status !== 204) {
+    throw new Error(await extractError(response));
+  }
+
+  return true;
+}

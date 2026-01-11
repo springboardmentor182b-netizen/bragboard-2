@@ -44,3 +44,34 @@ class ShoutoutReportRead(BaseModel):
     shoutout_message: Optional[str] = None
     shoutout_sender_id: Optional[int] = None
 
+
+class CommentReportCreate(BaseModel):
+    comment_id: int = Field(..., ge=1, description="ID of the comment being reported")
+    reason: str = Field(..., min_length=1, max_length=200, description="Reason for reporting")
+    description: Optional[str] = Field(None, max_length=5000, description="Optional detailed description")
+
+
+class CommentReportResolve(BaseModel):
+    status: ReportStatus = Field(..., description="Resolution status: 'resolved', 'dismissed'")
+    resolution_notes: Optional[str] = Field(None, max_length=5000)
+
+
+class CommentReportRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True, use_enum_values=True)
+    
+    id: int
+    comment_id: int
+    reporter_id: int
+    reporter_name: Optional[str] = None
+    reason: str
+    description: Optional[str] = None
+    status: ReportStatus
+    resolved_by: Optional[int] = None
+    resolver_name: Optional[str] = None
+    resolved_at: Optional[datetime] = None
+    resolution_notes: Optional[str] = None
+    created_at: datetime
+    
+    comment_content: Optional[str] = None
+    comment_author_id: Optional[int] = None
+

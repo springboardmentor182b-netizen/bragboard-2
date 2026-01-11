@@ -2,23 +2,41 @@ from sqlalchemy.orm import Session, joinedload
 from .models import ShoutoutCreate
 from src.entities.todo import Shoutout, Tag, Comment
 from src.entities.user import User
+from src.notifications.service import create_notification
+from src.notifications.models import NotificationCreate
 
 def create_shoutout(db: Session, payload: ShoutoutCreate):
-    recipient = db.get(User, payload.recipient_id)
     shout = Shoutout(
         title=payload.title.strip(),
         message=payload.message,
         sender_id=payload.sender_id,
     )
-    if recipient:
-        shout.recipients.append(recipient)
+    # Fetch sender for notification details
+    sender = db.get(User, payload.sender_id)
+    sender_name = sender.name if sender else "Someone"
+
+
+    if payload.recipient_ids:
+        # Fetch all recipients
+        recipients = db.query(User).filter(User.id.in_(payload.recipient_ids)).all()
+        shout.recipients.extend(recipients)
+        
+        # Trigger Notification for each tagged user
+        for recipient in recipients:
+             if recipient.id != payload.sender_id:
+                notif = NotificationCreate(
+                    recipient_id=recipient.id,
+                    type="shoutout_tag",
+                    message=f"{sender_name} tagged you in a shoutout",
+                    link=f"/dashboard" 
+                )
+                create_notification(db, notif)
+
     tags = [get_or_create_tag(db, t) for t in (payload.tags or []) if t and t.strip()]
     shout.tags = tags
     db.add(shout)
     db.commit()
     db.refresh(shout)
-    # Eagerly load sender for response model serialization
-    db.refresh(shout, ['sender'])
     return shout
 
 def get_or_create_tag(db: Session, tag_name: str):
@@ -72,6 +90,15 @@ def toggle_like(db: Session, shoutout_id: int, user_id: int):
         shout.likes.remove(user)
     else:
         shout.likes.append(user)
+        # Notify author if not self-reaction
+        if shout.sender_id != user_id:
+            notif = NotificationCreate(
+                recipient_id=shout.sender_id,
+                type="like",
+                message=f"{user.name} liked your shoutout",
+                link=f"/dashboard" # TBD specific link
+            )
+            create_notification(db, notif)
     
     db.commit()
     db.refresh(shout)
@@ -89,6 +116,15 @@ def toggle_clap(db: Session, shoutout_id: int, user_id: int):
         shout.claps.remove(user)
     else:
         shout.claps.append(user)
+        # Notify author if not self-reaction
+        if shout.sender_id != user_id:
+            notif = NotificationCreate(
+                recipient_id=shout.sender_id,
+                type="clap",
+                message=f"{user.name} clapped for your shoutout",
+                link=f"/dashboard"
+            )
+            create_notification(db, notif)
     
     db.commit()
     db.refresh(shout)
@@ -106,6 +142,15 @@ def toggle_star(db: Session, shoutout_id: int, user_id: int):
         shout.stars.remove(user)
     else:
         shout.stars.append(user)
+        # Notify author if not self-reaction
+        if shout.sender_id != user_id:
+            notif = NotificationCreate(
+                recipient_id=shout.sender_id,
+                type="star",
+                message=f"{user.name} starred your shoutout",
+                link=f"/dashboard"
+            )
+            create_notification(db, notif)
     
     db.commit()
     db.refresh(shout)
@@ -126,6 +171,19 @@ def add_comment(db: Session, shoutout_id: int, user_id: int, content: str, paren
     db.add(comment)
     db.commit()
     db.refresh(comment)
+
+    # Notify shoutout author
+    if shout.sender_id != user_id:
+        author = db.get(User, user_id)
+        author_name = author.name if author else "Someone"
+        notif = NotificationCreate(
+            recipient_id=shout.sender_id,
+            type="comment",
+            message=f"{author_name} commented on your shoutout",
+            link=f"/dashboard"
+        )
+        create_notification(db, notif)
+
     return comment
 
 def get_recent_reactions(db: Session, limit: int = 5):

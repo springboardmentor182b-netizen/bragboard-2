@@ -5,7 +5,7 @@ from src.auth.auth import create_access_token, verify_password, hash_password
 from src.auth.utils import send_otp
 from src.database.core import get_db
 from src.users import service as user_service
-
+from src.auth.utils import send_welcome_email
 router = APIRouter()
 
 # In-memory OTP store (still okay for simple demo, but could be DB)
@@ -16,8 +16,24 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     db_user = user_service.get_user_by_email(db, user.email)
     if db_user:
         return {"error": "User already exists"}
-    
     new_user = user_service.create_user(db, user)
+
+    try:
+        send_welcome_email(new_user.email)
+    except Exception as e:
+        print(f"Failed to send welcome email: {e}")  
+    
+    # Trigger Welcome Notification
+    from src.notifications.service import create_notification
+    from src.notifications.models import NotificationCreate
+    welcome_notif = NotificationCreate(
+        recipient_id=new_user.id,
+        type="welcome",
+        message="Welcome to Bragboard! Check out the latest shoutouts.",
+        link="/dashboard"
+    )
+    create_notification(db, welcome_notif)  
+
     return {"msg": "User registered successfully", "role": new_user.role}
 
 @router.post("/login")

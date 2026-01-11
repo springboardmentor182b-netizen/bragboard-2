@@ -13,4 +13,5 @@ class User(Base):
     role = Column(String(20), default="employee")
     joined_at = Column(DateTime, default=datetime.utcnow)
     is_active = Column(Boolean, default=True)
-    # Relationships if needed
+    
+    notifications = relationship("Notification", back_populates="recipient", cascade="all, delete-orphan")

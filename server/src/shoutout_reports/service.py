@@ -10,10 +10,10 @@ except ImportError:
    
     class FPDF: pass
 
-from src.entities.shoutout_report import ShoutoutReport, ReportStatus
-from src.entities.todo import Shoutout
+from src.entities.shoutout_report import ShoutoutReport, ReportStatus, CommentReport
+from src.entities.todo import Shoutout, Comment
 from src.entities.user import User
-from .models import ShoutoutReportCreate, ShoutoutReportResolve
+from .models import ShoutoutReportCreate, ShoutoutReportResolve, CommentReportCreate, CommentReportResolve
 
 
 def create_report(db: Session, reporter_id: int, payload: ShoutoutReportCreate) -> ShoutoutReport:
@@ -51,6 +51,22 @@ def create_report(db: Session, reporter_id: int, payload: ShoutoutReportCreate) 
     db.add(report)
     db.commit()
     db.refresh(report)
+
+    # Notify Admins
+    from src.users.service import get_admin_users
+    from src.notifications.service import create_notification
+    from src.notifications.models import NotificationCreate
+    
+    admins = get_admin_users(db)
+    for admin in admins:
+        notif = NotificationCreate(
+            recipient_id=admin.id,
+            type="report",
+            message=f"New Shoutout Report against shoutout #{payload.shoutout_id}",
+            link="/admin/moderation"
+        )
+        create_notification(db, notif)
+
     return report
 
 
@@ -120,6 +136,19 @@ def resolve_report(db: Session, report_id: int, admin_id: int, payload: Shoutout
     
     db.commit()
     db.refresh(report)
+
+            # Notify reporter
+    from src.notifications.service import create_notification
+    from src.notifications.models import NotificationCreate
+    
+    notif = NotificationCreate(
+        recipient_id=report.reporter_id,
+        type="report_resolved",
+        message=f"Your report against shoutout #{report.shoutout_id} has been resolved: {status_enum.value}",
+        link=f"/my-reports"
+    )
+    create_notification(db, notif)
+
     return report
 
 
@@ -265,3 +294,156 @@ def generate_reports_pdf(data: List[Dict[str, Any]]) -> io.BytesIO:
     buffer = io.BytesIO(pdf_output)
     buffer.seek(0)
     return buffer
+
+
+# --- Comment Reporting Service Functions ---
+
+def create_comment_report(db: Session, reporter_id: int, payload: CommentReportCreate) -> CommentReport:
+    """Create a new comment report."""
+    comment = db.get(Comment, payload.comment_id)
+    if not comment:
+        raise ValueError("Comment not found")
+    
+    reporter = db.get(User, reporter_id)
+    if not reporter:
+        raise ValueError("Reporter not found")
+    
+    existing_report = db.query(CommentReport).filter(
+        CommentReport.comment_id == payload.comment_id,
+        CommentReport.reporter_id == reporter_id
+    ).first()
+    
+    if existing_report:
+        raise ValueError("You have already reported this comment")
+    
+    report = CommentReport(
+        comment_id=payload.comment_id,
+        reporter_id=reporter_id,
+        reason=payload.reason.strip(),
+        description=payload.description.strip() if payload.description else None,
+        status=ReportStatus.PENDING
+    )
+    
+    db.add(report)
+    db.commit()
+    db.refresh(report)
+
+    # Notify Admins
+    from src.users.service import get_admin_users
+    from src.notifications.service import create_notification
+    from src.notifications.models import NotificationCreate
+    
+    admins = get_admin_users(db)
+    for admin in admins:
+        notif = NotificationCreate(
+            recipient_id=admin.id,
+            type="report",
+            message=f"New Comment Report against comment #{payload.comment_id}",
+            link="/admin/moderation"
+        )
+        create_notification(db, notif)
+
+    return report
+
+def get_comment_reports_by_reporter(db: Session, reporter_id: int) -> List[CommentReport]:
+    """Get all comment reports by a reporter."""
+    return db.query(CommentReport).filter(
+        CommentReport.reporter_id == reporter_id
+    ).order_by(CommentReport.created_at.desc()).all()
+
+
+def get_all_comment_reports(db: Session, status: Optional[str] = None) -> List[CommentReport]:
+    """Get all comment reports (admin)."""
+    query = db.query(CommentReport)
+    if status:
+        try:
+            status_enum = ReportStatus(status.lower())
+            query = query.filter(CommentReport.status == status_enum)
+        except ValueError:
+            pass
+    return query.order_by(CommentReport.created_at.desc()).all()
+
+
+def resolve_comment_report(db: Session, report_id: int, admin_id: int, payload: CommentReportResolve) -> CommentReport:
+    """Resolve a comment report."""
+    report = db.get(CommentReport, report_id)
+    if not report:
+        raise ValueError("Report not found")
+    
+    if report.status != ReportStatus.PENDING:
+        raise ValueError(f"Report is already {report.status.value}")
+    
+    # Ensure admin exists
+    if not db.get(User, admin_id):
+        raise ValueError("Admin not found")
+    
+    try:
+        status_value = payload.status.value if hasattr(payload.status, 'value') else payload.status
+        status_enum = ReportStatus(status_value.lower())
+    except (ValueError, AttributeError):
+        raise ValueError(f"Invalid status: {payload.status}")
+        
+    if status_enum == ReportStatus.PENDING:
+        raise ValueError("Cannot set status back to pending")
+
+    report.status = status_enum
+    report.resolved_by = admin_id
+    report.resolved_at = datetime.utcnow()
+    report.resolution_notes = payload.resolution_notes.strip() if payload.resolution_notes else None
+    
+    db.commit()
+    db.refresh(report)
+
+    # Notify reporter
+    from src.notifications.service import create_notification
+    from src.notifications.models import NotificationCreate
+    
+    notif = NotificationCreate(
+        recipient_id=report.reporter_id,
+        type="report_resolved",
+        message=f"Your report against comment #{report.comment_id} has been resolved: {status_enum.value}",
+        link=f"/my-reports"
+    )
+    create_notification(db, notif)
+
+    return report
+
+
+def to_comment_report_read(db: Session, report: CommentReport) -> dict:
+    """Convert CommentReport to dict."""
+    reporter = db.get(User, report.reporter_id)
+    reporter_name = reporter.name if reporter else None
+    
+    resolver_name = None
+    if report.resolved_by:
+        resolver = db.get(User, report.resolved_by)
+        resolver_name = resolver.name if resolver else None
+    
+    comment = db.get(Comment, report.comment_id)
+    comment_content = comment.content if comment else None
+    comment_author_id = comment.author_id if comment else None
+    
+    return {
+        "id": report.id,
+        "comment_id": report.comment_id,
+        "reporter_id": report.reporter_id,
+        "reporter_name": reporter_name,
+        "reason": report.reason,
+        "description": report.description,
+        "status": report.status.value,
+        "resolved_by": report.resolved_by,
+        "resolver_name": resolver_name,
+        "resolved_at": report.resolved_at,
+        "resolution_notes": report.resolution_notes,
+        "created_at": report.created_at,
+        "comment_content": comment_content,
+        "comment_author_id": comment_author_id,
+    }
+
+def delete_comment(db: Session, comment_id: int):
+    """Delete a comment (admin action)."""
+    comment = db.get(Comment, comment_id)
+    if comment:
+        db.delete(comment)
+        db.commit()
+    return True
