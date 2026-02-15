@@ -17,11 +17,11 @@ const Admin_Header = ({ searchQuery, setSearchQuery }) => {
       <div className="header-right">
         <div className="user-info">
           <div className="user-details">
-            <span className="user-role">Admin User</span>
-            <span className="user-role" style={{ fontSize: '11px', color: '#94a3b8' }}>Administrator</span>
+            <span className="user-role">Pranjali</span>
+            <span className="user-role" style={{ fontSize: '11px', color: '#94a3b8' }}>Employee</span>
           </div>
           <div className="user-avatar">
-            <span>AU</span>
+            <span>PR</span>
           </div>
         </div>
       </div>

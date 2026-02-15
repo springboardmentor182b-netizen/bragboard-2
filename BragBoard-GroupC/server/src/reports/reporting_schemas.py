@@ -15,7 +15,7 @@ class ReportResponse(BaseModel):
     shoutout_id: int
     reporting_employee_id: int
     reporting_reason: str
-    reporting_status: str
+    reporting_status: Optional[str] = None
     admin_resolution_notes: Optional[str]
     resolving_admin_id: Optional[int]
     created_at: datetime

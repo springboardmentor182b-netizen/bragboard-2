@@ -4,3 +4,7 @@ sqlalchemy==2.0.23
 psycopg2-binary==2.9.9
 pydantic==2.5.0
 python-multipart==0.0.6
+sqlalchemy
+reportlab
+passlib==1.7.4 
+bcrypt==4.0.1

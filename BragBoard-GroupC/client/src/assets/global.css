@@ -822,3 +822,370 @@ body {
     gap: 10px;
   }
 }
+
+/* Grid container */
+.analytics-grid {
+  display: flex;
+  flex-direction: column;   /* 👈 THIS is the key fix */
+  gap: 16px;
+}
+
+
+/* Card styling */
+.employee-card {
+  background-color: #ffffff; /* force white background */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.employee-card-message {
+  font-size: 16px;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+.employee-card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 5px;
+}
+
+.employee-card-date {
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+
+
+
+/* ===============================
+   CREATE SHOUTOUT CARD
+================================ */
+
+.create-shoutout-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.create-shoutout-card {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.create-shoutout-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.create-shoutout-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 18px;
+}
+
+/* Inputs */
+.create-shoutout-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.create-shoutout-input,
+.create-shoutout-textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.create-shoutout-textarea {
+  resize: none;
+}
+
+.create-shoutout-input:focus,
+.create-shoutout-textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.create-shoutout-hint {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+/* Messages */
+.create-shoutout-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+}
+
+.create-shoutout-success {
+  color: #16a34a;
+  font-size: 0.85rem;
+}
+
+/* Buttons */
+.create-shoutout-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-cancel {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #374151;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #f3f4f6;
+}
+
+.btn-primary {
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   CREATE SHOUTOUT BUTTON
+================================ */
+
+.create-shoutout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.3);
+  transition: all 0.2s ease;
+}
+
+.create-shoutout-btn:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+}
+
+.create-shoutout-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 5px 10px rgba(37, 99, 235, 0.25);
+}
+
+/* =========================
+   REPORT SHOUTOUT SECTION
+========================= */
+
+/* MAIN WRAPPER */
+.report-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;   /* 🔥 FIX HORIZONTAL ISSUE */
+  gap: 24px;
+}
+
+/* SHOUTOUT PREVIEW */
+.report-preview h3 {
+  margin-bottom: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* OVERRIDE DASHBOARD CARD LAYOUT */
+.report-preview .employee-card {
+  display: block !important;
+  width: 100%;
+}
+
+.report-preview .employee-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* REPORT FORM CARD */
+.report-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* TITLE */
+.report-card h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 4px;   /* 🔥 FIX */
+}
+
+/* SUBTITLE */
+.report-subtitle {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 12px;  /* controlled spacing */
+}
+
+
+/* TEXTAREA */
+.report-card textarea {
+  width: 100%;
+  resize: none;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
+}
+
+.report-card textarea:focus {
+  outline: none;
+  border-color: #dc2626;
+}
+
+/* ACTION BUTTONS */
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* CANCEL BUTTON */
+.btn-cancel {
+  background: #e5e7eb;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #d1d5db;
+}
+
+/* SUBMIT BUTTON */
+.btn-danger {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+/* FEEDBACK TEXT */
+.error-text {
+  color: #dc2626;
+  font-size: 0.85rem;
+}
+
+.success-text {
+  color: #16a34a;
+  font-size: 0.85rem;
+}
+
+
+/* SHOUTOUT CARD FOOTER */
+.employee-card-footer {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+/* DATE */
+.employee-card-date {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* REPORT BUTTON */
+.report-btn {
+  font-size: 0.75rem;
+  color: #dc2626;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.report-btn:hover {
+  text-decoration: underline;
+}
+
+
+.reactions-container {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.reaction-btn {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: 0.2s;
+}
+
+.reaction-btn:hover {
+  background: #e5e7eb;
+}
+
+.reaction-btn.selected {
+  background: #5b72f6;
+  color: white;
+  border-color: #5b72f6;
+}
+
+

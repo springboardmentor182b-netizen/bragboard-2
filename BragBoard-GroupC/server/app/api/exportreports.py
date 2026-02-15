@@ -5,7 +5,7 @@ from io import StringIO, BytesIO
 import csv
 from reportlab.pdfgen import canvas
 
-from app.core.database import get_db
+from app.core.database import get_database_session
 from app.models.user import User
 from app.models.shoutout import Shoutout
 from src.auth.auth import get_current_user  
@@ -20,7 +20,7 @@ def ensure_admin(user: User):
 #  EXPORT CSV
 
 @router.get("/export/csv")
-def export_csv(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def export_csv(db: Session = Depends(get_database_session), user: User = Depends(get_current_user)):
 
     ensure_admin(user)
 
@@ -45,7 +45,7 @@ def export_csv(db: Session = Depends(get_db), user: User = Depends(get_current_u
 #  EXPORT PDF
 
 @router.get("/export/pdf")
-def export_pdf(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def export_pdf(db: Session = Depends(get_database_session), user: User = Depends(get_current_user)):
 
     ensure_admin(user)
 

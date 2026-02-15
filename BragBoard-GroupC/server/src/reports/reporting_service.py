@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from typing import List, Optional, Dict, Tuple
 from sqlalchemy import func
-from src.entities.user import User
-from src.entities.shoutout import Shoutout
+from app.models import User
+from app.models import Shoutout
 from src.entities.shoutout_report import ShoutoutReport
 from .reporting_schemas import ReportUpdateRequest
 from datetime import datetime

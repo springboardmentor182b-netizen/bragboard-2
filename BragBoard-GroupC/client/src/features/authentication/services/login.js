@@ -1,26 +1,19 @@
 import axios from "axios";
 
 export const login = async (email, password) => {
-  const formData = new FormData();
-  formData.append("username", email);
-  formData.append("password", password);
+  const params = new URLSearchParams();
+  params.append("username", email);
+  params.append("password", password);
 
-  try {
-    const res = await axios.post(
-      "http://localhost:8000/auth/token",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
+  const res = await axios.post(
+    "http://127.0.0.1:8000/auth/token",
+    params,
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
-    );
-    if (res.data.access_token) {
-      localStorage.setItem("token", res.data.access_token);
     }
-    return res.data;
-  } catch (error) {
-    console.error("LOGIN ERROR:", error.response?.data || error.message);
-    throw error;
-  }
+  );
+  localStorage.setItem("access_token", res.data.access_token);
+  return res.data;
 };
